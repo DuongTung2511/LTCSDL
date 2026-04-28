@@ -1,0 +1,11 @@
+D:\LTCSDL\thuchanh\thuchanh\obj\Debug\thuchanh.csproj.AssemblyReference.cache
+D:\LTCSDL\thuchanh\thuchanh\obj\Debug\thuchanh.Form1.resources
+D:\LTCSDL\thuchanh\thuchanh\obj\Debug\thuchanh.Properties.Resources.resources
+D:\LTCSDL\thuchanh\thuchanh\obj\Debug\thuchanh.csproj.GenerateResource.cache
+D:\LTCSDL\thuchanh\thuchanh\obj\Debug\thuchanh.csproj.CoreCompileInputs.cache
+D:\LTCSDL\thuchanh\thuchanh\bin\Debug\thuchanh.exe.config
+D:\LTCSDL\thuchanh\thuchanh\bin\Debug\thuchanh.exe
+D:\LTCSDL\thuchanh\thuchanh\bin\Debug\thuchanh.pdb
+D:\LTCSDL\thuchanh\thuchanh\obj\Debug\thuchanh.exe
+D:\LTCSDL\thuchanh\thuchanh\obj\Debug\thuchanh.pdb
+D:\LTCSDL\thuchanh\thuchanh\obj\Debug\thuchanh.exe.config
