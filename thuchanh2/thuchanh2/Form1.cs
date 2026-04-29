@@ -32,10 +32,8 @@ namespace thuchanh2
         private void get_database()
         {
             //Gắn các cầu nối DataAdapter vào các CommandBuilder 
-            SqlCommandBuilder cmdbd_sv = new
-            SqlCommandBuilder(da_sv);
-            SqlCommandBuilder cmdbd_lop = new
-            SqlCommandBuilder(da_lop);
+            SqlCommandBuilder cmdbd_sv = new SqlCommandBuilder(da_sv);
+            SqlCommandBuilder cmdbd_lop = new SqlCommandBuilder(da_lop);
             //Lấy dữ liệu từ bảng sinhvien về lưu vào DataSet 
             da_sv.SelectCommand = new SqlCommand("Select * from sinhvien order by masv",conn); 
             da_sv.TableMappings.Add("sinhvien", "sinhvien");
@@ -45,8 +43,7 @@ namespace thuchanh2
             da_lop.TableMappings.Add("lop", "lop");
             da_lop.Fill(ds, "lop");
             //Thiết lập quan hệ giữa bảng Lop và bảng Sinhvien 
-            DataRelation rela_lop_sv = new
-            DataRelation("rela_lop_sv", ds.Tables["lop"].Columns["malop"],
+            DataRelation rela_lop_sv = new DataRelation("rela_lop_sv", ds.Tables["lop"].Columns["malop"],
             ds.Tables["Sinhvien"].Columns["malop"]);
             ds.Relations.Add(rela_lop_sv);
             //Lấy dữ liệu từ bảng sinhvien và bảng lop để tạo view sinhvien_lop 
@@ -143,8 +140,7 @@ namespace thuchanh2
             else if (!type &&
             (dtgdanhsach.Rows[dtgdanhsach.CurrentCell.RowIndex].Cells["masv"].Value.ToString() != txt_masv.Text)) 
             {
-                MessageBox.Show("Không được phép sửa mã sinh viên!",
-                "Lỗi nhập dữ liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Không được phép sửa mã sinh viên!","Lỗi nhập dữ liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txt_masv.Text = dtgdanhsach.Rows[dtgdanhsach.CurrentCell.RowIndex].Cells["masv"].Value.ToString();
                 txt_masv.Focus();
                 txt_masv.SelectionStart = 0;
@@ -169,8 +165,7 @@ namespace thuchanh2
             DataTable dt = ds.Tables["sinhvien"];
             bool err = false;
             foreach (DataRow row in dt.Rows)
-                if (row["masv"].ToString().Trim().ToUpper() ==
-                txt_masv.Text.Trim().ToUpper())
+                if (row["masv"].ToString().Trim().ToUpper() == txt_masv.Text.Trim().ToUpper())
                 {
                     err = true; break;
                 }
@@ -295,7 +290,5 @@ namespace thuchanh2
         {
             lammoi();
         }
-
-        
     }
 }
