@@ -43,8 +43,7 @@ namespace thuchanh2
             da_lop.TableMappings.Add("lop", "lop");
             da_lop.Fill(ds, "lop");
             //Thiết lập quan hệ giữa bảng Lop và bảng Sinhvien 
-            DataRelation rela_lop_sv = new DataRelation("rela_lop_sv", ds.Tables["lop"].Columns["malop"],
-            ds.Tables["Sinhvien"].Columns["malop"]);
+            DataRelation rela_lop_sv = new DataRelation("rela_lop_sv", ds.Tables["lop"].Columns["malop"],ds.Tables["Sinhvien"].Columns["malop"]);
             ds.Relations.Add(rela_lop_sv);
             //Lấy dữ liệu từ bảng sinhvien và bảng lop để tạo view sinhvien_lop 
             da_sv_lop.SelectCommand = new SqlCommand("SELECT  dbo.Sinhvien.masv, dbo.Sinhvien.hoten, dbo.Sinhvien.gioitinh,dbo.Sinhvien.ngaysinh, dbo.Sinhvien.diachi, dbo.Sinhvien.malop,dbo.Lop.tenlop FROM  dbo.Sinhvien INNER JOIN dbo.Lop ON dbo.Sinhvien.malop = dbo.Lop.malop ORDER BY dbo.Sinhvien.masv", conn);
@@ -68,7 +67,7 @@ namespace thuchanh2
             dtgdanhsach.Columns["diachi"].Width = 100;
             dtgdanhsach.Columns["diachi"].HeaderText = "Địa chỉ";
             dtgdanhsach.Columns["malop"].Visible = false;
-            dtgdanhsach.Columns["tenlop"].Width = 80;
+            dtgdanhsach.Columns["tenlop"].Width = 120;
             dtgdanhsach.Columns["tenlop"].HeaderText = "Tên lớp";
             dtgdanhsach.ReadOnly = true;
         }
@@ -137,8 +136,7 @@ namespace thuchanh2
                 txt_masv.SelectionLength = txt_masv.Text.Length;
                 err = false;
             }
-            else if (!type &&
-            (dtgdanhsach.Rows[dtgdanhsach.CurrentCell.RowIndex].Cells["masv"].Value.ToString() != txt_masv.Text)) 
+            else if (!type && (dtgdanhsach.Rows[dtgdanhsach.CurrentCell.RowIndex].Cells["masv"].Value.ToString() != txt_masv.Text)) 
             {
                 MessageBox.Show("Không được phép sửa mã sinh viên!","Lỗi nhập dữ liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txt_masv.Text = dtgdanhsach.Rows[dtgdanhsach.CurrentCell.RowIndex].Cells["masv"].Value.ToString();
@@ -192,7 +190,6 @@ namespace thuchanh2
                 row["gioitinh"] = rdb_nam.Checked ? 1 : 0;
                 row["ngaysinh"] = dtp_ngsinh.Value;
                 row["diachi"] = txt_diachi.Text;
-
                 row["malop"] = cbb_malop.Items[cbb_tenlop.SelectedIndex].ToString();
                 row.EndEdit();
                 //Sửa lại dữ liệu trong DataTable sinhvien_lop 
