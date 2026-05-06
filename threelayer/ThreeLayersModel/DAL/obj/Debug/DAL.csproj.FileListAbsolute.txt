@@ -1,0 +1,10 @@
+D:\LTCSDL\threelayer\ThreeLayersModel\DAL\bin\Debug\DAL.dll.config
+D:\LTCSDL\threelayer\ThreeLayersModel\DAL\bin\Debug\DAL.dll
+D:\LTCSDL\threelayer\ThreeLayersModel\DAL\bin\Debug\DAL.pdb
+D:\LTCSDL\threelayer\ThreeLayersModel\DAL\bin\Debug\DTO.dll
+D:\LTCSDL\threelayer\ThreeLayersModel\DAL\bin\Debug\DTO.pdb
+D:\LTCSDL\threelayer\ThreeLayersModel\DAL\obj\Debug\DAL.csproj.AssemblyReference.cache
+D:\LTCSDL\threelayer\ThreeLayersModel\DAL\obj\Debug\DAL.csproj.CoreCompileInputs.cache
+D:\LTCSDL\threelayer\ThreeLayersModel\DAL\obj\Debug\DAL.csproj.Up2Date
+D:\LTCSDL\threelayer\ThreeLayersModel\DAL\obj\Debug\DAL.dll
+D:\LTCSDL\threelayer\ThreeLayersModel\DAL\obj\Debug\DAL.pdb
