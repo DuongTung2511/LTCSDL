@@ -111,5 +111,120 @@ namespace ThreeLayersModel
                 MessageBox.Show("Bạn chưa nhập đủ dữ liệu!");
             }
         }
+
+        private void cbb_tenlop_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbb_tenlop.SelectedIndex >= 0)
+                cbb_malop.SelectedIndex = cbb_tenlop.SelectedIndex;
+        }
+
+        private void dtgdanhsach_CellEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0 || e.RowIndex >= dtgdanhsach.Rows.Count) return;
+            var dgvRow = dtgdanhsach.Rows[e.RowIndex];
+            if (dgvRow.IsNewRow) return;
+
+            DataRowView row = dgvRow.DataBoundItem as DataRowView;
+            if (row == null) return;
+
+            txt_masv.Text = row["masv"].ToString();
+            txt_tensv.Text = row["hoten"].ToString();
+            bool gt = Convert.ToBoolean(row["gioitinh"]);
+            rdb_nam.Checked = gt;
+            rdb_nu.Checked = !gt;
+            dtp_ngsinh.Value = Convert.ToDateTime(row["ngaysinh"]);
+            txt_diachi.Text = row["diachi"].ToString();
+
+            // Đồng bộ ComboBox lớp
+            string malop = row["malop"].ToString();
+            int idx = cbb_malop.Items.IndexOf(malop);
+            cbb_malop.SelectedIndex = idx;
+            cbb_tenlop.SelectedIndex = idx;
+        }
+
+        private void btn_sua_Click(object sender, EventArgs e)
+        {
+            if (dtgdanhsach.CurrentRow == null || dtgdanhsach.CurrentRow.IsNewRow)
+            {
+                MessageBox.Show("Chưa chọn sinh viên cần sửa!", "Thông báo");
+                return;
+            }
+            if (!checkInput()) return;
+
+            Sinhvien s = new Sinhvien();
+            s.Masv = txt_masv.Text.Trim(); // giữ nguyên mã
+            s.Hoten = txt_tensv.Text.Trim();
+            s.Gioitinh = rdb_nam.Checked;
+            s.Ngaysinh = dtp_ngsinh.Value;
+            s.Diachi = txt_diachi.Text.Trim();
+            s.Malop = cbb_malop.SelectedItem.ToString();
+
+            if (qlsv.update_SV(s))
+            {
+                getGridSinhvien();
+                lammoi();
+                MessageBox.Show("Cập nhật thành công!", "Thông báo");
+            }
+            else
+            {
+                MessageBox.Show("Cập nhật thất bại!", "Lỗi");
+            }
+        }
+
+        private void btn_xoa_Click(object sender, EventArgs e)
+        {
+            if (dtgdanhsach.CurrentRow == null || dtgdanhsach.CurrentRow.IsNewRow)
+            {
+                MessageBox.Show("Chưa chọn sinh viên cần xoá!", "Thông báo");
+                return;
+            }
+
+            string masv = dtgdanhsach.CurrentRow.Cells["masv"].Value.ToString();
+            DialogResult ret = MessageBox.Show("Bạn có chắc chắn muốn xoá sinh viên " + masv + "?", "Xác nhận",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (ret == DialogResult.Yes)
+            {
+                if (qlsv.delete_SV(masv))
+                {
+                    getGridSinhvien();
+                    lammoi();
+                    MessageBox.Show("Xoá thành công!", "Thông báo");
+                }
+                else
+                {
+                    MessageBox.Show("Xoá thất bại!", "Lỗi");
+                }
+            }
+        }
+
+        private void bnt_lammoi_Click(object sender, EventArgs e)
+        {
+            lammoi();
+        }
+        private void lammoi()
+        {
+            txt_masv.Clear();
+            txt_tensv.Clear();
+            txt_diachi.Clear();
+            txtkeyword.Clear();
+            dtp_ngsinh.Value = DateTime.Now;
+            rdb_nam.Checked = false;
+            rdb_nu.Checked = false;
+            cbb_tenlop.SelectedIndex = -1;
+            cbb_malop.SelectedIndex = -1;
+            dtgdanhsach.ClearSelection();
+            txt_masv.Focus();
+        }
+        private void filter_dssv()
+        {
+            DataTable dt = qlsv.getDataset().Tables["sinhvien"];
+            DataRow[] rows = dt.Select("hoten LIKE '%" + txtkeyword.Text + "%'");
+            if (rows.Length > 0) dtgdanhsach.DataSource = rows.CopyToDataTable();
+        }
+
+        private void txtkeyword_TextChanged(object sender, EventArgs e)
+        {
+            filter_dssv();
+        }
     }
 }

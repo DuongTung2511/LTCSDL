@@ -16,3 +16,4 @@ D:\LTCSDL\threelayer\ThreeLayersModel\ThreeLayersModel\obj\Debug\GUI.csproj.Core
 D:\LTCSDL\threelayer\ThreeLayersModel\ThreeLayersModel\obj\Debug\GUI.csproj.Up2Date
 D:\LTCSDL\threelayer\ThreeLayersModel\ThreeLayersModel\obj\Debug\ThreeLayersModel.exe
 D:\LTCSDL\threelayer\ThreeLayersModel\ThreeLayersModel\obj\Debug\ThreeLayersModel.pdb
+D:\LTCSDL\threelayer\ThreeLayersModel\ThreeLayersModel\obj\Debug\ThreeLayersModel.exe.config

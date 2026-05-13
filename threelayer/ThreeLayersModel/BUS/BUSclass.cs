@@ -85,5 +85,31 @@ namespace BUS
             }
             return kq;
         }
+        // Cập nhật thông tin sinh viên
+        public bool update_SV(Sinhvien s)
+        {
+            DataRow[] rows = db.getTable("sinhvien").Select("masv = '" + s.Masv.Replace("'", "''") + "'");
+            if (rows.Length == 0)
+                return false;
+            DataRow r = rows[0];
+            r.BeginEdit();
+            r["hoten"] = s.Hoten;
+            r["gioitinh"] = s.Gioitinh;
+            r["ngaysinh"] = s.Ngaysinh;
+            r["diachi"] = s.Diachi;
+            r["malop"] = s.Malop;
+            r.EndEdit();
+            db.updateSinhvien();
+            return true;
+        }
+
+        // Xoá sinh viên
+        public bool delete_SV(string masv)
+        {
+            if (Masv_not_Exist(masv)) // nếu không tồn tại
+                return false;
+            db.deleteSinhvien(masv);
+            return true;
+        }
     }
 }

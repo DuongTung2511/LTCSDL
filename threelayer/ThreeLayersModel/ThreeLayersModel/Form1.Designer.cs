@@ -62,6 +62,7 @@
             this.bnt_lammoi.TabIndex = 77;
             this.bnt_lammoi.Text = "Làm mới";
             this.bnt_lammoi.UseVisualStyleBackColor = true;
+            this.bnt_lammoi.Click += new System.EventHandler(this.bnt_lammoi_Click);
             // 
             // dtgdanhsach
             // 
@@ -74,6 +75,7 @@
             this.dtgdanhsach.RowTemplate.Height = 24;
             this.dtgdanhsach.Size = new System.Drawing.Size(720, 477);
             this.dtgdanhsach.TabIndex = 76;
+            this.dtgdanhsach.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgdanhsach_CellEnter);
             // 
             // btntim
             // 
@@ -90,6 +92,7 @@
             this.txtkeyword.Name = "txtkeyword";
             this.txtkeyword.Size = new System.Drawing.Size(417, 22);
             this.txtkeyword.TabIndex = 74;
+            this.txtkeyword.TextChanged += new System.EventHandler(this.txtkeyword_TextChanged);
             // 
             // lb_timkiem
             // 
@@ -108,6 +111,7 @@
             this.btn_xoa.TabIndex = 72;
             this.btn_xoa.Text = "Xóa";
             this.btn_xoa.UseVisualStyleBackColor = true;
+            this.btn_xoa.Click += new System.EventHandler(this.btn_xoa_Click);
             // 
             // btn_sua
             // 
@@ -117,6 +121,7 @@
             this.btn_sua.TabIndex = 71;
             this.btn_sua.Text = "Sửa";
             this.btn_sua.UseVisualStyleBackColor = true;
+            this.btn_sua.Click += new System.EventHandler(this.btn_sua_Click);
             // 
             // btn_them
             // 
@@ -143,6 +148,7 @@
             this.cbb_tenlop.Name = "cbb_tenlop";
             this.cbb_tenlop.Size = new System.Drawing.Size(248, 24);
             this.cbb_tenlop.TabIndex = 68;
+            this.cbb_tenlop.SelectedIndexChanged += new System.EventHandler(this.cbb_tenlop_SelectedIndexChanged);
             // 
             // rdb_nu
             // 

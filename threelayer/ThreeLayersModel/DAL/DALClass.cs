@@ -65,6 +65,23 @@ namespace DAL
             }
             catch { }
         }
-    }
-} 
+        // Cập nhật thay đổi của bảng sinh viên lên CSDL
+        public void updateSinhvien()
+        {
+            da1.Update(ds, "sinhvien");
+            ds.AcceptChanges();
+        }
 
+        // Xoá sinh viên theo mã
+        public void deleteSinhvien(string masv)
+        {
+            DataRow[] rows = ds.Tables["sinhvien"].Select("masv = '" + masv.Replace("'", "''") + "'");
+            if (rows.Length > 0)
+            {
+                rows[0].Delete();
+                da1.Update(ds, "sinhvien");
+                ds.AcceptChanges();
+            }
+        }
+    }
+}
