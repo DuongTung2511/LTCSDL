@@ -50,11 +50,19 @@ namespace ThreeLayersModel
             DataViewManager dvm = qlsv.getDataset().DefaultViewManager;
             dtgdanhsach.DataSource = dvm;
             dtgdanhsach.DataMember = "sinhvien";
+
+            dtgdanhsach.Columns["masv"].Width = 60;
             dtgdanhsach.Columns["masv"].HeaderText = "Mã SV";
             dtgdanhsach.Columns["hoten"].HeaderText = "Họ và tên";
+            dtgdanhsach.Columns["gioitinh"].Width = 40;
             dtgdanhsach.Columns["gioitinh"].HeaderText = "Giới tính";
+
+            dtgdanhsach.Columns["ngaysinh"].Width = 70;
             dtgdanhsach.Columns["ngaysinh"].HeaderText = "Ngày sinh";
-            dtgdanhsach.Columns["malop"].HeaderText = "Mã lớp";
+            dtgdanhsach.Columns["diachi"].Width = 100;
+            dtgdanhsach.Columns["diachi"].HeaderText = "Địa chỉ";
+            dtgdanhsach.Columns["malop"].HeaderText ="Mã lớp" ;
+            dtgdanhsach.ReadOnly = true;
         }
         private void getLop()
         {
@@ -66,12 +74,7 @@ namespace ThreeLayersModel
                 cbb_tenlop.Items.Add(lp.Tenlop);
                 cbb_malop.Items.Add(lp.Malop);
             }
-            //DataTable dt = qlsv.getTableLop(); 
-            //foreach(DataRow r in dt.Rows) 
-            //{ 
-            //    cbb_tenlop.Items.Add(r["tenlop"].ToString()); 
-            //    cbb_malop.Items.Add(r["malop"].ToString()); 
-            //} 
+            
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -82,7 +85,6 @@ namespace ThreeLayersModel
 
         private void btn_them_Click(object sender, EventArgs e)
         {
-            // code cho sự kiện Click của nút Thêm: 
             if (checkInput())
             {
                 Sinhvien s = new Sinhvien();
@@ -135,7 +137,6 @@ namespace ThreeLayersModel
             dtp_ngsinh.Value = Convert.ToDateTime(row["ngaysinh"]);
             txt_diachi.Text = row["diachi"].ToString();
 
-            // Đồng bộ ComboBox lớp
             string malop = row["malop"].ToString();
             int idx = cbb_malop.Items.IndexOf(malop);
             cbb_malop.SelectedIndex = idx;
@@ -152,7 +153,7 @@ namespace ThreeLayersModel
             if (!checkInput()) return;
 
             Sinhvien s = new Sinhvien();
-            s.Masv = txt_masv.Text.Trim(); // giữ nguyên mã
+            s.Masv = txt_masv.Text.Trim(); 
             s.Hoten = txt_tensv.Text.Trim();
             s.Gioitinh = rdb_nam.Checked;
             s.Ngaysinh = dtp_ngsinh.Value;
@@ -217,9 +218,12 @@ namespace ThreeLayersModel
         }
         private void filter_dssv()
         {
-            DataTable dt = qlsv.getDataset().Tables["sinhvien"];
-            DataRow[] rows = dt.Select("hoten LIKE '%" + txtkeyword.Text + "%'");
-            if (rows.Length > 0) dtgdanhsach.DataSource = rows.CopyToDataTable();
+            DataRow[] rows = qlsv.getFilter_Hoten_SV("hoten LIKE '%" + txtkeyword.Text.Replace("'", "''") + "%'");
+
+            if (rows.Length > 0)
+            {
+                dtgdanhsach.DataSource = rows.CopyToDataTable();
+            }
         }
 
         private void txtkeyword_TextChanged(object sender, EventArgs e)

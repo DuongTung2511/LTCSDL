@@ -15,9 +15,9 @@ namespace DAL
         private DataSet ds = null;
         private SqlDataAdapter da1 = null;
         private SqlDataAdapter da2 = null;
+        SqlDataAdapter da_sv_lop = new SqlDataAdapter();
         public MyDatabase()
         {
-            //Lấy dữ liệu từ server về lưu vào Dataset 
             conn = new SqlConnection(Properties.Settings.Default.strconn);
             ds = new DataSet();
             da1 = new SqlDataAdapter();
@@ -37,6 +37,7 @@ namespace DAL
                 ds.Tables["lop"].Columns["malop"],
                 ds.Tables["sinhvien"].Columns["malop"]);
             ds.Relations.Add(rela_lop_sv);
+
         }
         public DataSet getDBtoDataset()
         {
@@ -65,14 +66,12 @@ namespace DAL
             }
             catch { }
         }
-        // Cập nhật thay đổi của bảng sinh viên lên CSDL
         public void updateSinhvien()
         {
             da1.Update(ds, "sinhvien");
             ds.AcceptChanges();
         }
 
-        // Xoá sinh viên theo mã
         public void deleteSinhvien(string masv)
         {
             DataRow[] rows = ds.Tables["sinhvien"].Select("masv = '" + masv.Replace("'", "''") + "'");

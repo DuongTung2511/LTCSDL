@@ -44,11 +44,16 @@ namespace BUS
             DataTable dt = db.getTable("sinhvien");
             return dt;
         }
-        public DataTable getFilter_Hoten_SV(string strFilter)
+        //public DataTable getFilter_Hoten_SV(string strFilter)
+        //{
+        //    DataRow[] rows = db.getTable("sinhvien").Select(strFilter);
+        //    DataTable dt = rows.CopyToDataTable();
+        //    return dt;
+        //}
+        public DataRow[] getFilter_Hoten_SV(string strFilter)
         {
             DataRow[] rows = db.getTable("sinhvien").Select(strFilter);
-            DataTable dt = rows.CopyToDataTable();
-            return dt;
+            return rows;
         }
         public Boolean add_New_SV(Sinhvien s)
         {
@@ -85,7 +90,7 @@ namespace BUS
             }
             return kq;
         }
-        // Cập nhật thông tin sinh viên
+
         public bool update_SV(Sinhvien s)
         {
             DataRow[] rows = db.getTable("sinhvien").Select("masv = '" + s.Masv.Replace("'", "''") + "'");
@@ -103,10 +108,9 @@ namespace BUS
             return true;
         }
 
-        // Xoá sinh viên
         public bool delete_SV(string masv)
         {
-            if (Masv_not_Exist(masv)) // nếu không tồn tại
+            if (Masv_not_Exist(masv)) 
                 return false;
             db.deleteSinhvien(masv);
             return true;

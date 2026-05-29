@@ -1,0 +1,12 @@
+d:\LTCSDL\duan\qlybanhang\BUS\bin\Debug\BUS.dll
+d:\LTCSDL\duan\qlybanhang\BUS\bin\Debug\BUS.pdb
+d:\LTCSDL\duan\qlybanhang\BUS\bin\Debug\DAL.dll
+d:\LTCSDL\duan\qlybanhang\BUS\bin\Debug\DTO.dll
+d:\LTCSDL\duan\qlybanhang\BUS\bin\Debug\DAL.pdb
+d:\LTCSDL\duan\qlybanhang\BUS\bin\Debug\DAL.dll.config
+d:\LTCSDL\duan\qlybanhang\BUS\bin\Debug\DTO.pdb
+d:\LTCSDL\duan\qlybanhang\BUS\obj\Debug\BUS.csproj.AssemblyReference.cache
+d:\LTCSDL\duan\qlybanhang\BUS\obj\Debug\BUS.csproj.CoreCompileInputs.cache
+d:\LTCSDL\duan\qlybanhang\BUS\obj\Debug\BUS.csproj.Up2Date
+d:\LTCSDL\duan\qlybanhang\BUS\obj\Debug\BUS.dll
+d:\LTCSDL\duan\qlybanhang\BUS\obj\Debug\BUS.pdb

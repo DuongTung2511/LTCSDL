@@ -1,0 +1,12 @@
+D:\LTCSDL\threelayer\ThreeLayersModel\DTO\bin\Debug\DTO.dll
+D:\LTCSDL\threelayer\ThreeLayersModel\DTO\bin\Debug\DTO.pdb
+D:\LTCSDL\threelayer\ThreeLayersModel\DTO\obj\Debug\DTO.csproj.AssemblyReference.cache
+D:\LTCSDL\threelayer\ThreeLayersModel\DTO\obj\Debug\DTO.csproj.CoreCompileInputs.cache
+D:\LTCSDL\threelayer\ThreeLayersModel\DTO\obj\Debug\DTO.dll
+D:\LTCSDL\threelayer\ThreeLayersModel\DTO\obj\Debug\DTO.pdb
+D:\LTCSDL\threelayer2\ThreeLayersModel\DTO\bin\Debug\DTO.dll
+D:\LTCSDL\threelayer2\ThreeLayersModel\DTO\bin\Debug\DTO.pdb
+D:\LTCSDL\threelayer2\ThreeLayersModel\DTO\obj\Debug\DTO.csproj.AssemblyReference.cache
+D:\LTCSDL\threelayer2\ThreeLayersModel\DTO\obj\Debug\DTO.csproj.CoreCompileInputs.cache
+D:\LTCSDL\threelayer2\ThreeLayersModel\DTO\obj\Debug\DTO.dll
+D:\LTCSDL\threelayer2\ThreeLayersModel\DTO\obj\Debug\DTO.pdb
