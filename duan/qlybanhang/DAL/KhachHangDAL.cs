@@ -7,7 +7,7 @@ namespace DAL
     public class KhachHangDAL : DBContext
     {
         private SqlDataAdapter da;
-        public DataSet ds { get; private set; }
+        public DataSet ds;
 
         public KhachHangDAL()
         {
@@ -45,7 +45,7 @@ namespace DAL
             DataRow[] rows = ds.Tables["KhachHang"].Select("MaKH = '" + maKH.Replace("'", "''") + "'");
             if (rows.Length > 0)
             {
-                rows[0].Delete();
+                rows[0]["TrangThai"] = 0;
                 da.Update(ds, "KhachHang");
                 ds.AcceptChanges();
             }

@@ -9,5 +9,6 @@ namespace DTO
         public string MaNCC { get; set; }
         public decimal GiaBan { get; set; }
         public int SoLuongTon { get; set; }
+        public int TrangThai { get; set; }
     }
 }

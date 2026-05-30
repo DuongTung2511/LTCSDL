@@ -17,34 +17,63 @@ namespace qlybanhang
 
         private void frmQuanLyNhanVien_Load(object sender, EventArgs e)
         {
+            // Ẩn TextBox và Label liên quan đến Tên Đăng Nhập vì không còn phụ thuộc
+            txtTenDangNhap.Visible = false;
+            // Label Tên Đăng Nhập thường nằm gần đó, nhưng ta không biết tên biến Label (có thể là label3, v.v.). Tạm thời chỉ ẩn txt.
+            // Sẽ dùng DataGridView_CellFormatting để hiển thị TrangThai.
+
+            dgvNhanVien.CellFormatting += dgvNhanVien_CellFormatting;
+
             LoadData();
+        }
+
+        private void dgvNhanVien_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dgvNhanVien.Columns[e.ColumnIndex].Name == "TrangThai" && e.Value != null)
+            {
+                if (e.Value.ToString() == "1" || e.Value.ToString() == "True")
+                    e.Value = "Đang làm";
+                else
+                    e.Value = "Đã nghỉ";
+            }
         }
 
         private void LoadData()
         {
-            DataViewManager dvm = bus.getDataset().DefaultViewManager;
-            dgvNhanVien.DataSource = dvm;
-            dgvNhanVien.DataMember = "NhanVien";
+            // Trả về toàn bộ danh sách để xem được cả NV đã nghỉ
+            dgvNhanVien.DataSource = bus.getTableNhanVien();
 
             if (dgvNhanVien.Columns.Count > 0)
             {
                 dgvNhanVien.Columns["MaNV"].HeaderText = "Mã NV";
                 dgvNhanVien.Columns["TenNV"].HeaderText = "Tên nhân viên";
-                dgvNhanVien.Columns["TenDangNhap"].HeaderText = "Tên đăng nhập";
+                if(dgvNhanVien.Columns.Contains("TenDangNhap")) dgvNhanVien.Columns["TenDangNhap"].Visible = false; // Ẩn cột cũ nếu còn tồn dư trong View
                 dgvNhanVien.Columns["GioiTinh"].HeaderText = "Giới tính";
                 dgvNhanVien.Columns["NgaySinh"].HeaderText = "Ngày sinh";
                 dgvNhanVien.Columns["SoDienThoai"].HeaderText = "Số điện thoại";
                 dgvNhanVien.Columns["DiaChi"].HeaderText = "Địa chỉ";
+                if(dgvNhanVien.Columns.Contains("TrangThai"))
+                {
+                    dgvNhanVien.Columns["TrangThai"].HeaderText = "Trạng thái";
+                    dgvNhanVien.Columns["TrangThai"].Visible = true;
+                }
             }
             dgvNhanVien.ReadOnly = true;
+            dtpNgaySinh.Value = DateTime.Now;
         }
 
         private void filter_dsnv()
         {
-            DataRow[] rows = bus.getFilter_NV("TenNV LIKE '%" + txtTimKiem.Text.Replace("'", "''") + "%' OR TenDangNhap LIKE '%" + txtTimKiem.Text.Replace("'", "''") + "%'");
+            string keyword = txtTimKiem.Text.Replace("'", "''");
+            DataTable dt = bus.getTableNhanVien();
+            DataRow[] rows = dt.Select("TenNV LIKE '%" + keyword + "%' OR MaNV LIKE '%" + keyword + "%'");
             if (rows.Length > 0)
             {
                 dgvNhanVien.DataSource = rows.CopyToDataTable();
+            }
+            else
+            {
+                dgvNhanVien.DataSource = dt.Clone();
             }
         }
 
@@ -65,11 +94,6 @@ namespace qlybanhang
             {
                 kq = false;
                 txtTenNV.Focus();
-            }
-            else if (txtTenDangNhap.Text == "")
-            {
-                kq = false;
-                txtTenDangNhap.Focus();
             }
             else if (cboGioiTinh.SelectedIndex < 0)
             {
@@ -96,25 +120,54 @@ namespace qlybanhang
             if (dgvRow.IsNewRow) return;
 
             DataRowView row = dgvRow.DataBoundItem as DataRowView;
-            if (row == null) return;
+            if (row != null)
+            {
+                txtMaNV.Text = row["MaNV"].ToString();
+                txtTenNV.Text = row["TenNV"].ToString();
+                
+                string gioiTinh = row["GioiTinh"].ToString();
+                if (gioiTinh != "")
+                    cboGioiTinh.SelectedItem = gioiTinh;
+                else
+                    cboGioiTinh.SelectedIndex = -1;
 
-            txtMaNV.Text = row["MaNV"].ToString();
-            txtTenNV.Text = row["TenNV"].ToString();
-            txtTenDangNhap.Text = row["TenDangNhap"].ToString();
-            
-            string gioiTinh = row["GioiTinh"].ToString();
-            if (gioiTinh != "")
-                cboGioiTinh.SelectedItem = gioiTinh;
+                if (row["NgaySinh"] != DBNull.Value)
+                    dtpNgaySinh.Value = Convert.ToDateTime(row["NgaySinh"]);
+                else
+                    dtpNgaySinh.Value = DateTime.Now;
+
+                txtSoDienThoai.Text = row["SoDienThoai"].ToString();
+                txtDiaChi.Text = row["DiaChi"].ToString();
+
+                if(row["TrangThai"] != DBNull.Value)
+                    cboTrangThai.SelectedIndex = (row["TrangThai"].ToString() == "1" || row["TrangThai"].ToString() == "True") ? 1 : 0;
+            }
             else
-                cboGioiTinh.SelectedIndex = -1;
+            {
+                DataRow dataRow = (dgvRow.DataBoundItem as DataRowView)?.Row;
+                if(dataRow != null)
+                {
+                    txtMaNV.Text = dataRow["MaNV"].ToString();
+                    txtTenNV.Text = dataRow["TenNV"].ToString();
+                    
+                    string gioiTinh = dataRow["GioiTinh"].ToString();
+                    if (gioiTinh != "")
+                        cboGioiTinh.SelectedItem = gioiTinh;
+                    else
+                        cboGioiTinh.SelectedIndex = -1;
 
-            if (row["NgaySinh"] != DBNull.Value)
-                dtpNgaySinh.Value = Convert.ToDateTime(row["NgaySinh"]);
-            else
-                dtpNgaySinh.Value = DateTime.Now;
+                    if (dataRow["NgaySinh"] != DBNull.Value)
+                        dtpNgaySinh.Value = Convert.ToDateTime(dataRow["NgaySinh"]);
+                    else
+                        dtpNgaySinh.Value = DateTime.Now;
 
-            txtSoDienThoai.Text = row["SoDienThoai"].ToString();
-            txtDiaChi.Text = row["DiaChi"].ToString();
+                    txtSoDienThoai.Text = dataRow["SoDienThoai"].ToString();
+                    txtDiaChi.Text = dataRow["DiaChi"].ToString();
+
+                    if(dataRow["TrangThai"] != DBNull.Value)
+                        cboTrangThai.SelectedIndex = (dataRow["TrangThai"].ToString() == "1" || dataRow["TrangThai"].ToString() == "True") ? 1 : 0;
+                }
+            }
         }
 
         private void btnThem_Click(object sender, EventArgs e)
@@ -124,11 +177,11 @@ namespace qlybanhang
                 NhanVienDTO nv = new NhanVienDTO();
                 nv.MaNV = txtMaNV.Text;
                 nv.TenNV = txtTenNV.Text;
-                nv.TenDangNhap = txtTenDangNhap.Text;
                 nv.GioiTinh = cboGioiTinh.SelectedItem.ToString();
                 nv.NgaySinh = dtpNgaySinh.Value.Date;
                 nv.SoDienThoai = txtSoDienThoai.Text;
                 nv.DiaChi = txtDiaChi.Text;
+                // Không gán TrangThai vì BUS đã gán mặc định = 1
 
                 Boolean kq = bus.add_New_NV(nv);
                 if (!kq)
@@ -161,11 +214,11 @@ namespace qlybanhang
                 NhanVienDTO nv = new NhanVienDTO();
                 nv.MaNV = txtMaNV.Text.Trim();
                 nv.TenNV = txtTenNV.Text.Trim();
-                nv.TenDangNhap = txtTenDangNhap.Text.Trim();
                 nv.GioiTinh = cboGioiTinh.SelectedItem.ToString();
                 nv.NgaySinh = dtpNgaySinh.Value.Date;
                 nv.SoDienThoai = txtSoDienThoai.Text.Trim();
                 nv.DiaChi = txtDiaChi.Text.Trim();
+                nv.TrangThai = cboTrangThai.SelectedIndex; // 1 hoặc 0
 
                 if (bus.update_NV(nv))
                 {
@@ -188,12 +241,12 @@ namespace qlybanhang
         {
             if (dgvNhanVien.CurrentRow == null || dgvNhanVien.CurrentRow.IsNewRow)
             {
-                MessageBox.Show("Chưa chọn nhân viên cần xoá!", "Thông báo");
+                MessageBox.Show("Chưa chọn nhân viên cần thao tác!", "Thông báo");
                 return;
             }
 
             string maNV = dgvNhanVien.CurrentRow.Cells["MaNV"].Value.ToString();
-            DialogResult ret = MessageBox.Show("Bạn có chắc chắn muốn xoá nhân viên " + maNV + "?", "Xác nhận",
+            DialogResult ret = MessageBox.Show("Bạn có chắc chắn muốn cho nhân viên " + maNV + " nghỉ việc?", "Xác nhận",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (ret == DialogResult.Yes)
             {
@@ -201,11 +254,11 @@ namespace qlybanhang
                 {
                     LoadData();
                     lammoi();
-                    MessageBox.Show("Xoá thành công!", "Thông báo");
+                    MessageBox.Show("Nhân viên đã được chuyển sang trạng thái Đã nghỉ!", "Thông báo");
                 }
                 else
                 {
-                    MessageBox.Show("Xoá thất bại!", "Lỗi");
+                    MessageBox.Show("Thao tác thất bại!", "Lỗi");
                 }
             }
         }
@@ -220,12 +273,12 @@ namespace qlybanhang
             txtMaNV.Enabled = true;
             txtMaNV.Clear();
             txtTenNV.Clear();
-            txtTenDangNhap.Clear();
-            cboGioiTinh.SelectedIndex = -1;
+            if(cboGioiTinh.Items.Count > 0) cboGioiTinh.SelectedIndex = -1;
             dtpNgaySinh.Value = DateTime.Now;
             txtSoDienThoai.Clear();
             txtDiaChi.Clear();
             txtTimKiem.Clear();
+            if(cboTrangThai != null) cboTrangThai.SelectedIndex = 1;
             dgvNhanVien.ClearSelection();
             txtMaNV.Focus();
         }

@@ -7,5 +7,6 @@ namespace DTO
         public string TenDangNhap { get; set; }
         public string MatKhau { get; set; }
         public string Quyen { get; set; }
+        public string MaNV { get; set; }
     }
 }

@@ -17,7 +17,19 @@ namespace qlybanhang
 
         private void frmQuanLyKhachHang_Load(object sender, EventArgs e)
         {
+            dgvKhachHang.CellFormatting += dgvKhachHang_CellFormatting;
             LoadData();
+        }
+
+        private void dgvKhachHang_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dgvKhachHang.Columns[e.ColumnIndex].Name == "TrangThai" && e.Value != null)
+            {
+                if (e.Value.ToString() == "1" || e.Value.ToString() == "True")
+                    e.Value = "Đang giao dịch";
+                else
+                    e.Value = "Ngừng giao dịch";
+            }
         }
 
         private void LoadData()
@@ -32,6 +44,7 @@ namespace qlybanhang
                 dgvKhachHang.Columns["TenKH"].HeaderText = "Tên khách hàng";
                 dgvKhachHang.Columns["SoDienThoai"].HeaderText = "Số điện thoại";
                 dgvKhachHang.Columns["DiaChi"].HeaderText = "Địa chỉ";
+                if(dgvKhachHang.Columns.Contains("TrangThai")) dgvKhachHang.Columns["TrangThai"].HeaderText = "Trạng thái";
             }
             dgvKhachHang.ReadOnly = true;
         }
@@ -89,6 +102,9 @@ namespace qlybanhang
             txtTenKH.Text = row["TenKH"].ToString();
             txtSoDienThoai.Text = row["SoDienThoai"].ToString();
             txtDiaChi.Text = row["DiaChi"].ToString();
+
+            if (row["TrangThai"] != DBNull.Value)
+                cboTrangThai.SelectedIndex = (row["TrangThai"].ToString() == "1" || row["TrangThai"].ToString() == "True") ? 1 : 0;
         }
 
         private void btnThem_Click(object sender, EventArgs e)
@@ -135,6 +151,8 @@ namespace qlybanhang
                 kh.SoDienThoai = txtSoDienThoai.Text.Trim();
                 kh.DiaChi = txtDiaChi.Text.Trim();
 
+                kh.TrangThai = cboTrangThai.SelectedIndex;
+
                 if (bus.update_KH(kh))
                 {
                     LoadData();
@@ -156,12 +174,12 @@ namespace qlybanhang
         {
             if (dgvKhachHang.CurrentRow == null || dgvKhachHang.CurrentRow.IsNewRow)
             {
-                MessageBox.Show("Chưa chọn khách hàng cần xoá!", "Thông báo");
+                MessageBox.Show("Chưa chọn khách hàng cần thao tác!", "Thông báo");
                 return;
             }
 
             string maKH = dgvKhachHang.CurrentRow.Cells["MaKH"].Value.ToString();
-            DialogResult ret = MessageBox.Show("Bạn có chắc chắn muốn xoá khách hàng " + maKH + "?", "Xác nhận",
+            DialogResult ret = MessageBox.Show("Bạn có chắc chắn muốn ngừng giao dịch với khách hàng " + maKH + "?", "Xác nhận",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (ret == DialogResult.Yes)
             {
@@ -169,11 +187,11 @@ namespace qlybanhang
                 {
                     LoadData();
                     lammoi();
-                    MessageBox.Show("Xoá thành công!", "Thông báo");
+                    MessageBox.Show("Đã chuyển trạng thái sang Ngừng giao dịch!", "Thông báo");
                 }
                 else
                 {
-                    MessageBox.Show("Xoá thất bại!", "Lỗi");
+                    MessageBox.Show("Thao tác thất bại!", "Lỗi");
                 }
             }
         }
@@ -191,6 +209,7 @@ namespace qlybanhang
             txtSoDienThoai.Clear();
             txtDiaChi.Clear();
             txtTimKiem.Clear();
+            if (cboTrangThai != null) cboTrangThai.SelectedIndex = 1;
             dgvKhachHang.ClearSelection();
             txtMaKH.Focus();
         }

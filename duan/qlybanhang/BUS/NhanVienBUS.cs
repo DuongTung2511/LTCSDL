@@ -38,11 +38,11 @@ namespace BUS
                 DataRow r = dal.ds.Tables["NhanVien"].NewRow();
                 r["MaNV"] = nv.MaNV;
                 r["TenNV"] = nv.TenNV;
-                r["TenDangNhap"] = nv.TenDangNhap;
                 r["GioiTinh"] = nv.GioiTinh;
                 r["NgaySinh"] = nv.NgaySinh;
                 r["SoDienThoai"] = nv.SoDienThoai;
                 r["DiaChi"] = nv.DiaChi;
+                r["TrangThai"] = 1;
                 dal.addRow(r);
                 kq = true;
             }
@@ -63,11 +63,11 @@ namespace BUS
             DataRow r = rows[0];
             r.BeginEdit();
             r["TenNV"] = nv.TenNV;
-            r["TenDangNhap"] = nv.TenDangNhap;
             r["GioiTinh"] = nv.GioiTinh;
             r["NgaySinh"] = nv.NgaySinh;
             r["SoDienThoai"] = nv.SoDienThoai;
             r["DiaChi"] = nv.DiaChi;
+            r["TrangThai"] = nv.TrangThai;
             r.EndEdit();
             dal.update();
             return true;
@@ -83,9 +83,20 @@ namespace BUS
 
         public string LayMaNV(string tenDangNhap)
         {
-            DataRow[] rows = dal.getTable().Select(
-                "TenDangNhap = '" + tenDangNhap.Replace("'", "''") + "'");
+            TaiKhoanBUS tkBus = new TaiKhoanBUS();
+            DataTable dtTK = tkBus.getTableTaiKhoan();
+            DataRow[] rows = dtTK.Select("TenDangNhap = '" + tenDangNhap.Replace("'", "''") + "'");
             return rows.Length > 0 ? rows[0]["MaNV"].ToString() : "";
+        }
+
+        public DataTable LayDanhSachNVDangLam()
+        {
+            DataTable dt = dal.getTable();
+            DataRow[] rows = dt.Select("TrangThai = 1 OR TrangThai IS NULL");
+            if (rows.Length > 0)
+                return rows.CopyToDataTable();
+            else
+                return dt.Clone();
         }
     }
 }

@@ -33,6 +33,8 @@ namespace qlybanhang
             this.label2 = new System.Windows.Forms.Label();
             this.txtTenNCC = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.lblTrangThai = new System.Windows.Forms.Label();
+            this.cboTrangThai = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvNhaCungCap)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -44,7 +46,7 @@ namespace qlybanhang
             this.dgvNhaCungCap.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvNhaCungCap.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvNhaCungCap.Location = new System.Drawing.Point(16, 52);
-            this.dgvNhaCungCap.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dgvNhaCungCap.Margin = new System.Windows.Forms.Padding(4);
             this.dgvNhaCungCap.Name = "dgvNhaCungCap";
             this.dgvNhaCungCap.ReadOnly = true;
             this.dgvNhaCungCap.RowHeadersWidth = 51;
@@ -56,7 +58,7 @@ namespace qlybanhang
             // txtTimKiem
             // 
             this.txtTimKiem.Location = new System.Drawing.Point(93, 15);
-            this.txtTimKiem.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtTimKiem.Margin = new System.Windows.Forms.Padding(4);
             this.txtTimKiem.Name = "txtTimKiem";
             this.txtTimKiem.Size = new System.Drawing.Size(265, 22);
             this.txtTimKiem.TabIndex = 3;
@@ -75,7 +77,7 @@ namespace qlybanhang
             // txtMaNCC
             // 
             this.txtMaNCC.Location = new System.Drawing.Point(123, 16);
-            this.txtMaNCC.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtMaNCC.Margin = new System.Windows.Forms.Padding(4);
             this.txtMaNCC.Name = "txtMaNCC";
             this.txtMaNCC.Size = new System.Drawing.Size(347, 22);
             this.txtMaNCC.TabIndex = 10;
@@ -92,22 +94,24 @@ namespace qlybanhang
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.txtMaNCC);
-            this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.btnLamMoi);
             this.groupBox1.Controls.Add(this.btnXoa);
             this.groupBox1.Controls.Add(this.btnSua);
             this.groupBox1.Controls.Add(this.btnThem);
+            this.groupBox1.Controls.Add(this.cboTrangThai);
+            this.groupBox1.Controls.Add(this.lblTrangThai);
             this.groupBox1.Controls.Add(this.txtDiaChi);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.txtSoDienThoai);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.txtTenNCC);
             this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.txtMaNCC);
+            this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Location = new System.Drawing.Point(16, 415);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox1.Size = new System.Drawing.Size(1013, 199);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
@@ -162,7 +166,7 @@ namespace qlybanhang
             this.txtDiaChi.Location = new System.Drawing.Point(122, 99);
             this.txtDiaChi.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtDiaChi.Name = "txtDiaChi";
-            this.txtDiaChi.Size = new System.Drawing.Size(855, 22);
+            this.txtDiaChi.Size = new System.Drawing.Size(347, 22);
             this.txtDiaChi.TabIndex = 5;
             // 
             // label3
@@ -175,12 +179,31 @@ namespace qlybanhang
             this.label3.TabIndex = 4;
             this.label3.Text = "Địa chỉ:";
             // 
+            // lblTrangThai
+            // 
+            this.lblTrangThai.AutoSize = true;
+            this.lblTrangThai.Location = new System.Drawing.Point(492, 102);
+            this.lblTrangThai.Name = "lblTrangThai";
+            this.lblTrangThai.Size = new System.Drawing.Size(70, 16);
+            this.lblTrangThai.TabIndex = 12;
+            this.lblTrangThai.Text = "Trạng thái:";
+            // 
+            // cboTrangThai
+            // 
+            this.cboTrangThai.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboTrangThai.FormattingEnabled = true;
+            this.cboTrangThai.Items.AddRange(new object[] {
+            "Ngừng giao dịch",
+            "Đang giao dịch"});
+            this.cboTrangThai.Location = new System.Drawing.Point(597, 99);
+            this.cboTrangThai.Name = "cboTrangThai";
+            this.cboTrangThai.Size = new System.Drawing.Size(380, 24);
+            this.cboTrangThai.TabIndex = 13;
+            // 
             // txtSoDienThoai
             // 
             this.txtSoDienThoai.Location = new System.Drawing.Point(597, 60);
             this.txtSoDienThoai.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.txtSoDienThoai.Name = "txtSoDienThoai";
-            this.txtSoDienThoai.Size = new System.Drawing.Size(380, 22);
             this.txtSoDienThoai.TabIndex = 3;
             // 
             // label2
@@ -251,5 +274,7 @@ namespace qlybanhang
         private System.Windows.Forms.Label lblTimKiem;
         private System.Windows.Forms.TextBox txtMaNCC;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label lblTrangThai;
+        private System.Windows.Forms.ComboBox cboTrangThai;
     }
 }

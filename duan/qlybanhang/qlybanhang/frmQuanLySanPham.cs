@@ -18,11 +18,23 @@ namespace qlybanhang
 
         private void frmQuanLySanPham_Load(object sender, EventArgs e)
         {
+            dgvSanPham.CellFormatting += dgvSanPham_CellFormatting;
             LoadData();
             
-            cboNhaCungCap.DataSource = nccBus.getTableNhaCungCap();
+            cboNhaCungCap.DataSource = nccBus.LayDanhSachNCCDangHoatDong();
             cboNhaCungCap.DisplayMember = "TenNCC";
             cboNhaCungCap.ValueMember = "MaNCC";
+        }
+
+        private void dgvSanPham_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dgvSanPham.Columns[e.ColumnIndex].Name == "TrangThai" && e.Value != null)
+            {
+                if (e.Value.ToString() == "1" || e.Value.ToString() == "True")
+                    e.Value = "Đang bán";
+                else
+                    e.Value = "Ngừng kinh doanh";
+            }
         }
 
         private void LoadData()
@@ -38,6 +50,7 @@ namespace qlybanhang
                 dgvSanPham.Columns["MaNCC"].HeaderText = "Mã NCC";
                 dgvSanPham.Columns["GiaBan"].HeaderText = "Giá bán";
                 dgvSanPham.Columns["SoLuongTon"].HeaderText = "Số lượng tồn";
+                if(dgvSanPham.Columns.Contains("TrangThai")) dgvSanPham.Columns["TrangThai"].HeaderText = "Trạng thái";
             }
             dgvSanPham.ReadOnly = true;
         }
@@ -101,6 +114,9 @@ namespace qlybanhang
             cboNhaCungCap.SelectedValue = row["MaNCC"];
             txtGiaBan.Text = row["GiaBan"].ToString();
             txtSoLuongTon.Text = row["SoLuongTon"].ToString();
+
+            if (row["TrangThai"] != DBNull.Value)
+                cboTrangThai.SelectedIndex = (row["TrangThai"].ToString() == "1" || row["TrangThai"].ToString() == "True") ? 1 : 0;
         }
 
         private void btnThem_Click(object sender, EventArgs e)
@@ -149,6 +165,8 @@ namespace qlybanhang
                 sp.GiaBan = Convert.ToDecimal(txtGiaBan.Text.Trim());
                 sp.SoLuongTon = Convert.ToInt32(txtSoLuongTon.Text.Trim());
 
+                sp.TrangThai = cboTrangThai.SelectedIndex;
+
                 if (bus.update_SP(sp))
                 {
                     LoadData();
@@ -170,12 +188,12 @@ namespace qlybanhang
         {
             if (dgvSanPham.CurrentRow == null || dgvSanPham.CurrentRow.IsNewRow)
             {
-                MessageBox.Show("Chưa chọn sản phẩm cần xoá!", "Thông báo");
+                MessageBox.Show("Chưa chọn sản phẩm cần thao tác!", "Thông báo");
                 return;
             }
 
             string maSP = dgvSanPham.CurrentRow.Cells["MaSP"].Value.ToString();
-            DialogResult ret = MessageBox.Show("Bạn có chắc chắn muốn xoá sản phẩm " + maSP + "?", "Xác nhận",
+            DialogResult ret = MessageBox.Show("Bạn có chắc chắn muốn ngừng kinh doanh sản phẩm " + maSP + "?", "Xác nhận",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (ret == DialogResult.Yes)
             {
@@ -183,11 +201,11 @@ namespace qlybanhang
                 {
                     LoadData();
                     lammoi();
-                    MessageBox.Show("Xoá thành công!", "Thông báo");
+                    MessageBox.Show("Đã chuyển trạng thái sang Ngừng kinh doanh!", "Thông báo");
                 }
                 else
                 {
-                    MessageBox.Show("Xoá thất bại!", "Lỗi");
+                    MessageBox.Show("Thao tác thất bại!", "Lỗi");
                 }
             }
         }
@@ -207,6 +225,7 @@ namespace qlybanhang
             txtGiaBan.Clear();
             txtSoLuongTon.Clear();
             txtTimKiem.Clear();
+            if (cboTrangThai != null) cboTrangThai.SelectedIndex = 1;
             dgvSanPham.ClearSelection();
             txtMaSP.Focus();
         }

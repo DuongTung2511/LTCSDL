@@ -7,7 +7,7 @@ namespace DAL
     public class SanPhamDAL : DBContext
     {
         private SqlDataAdapter da;
-        public DataSet ds { get; private set; }
+        public DataSet ds;
 
         public SanPhamDAL()
         {
@@ -45,7 +45,7 @@ namespace DAL
             DataRow[] rows = ds.Tables["SanPham"].Select("MaSP = '" + maSP.Replace("'", "''") + "'");
             if (rows.Length > 0)
             {
-                rows[0].Delete();
+                rows[0]["TrangThai"] = 0;
                 da.Update(ds, "SanPham");
                 ds.AcceptChanges();
             }

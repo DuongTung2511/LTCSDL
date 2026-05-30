@@ -7,7 +7,7 @@ namespace DAL
     public class TaiKhoanDAL : DBContext
     {
         private SqlDataAdapter da;
-        public DataSet ds { get; private set; }
+        public DataSet ds;
 
         public TaiKhoanDAL()
         {

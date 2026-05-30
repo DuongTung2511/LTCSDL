@@ -15,8 +15,23 @@ namespace qlybanhang
             InitializeComponent();
         }
 
+        private TextBox txtMaNV;
+        private Label lblMaNV;
+
         private void frmQuanLyTaiKhoan_Load(object sender, EventArgs e)
         {
+            lblMaNV = new Label();
+            lblMaNV.Text = "Mã NV (Tùy chọn):";
+            lblMaNV.AutoSize = true;
+            lblMaNV.Location = new System.Drawing.Point(460, 98);
+
+            txtMaNV = new TextBox();
+            txtMaNV.Location = new System.Drawing.Point(597, 95);
+            txtMaNV.Size = new System.Drawing.Size(299, 22);
+
+            groupBox1.Controls.Add(lblMaNV);
+            groupBox1.Controls.Add(txtMaNV);
+
             cboQuyen.Items.Add("Quản lý");
             cboQuyen.Items.Add("Nhân viên");
             cboQuyen.SelectedIndex = 1;
@@ -38,25 +53,32 @@ namespace qlybanhang
 
         private void LoadData()
         {
-            DataViewManager dvm = bus.getDataset().DefaultViewManager;
-            dgvTaiKhoan.DataSource = dvm;
-            dgvTaiKhoan.DataMember = "TaiKhoan";
+            DataTable dtDayDu = bus.LayDanhSachTaiKhoanDayDu();
+            dgvTaiKhoan.DataSource = dtDayDu;
 
             if (dgvTaiKhoan.Columns.Count > 0)
             {
                 dgvTaiKhoan.Columns["TenDangNhap"].HeaderText = "Tên đăng nhập";
                 dgvTaiKhoan.Columns["MatKhau"].HeaderText = "Mật khẩu";
                 dgvTaiKhoan.Columns["Quyen"].HeaderText = "Quyền";
+                dgvTaiKhoan.Columns["TenNV"].HeaderText = "Tên nhân viên";
+                if(dgvTaiKhoan.Columns.Contains("MaNV")) dgvTaiKhoan.Columns["MaNV"].Visible = false;
             }
             dgvTaiKhoan.ReadOnly = true;
         }
 
         private void filter_dstk()
         {
-            DataRow[] rows = bus.getFilter_TK("TenDangNhap LIKE '%" + txtTimKiem.Text.Replace("'", "''") + "%'");
+            string keyword = txtTimKiem.Text.Replace("'", "''");
+            DataTable dtDayDu = bus.LayDanhSachTaiKhoanDayDu();
+            DataRow[] rows = dtDayDu.Select("TenDangNhap LIKE '%" + keyword + "%' OR TenNV LIKE '%" + keyword + "%'");
             if (rows.Length > 0)
             {
                 dgvTaiKhoan.DataSource = rows.CopyToDataTable();
+            }
+            else
+            {
+                dgvTaiKhoan.DataSource = dtDayDu.Clone();
             }
         }
 
@@ -88,12 +110,32 @@ namespace qlybanhang
             if (dgvRow.IsNewRow) return;
 
             DataRowView row = dgvRow.DataBoundItem as DataRowView;
-            if (row == null) return;
-
-            txtTenDangNhap.Text = row["TenDangNhap"].ToString();
-            txtMatKhau.Text = row["MatKhau"].ToString();
-            string roleDB = row["Quyen"].ToString();
-            cboQuyen.Text = roleDB == "quanly" ? "Quản lý" : "Nhân viên";
+            if (row != null)
+            {
+                txtTenDangNhap.Text = row["TenDangNhap"].ToString();
+                txtMatKhau.Text = row["MatKhau"].ToString();
+                string roleDB = row["Quyen"].ToString();
+                cboQuyen.Text = roleDB == "quanly" ? "Quản lý" : "Nhân viên";
+                if(row["MaNV"] != DBNull.Value)
+                    txtMaNV.Text = row["MaNV"].ToString();
+                else
+                    txtMaNV.Clear();
+            }
+            else
+            {
+                DataRow dataRow = (dgvRow.DataBoundItem as DataRowView)?.Row;
+                if(dataRow != null)
+                {
+                    txtTenDangNhap.Text = dataRow["TenDangNhap"].ToString();
+                    txtMatKhau.Text = dataRow["MatKhau"].ToString();
+                    string roleDB = dataRow["Quyen"].ToString();
+                    cboQuyen.Text = roleDB == "quanly" ? "Quản lý" : "Nhân viên";
+                    if(dataRow["MaNV"] != DBNull.Value)
+                        txtMaNV.Text = dataRow["MaNV"].ToString();
+                    else
+                        txtMaNV.Clear();
+                }
+            }
         }
 
         private void btnThem_Click(object sender, EventArgs e)
@@ -105,6 +147,7 @@ namespace qlybanhang
                 tk.TenDangNhap = txtTenDangNhap.Text;
                 tk.MatKhau = txtMatKhau.Text;
                 tk.Quyen = dbRole;
+                tk.MaNV = txtMaNV.Text.Trim();
 
                 Boolean kq = bus.add_New_TK(tk);
                 if (!kq)
@@ -139,6 +182,7 @@ namespace qlybanhang
                 tk.TenDangNhap = txtTenDangNhap.Text.Trim();
                 tk.MatKhau = txtMatKhau.Text.Trim();
                 tk.Quyen = dbRole;
+                tk.MaNV = txtMaNV.Text.Trim();
 
                 if (bus.update_TK(tk))
                 {
@@ -170,15 +214,22 @@ namespace qlybanhang
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (ret == DialogResult.Yes)
             {
-                if (bus.delete_TK(tenDN))
+                try
                 {
-                    LoadData();
-                    lammoi();
-                    MessageBox.Show("Xoá thành công!", "Thông báo");
+                    if (bus.delete_TK(tenDN))
+                    {
+                        LoadData();
+                        lammoi();
+                        MessageBox.Show("Xoá thành công!", "Thông báo");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Xoá thất bại!", "Lỗi");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Xoá thất bại!", "Lỗi");
+                    MessageBox.Show(ex.Message, "Lỗi xóa tài khoản", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
         }
@@ -193,6 +244,7 @@ namespace qlybanhang
             txtTenDangNhap.Enabled = true;
             txtTenDangNhap.Clear();
             txtMatKhau.Clear();
+            if(txtMaNV != null) txtMaNV.Clear();
             cboQuyen.SelectedIndex = 1;
             txtTimKiem.Clear();
             dgvTaiKhoan.ClearSelection();

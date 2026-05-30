@@ -35,6 +35,8 @@ namespace qlybanhang
             this.label2 = new System.Windows.Forms.Label();
             this.txtTenSP = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.lblTrangThai = new System.Windows.Forms.Label();
+            this.cboTrangThai = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSanPham)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -85,6 +87,8 @@ namespace qlybanhang
             this.groupBox1.Controls.Add(this.btnXoa);
             this.groupBox1.Controls.Add(this.btnSua);
             this.groupBox1.Controls.Add(this.btnThem);
+            this.groupBox1.Controls.Add(this.cboTrangThai);
+            this.groupBox1.Controls.Add(this.lblTrangThai);
             this.groupBox1.Controls.Add(this.txtMaSP);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label2);
@@ -217,6 +221,27 @@ namespace qlybanhang
             this.label2.TabIndex = 2;
             this.label2.Text = "Nhà cung cấp:";
             // 
+            // lblTrangThai
+            // 
+            this.lblTrangThai.AutoSize = true;
+            this.lblTrangThai.Location = new System.Drawing.Point(555, 115);
+            this.lblTrangThai.Name = "lblTrangThai";
+            this.lblTrangThai.Size = new System.Drawing.Size(70, 16);
+            this.lblTrangThai.TabIndex = 15;
+            this.lblTrangThai.Text = "Trạng thái:";
+            // 
+            // cboTrangThai
+            // 
+            this.cboTrangThai.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboTrangThai.FormattingEnabled = true;
+            this.cboTrangThai.Items.AddRange(new object[] {
+            "Ngừng kinh doanh",
+            "Đang bán"});
+            this.cboTrangThai.Location = new System.Drawing.Point(656, 112);
+            this.cboTrangThai.Name = "cboTrangThai";
+            this.cboTrangThai.Size = new System.Drawing.Size(192, 24);
+            this.cboTrangThai.TabIndex = 16;
+            // 
             // txtTenSP
             // 
             this.txtTenSP.Location = new System.Drawing.Point(148, 59);
@@ -239,7 +264,7 @@ namespace qlybanhang
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1045, 629);
+            this.ClientSize = new System.Drawing.Size(1050, 631);
             this.Controls.Add(this.txtTimKiem);
             this.Controls.Add(this.lblTimKiem);
             this.Controls.Add(this.groupBox1);
@@ -277,5 +302,7 @@ namespace qlybanhang
         private System.Windows.Forms.TextBox txtGiaBan;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox cboNhaCungCap;
+        private System.Windows.Forms.Label lblTrangThai;
+        private System.Windows.Forms.ComboBox cboTrangThai;
     }
 }

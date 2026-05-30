@@ -40,10 +40,21 @@ namespace BUS
                 r["TenNCC"] = ncc.TenNCC;
                 r["SoDienThoai"] = ncc.SoDienThoai;
                 r["DiaChi"] = ncc.DiaChi;
+                r["TrangThai"] = 1;
                 dal.addRow(r);
                 kq = true;
             }
             return kq;
+        }
+
+        public DataTable LayDanhSachNCCDangHoatDong()
+        {
+            DataTable dt = dal.getTable();
+            DataRow[] rows = dt.Select("TrangThai = 1 OR TrangThai IS NULL"); // Đề phòng các record cũ chưa update 1
+            if (rows.Length > 0)
+                return rows.CopyToDataTable();
+            else
+                return dt.Clone();
         }
 
         public DataRow[] getFilter_NCC(string strFilter)
@@ -62,6 +73,7 @@ namespace BUS
             r["TenNCC"] = ncc.TenNCC;
             r["SoDienThoai"] = ncc.SoDienThoai;
             r["DiaChi"] = ncc.DiaChi;
+            r["TrangThai"] = ncc.TrangThai;
             r.EndEdit();
             dal.update();
             return true;

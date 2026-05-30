@@ -15,7 +15,6 @@ D:\LTCSDL\duan\qlybanhang\qlybanhang\obj\Debug\GUI.csproj.CoreCompileInputs.cach
 D:\LTCSDL\duan\qlybanhang\qlybanhang\obj\Debug\GUI.csproj.Up2Date
 D:\LTCSDL\duan\qlybanhang\qlybanhang\obj\Debug\qlybanhang.exe
 D:\LTCSDL\duan\qlybanhang\qlybanhang\obj\Debug\qlybanhang.pdb
-D:\LTCSDL\duan\qlybanhang\qlybanhang\obj\Debug\qlybanhang.exe.config
 D:\LTCSDL\duan\qlybanhang\qlybanhang\obj\Debug\qlybanhang.frmMain.resources
 D:\LTCSDL\duan\qlybanhang\qlybanhang\obj\Debug\qlybanhang.frmQuanLyTaiKhoan.resources
 D:\LTCSDL\duan\qlybanhang\qlybanhang\obj\Debug\qlybanhang.frmBanHang.resources
@@ -23,3 +22,5 @@ D:\LTCSDL\duan\qlybanhang\qlybanhang\obj\Debug\qlybanhang.frmQuanLyKhachHang.res
 D:\LTCSDL\duan\qlybanhang\qlybanhang\obj\Debug\qlybanhang.frmQuanLyNhaCungCap.resources
 D:\LTCSDL\duan\qlybanhang\qlybanhang\obj\Debug\qlybanhang.frmQuanLyNhanVien.resources
 D:\LTCSDL\duan\qlybanhang\qlybanhang\obj\Debug\qlybanhang.frmQuanLySanPham.resources
+D:\LTCSDL\duan\qlybanhang\qlybanhang\obj\Debug\qlybanhang.frmLichSuHoaDon.resources
+D:\LTCSDL\duan\qlybanhang\qlybanhang\obj\Debug\qlybanhang.frmChiTietHoaDon.resources

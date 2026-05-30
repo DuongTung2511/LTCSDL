@@ -7,7 +7,7 @@ namespace DAL
     public class ChiTietHoaDonDAL : DBContext
     {
         private SqlDataAdapter da;
-        public DataSet ds { get; private set; }
+        public DataSet ds;
 
         public ChiTietHoaDonDAL()
         {
@@ -28,12 +28,13 @@ namespace DAL
             try
             {
                 SqlCommand cmd = new SqlCommand(
-                    "INSERT INTO ChiTietHoaDon (MaHD, MaSP, SoLuong, DonGia) " +
-                    "VALUES (@MaHD, @MaSP, @SoLuong, @DonGia)", conn);
+                    "INSERT INTO ChiTietHoaDon (MaHD, MaSP, SoLuong, DonGia, ThanhTien) " +
+                    "VALUES (@MaHD, @MaSP, @SoLuong, @DonGia, @ThanhTien)", conn);
                 cmd.Parameters.AddWithValue("@MaHD", maHD);
                 cmd.Parameters.AddWithValue("@MaSP", maSP);
                 cmd.Parameters.AddWithValue("@SoLuong", soLuong);
                 cmd.Parameters.AddWithValue("@DonGia", donGia);
+                cmd.Parameters.AddWithValue("@ThanhTien", soLuong * donGia);
                 cmd.ExecuteNonQuery();
             }
             finally
@@ -51,6 +52,30 @@ namespace DAL
             }
             da.Update(ds, "ChiTietHoaDon");
             ds.AcceptChanges();
+        }
+
+        public void suaChiTietHoaDon(string maHD, string maSP, int soLuongMoi, decimal donGiaMoi)
+        {
+            DataRow[] rows = ds.Tables["ChiTietHoaDon"].Select("MaHD = '" + maHD.Replace("'", "''") + "' AND MaSP = '" + maSP.Replace("'", "''") + "'");
+            if (rows.Length > 0)
+            {
+                rows[0]["SoLuong"] = soLuongMoi;
+                rows[0]["DonGia"] = donGiaMoi;
+                rows[0]["ThanhTien"] = soLuongMoi * donGiaMoi;
+                da.Update(ds, "ChiTietHoaDon");
+                ds.AcceptChanges();
+            }
+        }
+
+        public void xoaChiTietHoaDon(string maHD, string maSP)
+        {
+            DataRow[] rows = ds.Tables["ChiTietHoaDon"].Select("MaHD = '" + maHD.Replace("'", "''") + "' AND MaSP = '" + maSP.Replace("'", "''") + "'");
+            if (rows.Length > 0)
+            {
+                rows[0].Delete();
+                da.Update(ds, "ChiTietHoaDon");
+                ds.AcceptChanges();
+            }
         }
 
         public void reload()

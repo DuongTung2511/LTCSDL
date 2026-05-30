@@ -17,14 +17,24 @@ namespace qlybanhang
 
         private void frmQuanLyNhaCungCap_Load(object sender, EventArgs e)
         {
+            dgvNhaCungCap.CellFormatting += dgvNhaCungCap_CellFormatting;
             LoadData();
+        }
+
+        private void dgvNhaCungCap_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dgvNhaCungCap.Columns[e.ColumnIndex].Name == "TrangThai" && e.Value != null)
+            {
+                if (e.Value.ToString() == "1" || e.Value.ToString() == "True")
+                    e.Value = "Đang giao dịch";
+                else
+                    e.Value = "Ngừng giao dịch";
+            }
         }
 
         private void LoadData()
         {
-            DataViewManager dvm = bus.getDataset().DefaultViewManager;
-            dgvNhaCungCap.DataSource = dvm;
-            dgvNhaCungCap.DataMember = "NhaCungCap";
+            dgvNhaCungCap.DataSource = bus.getTableNhaCungCap(); // Trả lại toàn bộ danh sách
 
             if (dgvNhaCungCap.Columns.Count > 0)
             {
@@ -32,16 +42,27 @@ namespace qlybanhang
                 dgvNhaCungCap.Columns["TenNCC"].HeaderText = "Tên nhà cung cấp";
                 dgvNhaCungCap.Columns["SoDienThoai"].HeaderText = "Số điện thoại";
                 dgvNhaCungCap.Columns["DiaChi"].HeaderText = "Địa chỉ";
+                if(dgvNhaCungCap.Columns.Contains("TrangThai"))
+                {
+                    dgvNhaCungCap.Columns["TrangThai"].HeaderText = "Trạng thái";
+                    dgvNhaCungCap.Columns["TrangThai"].Visible = true;
+                }
             }
             dgvNhaCungCap.ReadOnly = true;
         }
 
         private void filter_dsncc()
         {
-            DataRow[] rows = bus.getFilter_NCC("TenNCC LIKE '%" + txtTimKiem.Text.Replace("'", "''") + "%' OR SoDienThoai LIKE '%" + txtTimKiem.Text.Replace("'", "''") + "%'");
+            string keyword = txtTimKiem.Text.Replace("'", "''");
+            DataTable dt = bus.getTableNhaCungCap();
+            DataRow[] rows = dt.Select("TenNCC LIKE '%" + keyword + "%' OR SoDienThoai LIKE '%" + keyword + "%'");
             if (rows.Length > 0)
             {
                 dgvNhaCungCap.DataSource = rows.CopyToDataTable();
+            }
+            else
+            {
+                dgvNhaCungCap.DataSource = dt.Clone();
             }
         }
 
@@ -83,12 +104,28 @@ namespace qlybanhang
             if (dgvRow.IsNewRow) return;
 
             DataRowView row = dgvRow.DataBoundItem as DataRowView;
-            if (row == null) return;
-
-            txtMaNCC.Text = row["MaNCC"].ToString();
-            txtTenNCC.Text = row["TenNCC"].ToString();
-            txtSoDienThoai.Text = row["SoDienThoai"].ToString();
-            txtDiaChi.Text = row["DiaChi"].ToString();
+            if (row != null)
+            {
+                txtMaNCC.Text = row["MaNCC"].ToString();
+                txtTenNCC.Text = row["TenNCC"].ToString();
+                txtSoDienThoai.Text = row["SoDienThoai"].ToString();
+                txtDiaChi.Text = row["DiaChi"].ToString();
+                if(row["TrangThai"] != DBNull.Value)
+                    cboTrangThai.SelectedIndex = Convert.ToInt32(row["TrangThai"]) == 1 ? 1 : 0;
+            }
+            else
+            {
+                DataRow dataRow = (dgvRow.DataBoundItem as DataRowView)?.Row;
+                if(dataRow != null)
+                {
+                    txtMaNCC.Text = dataRow["MaNCC"].ToString();
+                    txtTenNCC.Text = dataRow["TenNCC"].ToString();
+                    txtSoDienThoai.Text = dataRow["SoDienThoai"].ToString();
+                    txtDiaChi.Text = dataRow["DiaChi"].ToString();
+                    if(dataRow["TrangThai"] != DBNull.Value)
+                        cboTrangThai.SelectedIndex = Convert.ToInt32(dataRow["TrangThai"]) == 1 ? 1 : 0;
+                }
+            }
         }
 
         private void btnThem_Click(object sender, EventArgs e)
@@ -100,6 +137,8 @@ namespace qlybanhang
                 ncc.TenNCC = txtTenNCC.Text;
                 ncc.SoDienThoai = txtSoDienThoai.Text;
                 ncc.DiaChi = txtDiaChi.Text;
+                // Hàm thêm mới luôn gán cứng TrangThai = 1 trong BUS, người dùng không tự nhập khi Thêm.
+                // Trừ khi bạn muốn cho phép thêm NCC đã ngừng CC ngay từ đầu (ít xảy ra).
 
                 Boolean kq = bus.add_New_NCC(ncc);
                 if (!kq)
@@ -134,6 +173,7 @@ namespace qlybanhang
                 ncc.TenNCC = txtTenNCC.Text.Trim();
                 ncc.SoDienThoai = txtSoDienThoai.Text.Trim();
                 ncc.DiaChi = txtDiaChi.Text.Trim();
+                ncc.TrangThai = cboTrangThai.SelectedIndex; // 0 = Ngừng cung cấp, 1 = Đang cung cấp
 
                 if (bus.update_NCC(ncc))
                 {
@@ -156,12 +196,12 @@ namespace qlybanhang
         {
             if (dgvNhaCungCap.CurrentRow == null || dgvNhaCungCap.CurrentRow.IsNewRow)
             {
-                MessageBox.Show("Chưa chọn nhà cung cấp cần xoá!", "Thông báo");
+                MessageBox.Show("Chưa chọn nhà cung cấp cần thao tác!", "Thông báo");
                 return;
             }
 
             string maNCC = dgvNhaCungCap.CurrentRow.Cells["MaNCC"].Value.ToString();
-            DialogResult ret = MessageBox.Show("Bạn có chắc chắn muốn xoá nhà cung cấp " + maNCC + "?", "Xác nhận",
+            DialogResult ret = MessageBox.Show("Bạn có chắc chắn muốn ngừng giao dịch với nhà cung cấp " + maNCC + "?", "Xác nhận",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (ret == DialogResult.Yes)
             {
@@ -169,11 +209,11 @@ namespace qlybanhang
                 {
                     LoadData();
                     lammoi();
-                    MessageBox.Show("Xoá thành công!", "Thông báo");
+                    MessageBox.Show("Đã ngừng giao dịch với nhà cung cấp này", "Thông báo");
                 }
                 else
                 {
-                    MessageBox.Show("Xoá thất bại!", "Lỗi");
+                    MessageBox.Show("Thao tác thất bại!", "Lỗi");
                 }
             }
         }
@@ -191,6 +231,7 @@ namespace qlybanhang
             txtSoDienThoai.Clear();
             txtDiaChi.Clear();
             txtTimKiem.Clear();
+            if(cboTrangThai != null) cboTrangThai.SelectedIndex = 1;
             dgvNhaCungCap.ClearSelection();
             txtMaNCC.Focus();
         }

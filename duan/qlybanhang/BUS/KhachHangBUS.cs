@@ -40,6 +40,7 @@ namespace BUS
                 r["TenKH"] = kh.TenKH;
                 r["SoDienThoai"] = kh.SoDienThoai;
                 r["DiaChi"] = kh.DiaChi;
+                r["TrangThai"] = 1;
                 dal.addRow(r);
                 kq = true;
             }
@@ -62,6 +63,7 @@ namespace BUS
             r["TenKH"] = kh.TenKH;
             r["SoDienThoai"] = kh.SoDienThoai;
             r["DiaChi"] = kh.DiaChi;
+            r["TrangThai"] = kh.TrangThai;
             r.EndEdit();
             dal.update();
             return true;

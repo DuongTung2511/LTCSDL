@@ -7,7 +7,7 @@ namespace DAL
     public class HoaDonDAL : DBContext
     {
         private SqlDataAdapter da;
-        public DataSet ds { get; private set; }
+        public DataSet ds;
 
         public HoaDonDAL()
         {
@@ -49,6 +49,17 @@ namespace DAL
             if (rows.Length > 0)
             {
                 rows[0].Delete();
+                da.Update(ds, "HoaDon");
+                ds.AcceptChanges();
+            }
+        }
+
+        public void capNhatTongTien(string maHD, decimal tongTien)
+        {
+            DataRow[] rows = ds.Tables["HoaDon"].Select("MaHD = '" + maHD.Replace("'", "''") + "'");
+            if (rows.Length > 0)
+            {
+                rows[0]["TongTien"] = tongTien;
                 da.Update(ds, "HoaDon");
                 ds.AcceptChanges();
             }

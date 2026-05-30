@@ -7,7 +7,7 @@ namespace DAL
     public class NhanVienDAL : DBContext
     {
         private SqlDataAdapter da;
-        public DataSet ds { get; private set; }
+        public DataSet ds;
 
         public NhanVienDAL()
         {
@@ -45,7 +45,7 @@ namespace DAL
             DataRow[] rows = ds.Tables["NhanVien"].Select("MaNV = '" + maNV.Replace("'", "''") + "'");
             if (rows.Length > 0)
             {
-                rows[0].Delete();
+                rows[0]["TrangThai"] = 0;
                 da.Update(ds, "NhanVien");
                 ds.AcceptChanges();
             }

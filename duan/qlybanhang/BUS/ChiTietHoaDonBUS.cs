@@ -53,5 +53,66 @@ namespace BUS
             }
             return result;
         }
+
+        private void CapNhatTongTien(string maHD)
+        {
+            HoaDonDAL hdDal = new HoaDonDAL();
+            DataTable dtChiTiet = dal.getTable();
+            DataRow[] rowsCT = dtChiTiet.Select("MaHD = '" + maHD.Replace("'", "''") + "'");
+            decimal tongTien = 0;
+            foreach (DataRow r in rowsCT)
+            {
+                tongTien += Convert.ToInt32(r["SoLuong"]) * Convert.ToDecimal(r["DonGia"]);
+            }
+            hdDal.capNhatTongTien(maHD, tongTien);
+        }
+
+        public bool ThemChiTiet(string maHD, string maSP, int soLuong, decimal donGia)
+        {
+            // Check if product already in invoice
+            DataRow[] exist = dal.getTable().Select("MaHD = '" + maHD.Replace("'", "''") + "' AND MaSP = '" + maSP.Replace("'", "''") + "'");
+            if (exist.Length > 0) return false;
+
+            dal.themChiTietHoaDon(maHD, maSP, soLuong, donGia);
+            dal.reload();
+
+            spDal.capNhatTonKho(maSP, soLuong);
+            spDal.reload();
+
+            CapNhatTongTien(maHD);
+            return true;
+        }
+
+        public bool SuaChiTiet(string maHD, string maSP, int soLuongMoi, decimal donGiaMoi)
+        {
+            DataRow[] exist = dal.getTable().Select("MaHD = '" + maHD.Replace("'", "''") + "' AND MaSP = '" + maSP.Replace("'", "''") + "'");
+            if (exist.Length == 0) return false;
+
+            int soLuongCu = Convert.ToInt32(exist[0]["SoLuong"]);
+            int chechLech = soLuongMoi - soLuongCu;
+
+            dal.suaChiTietHoaDon(maHD, maSP, soLuongMoi, donGiaMoi);
+            
+            spDal.capNhatTonKho(maSP, chechLech);
+            
+            CapNhatTongTien(maHD);
+            return true;
+        }
+
+        public bool XoaChiTiet(string maHD, string maSP)
+        {
+            DataRow[] exist = dal.getTable().Select("MaHD = '" + maHD.Replace("'", "''") + "' AND MaSP = '" + maSP.Replace("'", "''") + "'");
+            if (exist.Length == 0) return false;
+
+            int soLuongCu = Convert.ToInt32(exist[0]["SoLuong"]);
+
+            dal.xoaChiTietHoaDon(maHD, maSP);
+            
+            // Hoàn trả tồn kho
+            spDal.capNhatTonKho(maSP, -soLuongCu);
+            
+            CapNhatTongTien(maHD);
+            return true;
+        }
     }
 }

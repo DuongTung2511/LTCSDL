@@ -8,5 +8,6 @@ namespace DTO
         public string TenKH { get; set; }
         public string SoDienThoai { get; set; }
         public string DiaChi { get; set; }
+        public int TrangThai { get; set; }
     }
 }

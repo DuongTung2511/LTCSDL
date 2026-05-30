@@ -41,6 +41,7 @@ namespace BUS
                 r["MaNCC"] = sp.MaNCC;
                 r["GiaBan"] = sp.GiaBan;
                 r["SoLuongTon"] = sp.SoLuongTon;
+                r["TrangThai"] = 1;
                 dal.addRow(r);
                 kq = true;
             }
@@ -64,6 +65,7 @@ namespace BUS
             r["MaNCC"] = sp.MaNCC;
             r["GiaBan"] = sp.GiaBan;
             r["SoLuongTon"] = sp.SoLuongTon;
+            r["TrangThai"] = sp.TrangThai;
             r.EndEdit();
             dal.update();
             return true;

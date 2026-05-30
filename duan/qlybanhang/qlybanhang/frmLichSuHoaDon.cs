@@ -8,7 +8,6 @@ namespace qlybanhang
     public partial class frmLichSuHoaDon : Form
     {
         HoaDonBUS hdBus = new HoaDonBUS();
-        ChiTietHoaDonBUS cthdBus = new ChiTietHoaDonBUS();
 
         public frmLichSuHoaDon()
         {
@@ -16,6 +15,11 @@ namespace qlybanhang
         }
 
         private void frmLichSuHoaDon_Load(object sender, EventArgs e)
+        {
+            LoadData();
+        }
+
+        private void LoadData()
         {
             dgvHoaDon.DataSource = hdBus.LayDanhSachHoaDonDayDu();
             if (dgvHoaDon.Columns.Count > 0)
@@ -44,32 +48,9 @@ namespace qlybanhang
             }
         }
 
-        private void dgvHoaDon_SelectionChanged(object sender, EventArgs e)
-        {
-            if (dgvHoaDon.CurrentRow != null && dgvHoaDon.CurrentRow.Cells["MaHD"].Value != DBNull.Value)
-            {
-                string maHD = dgvHoaDon.CurrentRow.Cells["MaHD"].Value.ToString();
-                DataTable dtChiTietDayDu = cthdBus.LayDanhSachChiTietHDDayDu(maHD);
-                dgvChiTiet.DataSource = dtChiTietDayDu;
-                if (dgvChiTiet.Columns.Count > 0)
-                {
-                    dgvChiTiet.Columns["MaHD"].Visible = false;
-                    dgvChiTiet.Columns["MaSP"].Visible = false;
-                    dgvChiTiet.Columns["TenSP"].HeaderText = "Tên sản phẩm";
-                    dgvChiTiet.Columns["SoLuong"].HeaderText = "Số lượng";
-                    dgvChiTiet.Columns["DonGia"].HeaderText = "Đơn giá";
-                    dgvChiTiet.Columns["ThanhTien"].HeaderText = "Thành tiền";
-                }
-            }
-            else
-            {
-                dgvChiTiet.DataSource = null;
-            }
-        }
-
         private void btnXoa_Click(object sender, EventArgs e)
         {
-            if (dgvHoaDon.CurrentRow != null)
+            if (dgvHoaDon.CurrentRow != null && dgvHoaDon.CurrentRow.Cells["MaHD"].Value != DBNull.Value)
             {
                 string maHD = dgvHoaDon.CurrentRow.Cells["MaHD"].Value.ToString();
                 DialogResult dr = MessageBox.Show("Bạn có chắc chắn muốn xóa hóa đơn này (cũng sẽ khôi phục lại số lượng tồn kho sản phẩm)?", "Xác nhận xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
@@ -77,9 +58,24 @@ namespace qlybanhang
                 {
                     hdBus.XoaHoaDon(maHD);
                     MessageBox.Show("Xóa hóa đơn thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    // Load lại danh sách sau khi xóa
-                    dgvHoaDon.DataSource = hdBus.LayDanhSachHoaDonDayDu();
+                    LoadData();
                 }
+            }
+        }
+
+        private void btnXemChiTiet_Click(object sender, EventArgs e)
+        {
+            if (dgvHoaDon.CurrentRow != null && dgvHoaDon.CurrentRow.Cells["MaHD"].Value != DBNull.Value)
+            {
+                string maHD = dgvHoaDon.CurrentRow.Cells["MaHD"].Value.ToString();
+                frmChiTietHoaDon frm = new frmChiTietHoaDon(maHD);
+                frm.ShowDialog();
+                // Tải lại dữ liệu hóa đơn (do tổng tiền có thể thay đổi sau khi sửa chi tiết)
+                LoadData();
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn một hóa đơn để xem chi tiết!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
     }

@@ -3,8 +3,6 @@ d:\LTCSDL\duan\qlybanhang\DAL\bin\Debug\DAL.dll
 d:\LTCSDL\duan\qlybanhang\DAL\bin\Debug\DAL.pdb
 d:\LTCSDL\duan\qlybanhang\DAL\bin\Debug\DTO.dll
 d:\LTCSDL\duan\qlybanhang\DAL\bin\Debug\DTO.pdb
-d:\LTCSDL\duan\qlybanhang\DAL\obj\Debug\DAL.csproj.AssemblyReference.cache
-d:\LTCSDL\duan\qlybanhang\DAL\obj\Debug\DAL.csproj.CoreCompileInputs.cache
-d:\LTCSDL\duan\qlybanhang\DAL\obj\Debug\DAL.csproj.Up2Date
 d:\LTCSDL\duan\qlybanhang\DAL\obj\Debug\DAL.dll
 d:\LTCSDL\duan\qlybanhang\DAL\obj\Debug\DAL.pdb
+d:\LTCSDL\duan\qlybanhang\DAL\obj\Debug\DAL.csprojResolveAssemblyReference.cache
