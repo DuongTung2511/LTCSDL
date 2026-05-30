@@ -8,7 +8,7 @@ namespace qlybanhang
 {
     public partial class frmQuanLyTaiKhoan : Form
     {
-        MyBUS bus = new MyBUS();
+        TaiKhoanBUS bus = new TaiKhoanBUS();
 
         public frmQuanLyTaiKhoan()
         {
@@ -38,44 +38,47 @@ namespace qlybanhang
 
         private void LoadData()
         {
-            dgvTaiKhoan.DataSource = bus.getTableTaiKhoan();
+            DataViewManager dvm = bus.getDataset().DefaultViewManager;
+            dgvTaiKhoan.DataSource = dvm;
+            dgvTaiKhoan.DataMember = "TaiKhoan";
+
             if (dgvTaiKhoan.Columns.Count > 0)
             {
                 dgvTaiKhoan.Columns["TenDangNhap"].HeaderText = "Tên đăng nhập";
                 dgvTaiKhoan.Columns["MatKhau"].HeaderText = "Mật khẩu";
                 dgvTaiKhoan.Columns["Quyen"].HeaderText = "Quyền";
             }
+            dgvTaiKhoan.ReadOnly = true;
         }
 
-        private bool checkInput()
+        private void filter_dstk()
         {
-            if (string.IsNullOrEmpty(txtTenDangNhap.Text.Trim()))
-            {
-                MessageBox.Show("Vui lòng nhập tên đăng nhập!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtTenDangNhap.Focus();
-                return false;
-            }
-            if (string.IsNullOrEmpty(txtMatKhau.Text.Trim()))
-            {
-                MessageBox.Show("Vui lòng nhập mật khẩu!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtMatKhau.Focus();
-                return false;
-            }
-            return true;
-        }
-
-        private void txtTimKiem_TextChanged(object sender, EventArgs e)
-        {
-            string keyword = txtTimKiem.Text.Trim().Replace("'", "''");
-            DataRow[] rows = bus.getFilter_TK(string.Format("TenDangNhap LIKE '%{0}%'", keyword));
+            DataRow[] rows = bus.getFilter_TK("TenDangNhap LIKE '%" + txtTimKiem.Text.Replace("'", "''") + "%'");
             if (rows.Length > 0)
             {
                 dgvTaiKhoan.DataSource = rows.CopyToDataTable();
             }
-            else
+        }
+
+        private void txtTimKiem_TextChanged(object sender, EventArgs e)
+        {
+            filter_dstk();
+        }
+
+        private Boolean checkInput()
+        {
+            Boolean kq = true;
+            if (txtTenDangNhap.Text == "")
             {
-                dgvTaiKhoan.DataSource = bus.getTableTaiKhoan().Clone();
+                kq = false;
+                txtTenDangNhap.Focus();
             }
+            else if (txtMatKhau.Text == "")
+            {
+                kq = false;
+                txtMatKhau.Focus();
+            }
+            return kq;
         }
 
         private void dgvTaiKhoan_CellEnter(object sender, DataGridViewCellEventArgs e)
@@ -95,25 +98,29 @@ namespace qlybanhang
 
         private void btnThem_Click(object sender, EventArgs e)
         {
-            if (!checkInput()) return;
-
-            string dbRole = cboQuyen.Text == "Quản lý" ? "quanly" : "nhanvien";
-            TaiKhoanDTO tk = new TaiKhoanDTO
+            if (checkInput())
             {
-                TenDangNhap = txtTenDangNhap.Text.Trim(),
-                MatKhau = txtMatKhau.Text.Trim(),
-                Quyen = dbRole
-            };
+                string dbRole = cboQuyen.Text == "Quản lý" ? "quanly" : "nhanvien";
+                TaiKhoanDTO tk = new TaiKhoanDTO();
+                tk.TenDangNhap = txtTenDangNhap.Text;
+                tk.MatKhau = txtMatKhau.Text;
+                tk.Quyen = dbRole;
 
-            if (bus.add_New_TK(tk))
-            {
-                MessageBox.Show("Thêm thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                LoadData();
-                btnLamMoi_Click(null, null);
+                Boolean kq = bus.add_New_TK(tk);
+                if (!kq)
+                {
+                    MessageBox.Show("Thêm mới không thành công. Có thể tên đăng nhập đã tồn tại!");
+                }
+                else
+                {
+                    LoadData();
+                    lammoi();
+                    MessageBox.Show("Thêm tài khoản thành công!", "Thông báo");
+                }
             }
             else
             {
-                MessageBox.Show("Tên đăng nhập đã tồn tại!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Bạn chưa nhập đủ dữ liệu!");
             }
         }
 
@@ -121,29 +128,32 @@ namespace qlybanhang
         {
             if (dgvTaiKhoan.CurrentRow == null || dgvTaiKhoan.CurrentRow.IsNewRow)
             {
-                MessageBox.Show("Vui lòng chọn tài khoản để sửa!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Chưa chọn tài khoản cần sửa!", "Thông báo");
                 return;
             }
 
-            if (!checkInput()) return;
-
-            string dbRole = cboQuyen.Text == "Quản lý" ? "quanly" : "nhanvien";
-            TaiKhoanDTO tk = new TaiKhoanDTO
+            if (checkInput())
             {
-                TenDangNhap = txtTenDangNhap.Text.Trim(),
-                MatKhau = txtMatKhau.Text.Trim(),
-                Quyen = dbRole
-            };
+                string dbRole = cboQuyen.Text == "Quản lý" ? "quanly" : "nhanvien";
+                TaiKhoanDTO tk = new TaiKhoanDTO();
+                tk.TenDangNhap = txtTenDangNhap.Text.Trim();
+                tk.MatKhau = txtMatKhau.Text.Trim();
+                tk.Quyen = dbRole;
 
-            if (bus.update_TK(tk))
-            {
-                MessageBox.Show("Sửa thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                LoadData();
-                btnLamMoi_Click(null, null);
+                if (bus.update_TK(tk))
+                {
+                    LoadData();
+                    lammoi();
+                    MessageBox.Show("Cập nhật thành công!", "Thông báo");
+                }
+                else
+                {
+                    MessageBox.Show("Cập nhật thất bại!", "Lỗi");
+                }
             }
             else
             {
-                MessageBox.Show("Không tìm thấy tài khoản để sửa!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Bạn chưa nhập đủ dữ liệu!");
             }
         }
 
@@ -151,31 +161,41 @@ namespace qlybanhang
         {
             if (dgvTaiKhoan.CurrentRow == null || dgvTaiKhoan.CurrentRow.IsNewRow)
             {
-                MessageBox.Show("Vui lòng chọn tài khoản để xóa!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Chưa chọn tài khoản cần xoá!", "Thông báo");
                 return;
             }
 
             string tenDN = dgvTaiKhoan.CurrentRow.Cells["TenDangNhap"].Value.ToString();
-            if (MessageBox.Show("Bạn có chắc muốn xóa tài khoản " + tenDN + "?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            DialogResult ret = MessageBox.Show("Bạn có chắc chắn muốn xoá tài khoản " + tenDN + "?", "Xác nhận",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (ret == DialogResult.Yes)
             {
                 if (bus.delete_TK(tenDN))
                 {
-                    MessageBox.Show("Xóa thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     LoadData();
-                    btnLamMoi_Click(null, null);
+                    lammoi();
+                    MessageBox.Show("Xoá thành công!", "Thông báo");
                 }
                 else
                 {
-                    MessageBox.Show("Không tìm thấy tài khoản để xóa!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Xoá thất bại!", "Lỗi");
                 }
             }
         }
 
         private void btnLamMoi_Click(object sender, EventArgs e)
         {
+            lammoi();
+        }
+
+        private void lammoi()
+        {
+            txtTenDangNhap.Enabled = true;
             txtTenDangNhap.Clear();
             txtMatKhau.Clear();
             cboQuyen.SelectedIndex = 1;
+            txtTimKiem.Clear();
+            dgvTaiKhoan.ClearSelection();
             txtTenDangNhap.Focus();
         }
     }

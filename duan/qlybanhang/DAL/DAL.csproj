@@ -41,10 +41,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MyDatabase.cs" />
+    <Compile Include="ChiTietHoaDonDAL.cs" />
+    <Compile Include="DBContext.cs" />
+    <Compile Include="HoaDonDAL.cs" />
+    <Compile Include="KhachHangDAL.cs" />
+    <Compile Include="NhaCungCapDAL.cs" />
+    <Compile Include="NhanVienDAL.cs" />
+    <Compile Include="SanPhamDAL.cs" />
+    <Compile Include="TaiKhoanDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>

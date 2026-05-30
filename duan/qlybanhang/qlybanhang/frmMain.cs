@@ -6,7 +6,7 @@ namespace qlybanhang
 {
     public partial class frmMain : Form
     {
-        MyBUS bus = new MyBUS();
+        NhanVienBUS bus = new NhanVienBUS();
         public string TenDangNhap { get; set; }
         public string Quyen { get; set; }
         public bool IsLogout { get; set; } = false;

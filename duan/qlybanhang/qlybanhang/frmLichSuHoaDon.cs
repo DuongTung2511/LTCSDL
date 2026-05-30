@@ -7,7 +7,8 @@ namespace qlybanhang
 {
     public partial class frmLichSuHoaDon : Form
     {
-        MyBUS bus = new MyBUS();
+        HoaDonBUS hdBus = new HoaDonBUS();
+        ChiTietHoaDonBUS cthdBus = new ChiTietHoaDonBUS();
 
         public frmLichSuHoaDon()
         {
@@ -16,7 +17,7 @@ namespace qlybanhang
 
         private void frmLichSuHoaDon_Load(object sender, EventArgs e)
         {
-            dgvHoaDon.DataSource = bus.LayDanhSachHoaDonDayDu();
+            dgvHoaDon.DataSource = hdBus.LayDanhSachHoaDonDayDu();
             if (dgvHoaDon.Columns.Count > 0)
             {
                 dgvHoaDon.Columns["MaHD"].HeaderText = "Mã HĐ";
@@ -32,14 +33,14 @@ namespace qlybanhang
         private void txtTimKiemKH_TextChanged(object sender, EventArgs e)
         {
             string keyword = txtTimKiemKH.Text.Trim().Replace("'", "''");
-            DataRow[] rows = bus.getFilter_HDDayDu(string.Format("TenKH LIKE '%{0}%'", keyword));
+            DataRow[] rows = hdBus.getFilter_HDDayDu(string.Format("TenKH LIKE '%{0}%'", keyword));
             if (rows.Length > 0)
             {
                 dgvHoaDon.DataSource = rows.CopyToDataTable();
             }
             else
             {
-                dgvHoaDon.DataSource = bus.LayDanhSachHoaDonDayDu().Clone();
+                dgvHoaDon.DataSource = hdBus.LayDanhSachHoaDonDayDu().Clone();
             }
         }
 
@@ -47,8 +48,8 @@ namespace qlybanhang
         {
             if (dgvHoaDon.CurrentRow != null && dgvHoaDon.CurrentRow.Cells["MaHD"].Value != DBNull.Value)
             {
-                int maHD = Convert.ToInt32(dgvHoaDon.CurrentRow.Cells["MaHD"].Value);
-                DataTable dtChiTietDayDu = bus.LayDanhSachChiTietHDDayDu(maHD);
+                string maHD = dgvHoaDon.CurrentRow.Cells["MaHD"].Value.ToString();
+                DataTable dtChiTietDayDu = cthdBus.LayDanhSachChiTietHDDayDu(maHD);
                 dgvChiTiet.DataSource = dtChiTietDayDu;
                 if (dgvChiTiet.Columns.Count > 0)
                 {
@@ -70,14 +71,14 @@ namespace qlybanhang
         {
             if (dgvHoaDon.CurrentRow != null)
             {
-                int maHD = Convert.ToInt32(dgvHoaDon.CurrentRow.Cells["MaHD"].Value);
+                string maHD = dgvHoaDon.CurrentRow.Cells["MaHD"].Value.ToString();
                 DialogResult dr = MessageBox.Show("Bạn có chắc chắn muốn xóa hóa đơn này (cũng sẽ khôi phục lại số lượng tồn kho sản phẩm)?", "Xác nhận xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (dr == DialogResult.Yes)
                 {
-                    bus.XoaHoaDon(maHD);
+                    hdBus.XoaHoaDon(maHD);
                     MessageBox.Show("Xóa hóa đơn thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     // Load lại danh sách sau khi xóa
-                    dgvHoaDon.DataSource = bus.LayDanhSachHoaDonDayDu();
+                    dgvHoaDon.DataSource = hdBus.LayDanhSachHoaDonDayDu();
                 }
             }
         }

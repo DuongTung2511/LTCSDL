@@ -7,8 +7,11 @@ namespace qlybanhang
 {
     public partial class frmBanHang : Form
     {
-        MyBUS bus = new MyBUS();
-        public int MaNV { get; set; }
+        KhachHangBUS khBus = new KhachHangBUS();
+        SanPhamBUS spBus = new SanPhamBUS();
+        HoaDonBUS hdBus = new HoaDonBUS();
+
+        public string MaNV { get; set; }
         private DataTable gioHang;
 
         public frmBanHang()
@@ -19,7 +22,7 @@ namespace qlybanhang
         private void frmBanHang_Load(object sender, EventArgs e)
         {
             // Load Khách Hàng
-            cboKhachHang.DataSource = bus.getTableKhachHang();
+            cboKhachHang.DataSource = khBus.getTableKhachHang();
             cboKhachHang.DisplayMember = "TenKH";
             cboKhachHang.ValueMember = "MaKH";
 
@@ -27,12 +30,13 @@ namespace qlybanhang
             LoadDataSanPham();
 
             KhoiTaoGioHang();
+            LoadmaHD();
         }
 
         private void KhoiTaoGioHang()
         {
             gioHang = new DataTable();
-            gioHang.Columns.Add("MaSP", typeof(int));
+            gioHang.Columns.Add("MaSP", typeof(string));
             gioHang.Columns.Add("TenSP", typeof(string));
             gioHang.Columns.Add("SoLuong", typeof(int));
             gioHang.Columns.Add("DonGia", typeof(decimal));
@@ -47,34 +51,44 @@ namespace qlybanhang
                 dgvGioHang.Columns["DonGia"].HeaderText = "Đơn giá";
                 dgvGioHang.Columns["ThanhTien"].HeaderText = "Thành tiền";
             }
+            dgvGioHang.ReadOnly = true;
         }
 
         private void LoadDataSanPham()
         {
-            dgvSanPham.DataSource = bus.getTableSanPham();
+            DataViewManager dvm = spBus.getDataset().DefaultViewManager;
+            dgvSanPham.DataSource = dvm;
+            dgvSanPham.DataMember = "SanPham";
+
             if (dgvSanPham.Columns.Count > 0)
             {
                 dgvSanPham.Columns["MaSP"].HeaderText = "Mã SP";
                 dgvSanPham.Columns["TenSP"].HeaderText = "Tên sản phẩm";
                 dgvSanPham.Columns["MaNCC"].HeaderText = "Mã NCC";
-                dgvSanPham.Columns["GiaNhap"].HeaderText = "Giá nhập";
                 dgvSanPham.Columns["GiaBan"].HeaderText = "Giá bán";
                 dgvSanPham.Columns["SoLuongTon"].HeaderText = "Số lượng tồn";
+            }
+            dgvSanPham.ReadOnly = true;
+        }
+
+        private void LoadmaHD()
+        {
+            string maHD = hdBus.LayNextMaHD();
+            txtMaHD.Text = maHD;
+        }
+
+        private void filter_dssp()
+        {
+            DataRow[] rows = spBus.getFilter_SP("TenSP LIKE '%" + txtTimKiemSanPham.Text.Replace("'", "''") + "%'");
+            if (rows.Length > 0)
+            {
+                dgvSanPham.DataSource = rows.CopyToDataTable();
             }
         }
 
         private void txtTimKiemSanPham_TextChanged(object sender, EventArgs e)
         {
-            string keyword = txtTimKiemSanPham.Text.Trim().Replace("'", "''");
-            DataRow[] rows = bus.getFilter_SP(string.Format("TenSP LIKE '%{0}%'", keyword));
-            if (rows.Length > 0)
-            {
-                dgvSanPham.DataSource = rows.CopyToDataTable();
-            }
-            else
-            {
-                dgvSanPham.DataSource = bus.getTableSanPham().Clone();
-            }
+            filter_dssp();
         }
 
         private void btnThemGioHang_Click(object sender, EventArgs e)
@@ -83,7 +97,7 @@ namespace qlybanhang
             DataRowView drvSP = dgvSanPham.CurrentRow.DataBoundItem as DataRowView;
             if (drvSP == null) return;
 
-            int maSP = Convert.ToInt32(drvSP["MaSP"]);
+            string maSPStr = drvSP["MaSP"].ToString();
             string tenSP = drvSP["TenSP"].ToString();
             decimal donGia = Convert.ToDecimal(drvSP["GiaBan"]);
             int soLuongTon = Convert.ToInt32(drvSP["SoLuongTon"]);
@@ -91,18 +105,18 @@ namespace qlybanhang
 
             if (soLuongTon < soLuongThem)
             {
-                MessageBox.Show("Số lượng tồn không đủ!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Số lượng tồn không đủ!");
                 return;
             }
 
             // Check if exist
-            DataRow[] existing = gioHang.Select("MaSP = " + maSP);
+            DataRow[] existing = gioHang.Select("MaSP = '" + maSPStr.Replace("'", "''") + "'");
             if (existing.Length > 0)
             {
                 int soLuongHienTai = Convert.ToInt32(existing[0]["SoLuong"]);
                 if (soLuongTon < soLuongHienTai + soLuongThem)
                 {
-                    MessageBox.Show("Số lượng tồn không đủ!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Số lượng tồn không đủ!");
                     return;
                 }
                 existing[0]["SoLuong"] = soLuongHienTai + soLuongThem;
@@ -111,7 +125,7 @@ namespace qlybanhang
             else
             {
                 DataRow r = gioHang.NewRow();
-                r["MaSP"] = maSP;
+                r["MaSP"] = maSPStr;
                 r["TenSP"] = tenSP;
                 r["SoLuong"] = soLuongThem;
                 r["DonGia"] = donGia;
@@ -134,33 +148,57 @@ namespace qlybanhang
             }
         }
 
-        private void btnThanhToan_Click(object sender, EventArgs e)
+        private Boolean checkInputThanhToan()
         {
+            Boolean kq = true;
             if (gioHang.Rows.Count == 0)
             {
-                MessageBox.Show("Giỏ hàng trống!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                kq = false;
+                MessageBox.Show("Giỏ hàng trống!");
             }
-            if (cboKhachHang.SelectedValue == null)
+            else if (cboKhachHang.SelectedIndex < 0)
             {
-                MessageBox.Show("Vui lòng chọn khách hàng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                kq = false;
+                cboKhachHang.Focus();
+                MessageBox.Show("Vui lòng chọn khách hàng!");
             }
+            else if (txtMaHD.Text == "")
+            {
+                kq = false;
+                txtMaHD.Focus();
+                MessageBox.Show("Vui lòng nhập mã hóa đơn!");
+            }
+            return kq;
+        }
 
-            try
+        private void btnThanhToan_Click(object sender, EventArgs e)
+        {
+            if (checkInputThanhToan())
             {
-                int maKH = Convert.ToInt32(cboKhachHang.SelectedValue);
-                bus.TaoHoaDon(maKH, MaNV, gioHang);
-                MessageBox.Show("Thanh toán thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                
-                gioHang.Rows.Clear();
-                CapNhatTongTien();
-                // Reload san pham to update so luong ton
-                LoadDataSanPham();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (!hdBus.MaHD_not_Exist(txtMaHD.Text))
+                {
+                    MessageBox.Show("Mã hóa đơn đã tồn tại!");
+                    txtMaHD.Focus();
+                    return;
+                }
+
+                try
+                {
+                    string maKH = cboKhachHang.SelectedValue.ToString();
+                    string maHD = txtMaHD.Text.Trim();
+                    hdBus.TaoHoaDon(maHD, maKH, MaNV, gioHang);
+                    MessageBox.Show("Thanh toán thành công!", "Thông báo");
+                    
+                    gioHang.Rows.Clear();
+                    txtMaHD.Clear();
+                    CapNhatTongTien();
+                    LoadDataSanPham();
+                    LoadmaHD();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi: " + ex.Message, "Lỗi");
+                }
             }
         }
 

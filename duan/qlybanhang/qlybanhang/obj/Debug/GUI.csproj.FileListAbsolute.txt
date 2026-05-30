@@ -19,3 +19,7 @@ D:\LTCSDL\duan\qlybanhang\qlybanhang\obj\Debug\qlybanhang.exe.config
 D:\LTCSDL\duan\qlybanhang\qlybanhang\obj\Debug\qlybanhang.frmMain.resources
 D:\LTCSDL\duan\qlybanhang\qlybanhang\obj\Debug\qlybanhang.frmQuanLyTaiKhoan.resources
 D:\LTCSDL\duan\qlybanhang\qlybanhang\obj\Debug\qlybanhang.frmBanHang.resources
+D:\LTCSDL\duan\qlybanhang\qlybanhang\obj\Debug\qlybanhang.frmQuanLyKhachHang.resources
+D:\LTCSDL\duan\qlybanhang\qlybanhang\obj\Debug\qlybanhang.frmQuanLyNhaCungCap.resources
+D:\LTCSDL\duan\qlybanhang\qlybanhang\obj\Debug\qlybanhang.frmQuanLyNhanVien.resources
+D:\LTCSDL\duan\qlybanhang\qlybanhang\obj\Debug\qlybanhang.frmQuanLySanPham.resources

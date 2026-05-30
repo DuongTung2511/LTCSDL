@@ -19,6 +19,8 @@ namespace qlybanhang
         {
             this.cboKhachHang = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.txtMaHD = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.lblTimKiemSanPham = new System.Windows.Forms.Label();
             this.txtTimKiemSanPham = new System.Windows.Forms.TextBox();
@@ -43,7 +45,7 @@ namespace qlybanhang
             this.cboKhachHang.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboKhachHang.FormattingEnabled = true;
             this.cboKhachHang.Location = new System.Drawing.Point(123, 15);
-            this.cboKhachHang.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cboKhachHang.Margin = new System.Windows.Forms.Padding(4);
             this.cboKhachHang.Name = "cboKhachHang";
             this.cboKhachHang.Size = new System.Drawing.Size(348, 24);
             this.cboKhachHang.TabIndex = 0;
@@ -58,6 +60,24 @@ namespace qlybanhang
             this.label1.TabIndex = 1;
             this.label1.Text = "Khách hàng:";
             // 
+            // txtMaHD
+            // 
+            this.txtMaHD.Location = new System.Drawing.Point(570, 15);
+            this.txtMaHD.Margin = new System.Windows.Forms.Padding(4);
+            this.txtMaHD.Name = "txtMaHD";
+            this.txtMaHD.Size = new System.Drawing.Size(200, 22);
+            this.txtMaHD.TabIndex = 4;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(500, 18);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(51, 16);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "Mã HĐ:";
+            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.lblTimKiemSanPham);
@@ -67,9 +87,9 @@ namespace qlybanhang
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.dgvSanPham);
             this.groupBox1.Location = new System.Drawing.Point(16, 65);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox1.Size = new System.Drawing.Size(596, 610);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
@@ -88,7 +108,7 @@ namespace qlybanhang
             // txtTimKiemSanPham
             // 
             this.txtTimKiemSanPham.Location = new System.Drawing.Point(85, 23);
-            this.txtTimKiemSanPham.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtTimKiemSanPham.Margin = new System.Windows.Forms.Padding(4);
             this.txtTimKiemSanPham.Name = "txtTimKiemSanPham";
             this.txtTimKiemSanPham.Size = new System.Drawing.Size(265, 22);
             this.txtTimKiemSanPham.TabIndex = 5;
@@ -97,7 +117,7 @@ namespace qlybanhang
             // btnThemGioHang
             // 
             this.btnThemGioHang.Location = new System.Drawing.Point(292, 556);
-            this.btnThemGioHang.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnThemGioHang.Margin = new System.Windows.Forms.Padding(4);
             this.btnThemGioHang.Name = "btnThemGioHang";
             this.btnThemGioHang.Size = new System.Drawing.Size(164, 28);
             this.btnThemGioHang.TabIndex = 3;
@@ -108,7 +128,7 @@ namespace qlybanhang
             // nudSoLuong
             // 
             this.nudSoLuong.Location = new System.Drawing.Point(120, 558);
-            this.nudSoLuong.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.nudSoLuong.Margin = new System.Windows.Forms.Padding(4);
             this.nudSoLuong.Minimum = new decimal(new int[] {
             1,
             0,
@@ -140,7 +160,7 @@ namespace qlybanhang
             this.dgvSanPham.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvSanPham.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvSanPham.Location = new System.Drawing.Point(8, 55);
-            this.dgvSanPham.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dgvSanPham.Margin = new System.Windows.Forms.Padding(4);
             this.dgvSanPham.Name = "dgvSanPham";
             this.dgvSanPham.ReadOnly = true;
             this.dgvSanPham.RowHeadersWidth = 51;
@@ -155,9 +175,9 @@ namespace qlybanhang
             this.groupBox2.Controls.Add(this.lblTongTien);
             this.groupBox2.Controls.Add(this.dgvGioHang);
             this.groupBox2.Location = new System.Drawing.Point(620, 65);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox2.Size = new System.Drawing.Size(609, 610);
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
@@ -167,7 +187,7 @@ namespace qlybanhang
             // 
             this.btnThanhToan.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnThanhToan.Location = new System.Drawing.Point(397, 538);
-            this.btnThanhToan.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnThanhToan.Margin = new System.Windows.Forms.Padding(4);
             this.btnThanhToan.Name = "btnThanhToan";
             this.btnThanhToan.Size = new System.Drawing.Size(204, 62);
             this.btnThanhToan.TabIndex = 3;
@@ -178,7 +198,7 @@ namespace qlybanhang
             // btnXoaGioHang
             // 
             this.btnXoaGioHang.Location = new System.Drawing.Point(8, 538);
-            this.btnXoaGioHang.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnXoaGioHang.Margin = new System.Windows.Forms.Padding(4);
             this.btnXoaGioHang.Name = "btnXoaGioHang";
             this.btnXoaGioHang.Size = new System.Drawing.Size(164, 28);
             this.btnXoaGioHang.TabIndex = 2;
@@ -205,7 +225,7 @@ namespace qlybanhang
             this.dgvGioHang.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvGioHang.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvGioHang.Location = new System.Drawing.Point(8, 23);
-            this.dgvGioHang.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dgvGioHang.Margin = new System.Windows.Forms.Padding(4);
             this.dgvGioHang.Name = "dgvGioHang";
             this.dgvGioHang.ReadOnly = true;
             this.dgvGioHang.RowHeadersWidth = 51;
@@ -218,11 +238,13 @@ namespace qlybanhang
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1245, 690);
+            this.Controls.Add(this.txtMaHD);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cboKhachHang);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "frmBanHang";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Bán Hàng";
@@ -255,5 +277,7 @@ namespace qlybanhang
         private System.Windows.Forms.Button btnThanhToan;
         private System.Windows.Forms.Button btnXoaGioHang;
         private System.Windows.Forms.Label lblTongTien;
+        private System.Windows.Forms.TextBox txtMaHD;
+        private System.Windows.Forms.Label label3;
     }
 }

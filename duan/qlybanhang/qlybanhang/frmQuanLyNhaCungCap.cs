@@ -8,7 +8,7 @@ namespace qlybanhang
 {
     public partial class frmQuanLyNhaCungCap : Form
     {
-        MyBUS bus = new MyBUS();
+        NhaCungCapBUS bus = new NhaCungCapBUS();
 
         public frmQuanLyNhaCungCap()
         {
@@ -22,7 +22,10 @@ namespace qlybanhang
 
         private void LoadData()
         {
-            dgvNhaCungCap.DataSource = bus.getTableNhaCungCap();
+            DataViewManager dvm = bus.getDataset().DefaultViewManager;
+            dgvNhaCungCap.DataSource = dvm;
+            dgvNhaCungCap.DataMember = "NhaCungCap";
+
             if (dgvNhaCungCap.Columns.Count > 0)
             {
                 dgvNhaCungCap.Columns["MaNCC"].HeaderText = "Mã NCC";
@@ -30,43 +33,47 @@ namespace qlybanhang
                 dgvNhaCungCap.Columns["SoDienThoai"].HeaderText = "Số điện thoại";
                 dgvNhaCungCap.Columns["DiaChi"].HeaderText = "Địa chỉ";
             }
+            dgvNhaCungCap.ReadOnly = true;
         }
 
-        private void txtTimKiem_TextChanged(object sender, EventArgs e)
+        private void filter_dsncc()
         {
-            string keyword = txtTimKiem.Text.Trim().Replace("'", "''");
-            DataRow[] rows = bus.getFilter_NCC(string.Format("TenNCC LIKE '%{0}%' OR SoDienThoai LIKE '%{0}%'", keyword));
+            DataRow[] rows = bus.getFilter_NCC("TenNCC LIKE '%" + txtTimKiem.Text.Replace("'", "''") + "%' OR SoDienThoai LIKE '%" + txtTimKiem.Text.Replace("'", "''") + "%'");
             if (rows.Length > 0)
             {
                 dgvNhaCungCap.DataSource = rows.CopyToDataTable();
             }
-            else
-            {
-                dgvNhaCungCap.DataSource = bus.getTableNhaCungCap().Clone();
-            }
         }
 
-        private bool checkInput()
+        private void txtTimKiem_TextChanged(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(txtTenNCC.Text.Trim()))
+            filter_dsncc();
+        }
+
+        private Boolean checkInput()
+        {
+            Boolean kq = true;
+            if (txtMaNCC.Text == "")
             {
-                MessageBox.Show("Vui lòng nhập tên nhà cung cấp!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                kq = false;
+                txtMaNCC.Focus();
+            }
+            else if (txtTenNCC.Text == "")
+            {
+                kq = false;
                 txtTenNCC.Focus();
-                return false;
             }
-            if (string.IsNullOrEmpty(txtSoDienThoai.Text.Trim()))
+            else if (txtSoDienThoai.Text == "")
             {
-                MessageBox.Show("Vui lòng nhập số điện thoại!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                kq = false;
                 txtSoDienThoai.Focus();
-                return false;
             }
-            if (string.IsNullOrEmpty(txtDiaChi.Text.Trim()))
+            else if (txtDiaChi.Text == "")
             {
-                MessageBox.Show("Vui lòng nhập địa chỉ!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                kq = false;
                 txtDiaChi.Focus();
-                return false;
             }
-            return true;
+            return kq;
         }
 
         private void dgvNhaCungCap_CellEnter(object sender, DataGridViewCellEventArgs e)
@@ -78,6 +85,7 @@ namespace qlybanhang
             DataRowView row = dgvRow.DataBoundItem as DataRowView;
             if (row == null) return;
 
+            txtMaNCC.Text = row["MaNCC"].ToString();
             txtTenNCC.Text = row["TenNCC"].ToString();
             txtSoDienThoai.Text = row["SoDienThoai"].ToString();
             txtDiaChi.Text = row["DiaChi"].ToString();
@@ -85,108 +93,106 @@ namespace qlybanhang
 
         private void btnThem_Click(object sender, EventArgs e)
         {
-            try
+            if (checkInput())
             {
-                if (!checkInput()) return;
                 NhaCungCapDTO ncc = new NhaCungCapDTO();
-                ncc.TenNCC = txtTenNCC.Text.Trim();
-                ncc.SoDienThoai = txtSoDienThoai.Text.Trim();
-                ncc.DiaChi = txtDiaChi.Text.Trim();
-                if (bus.add_New_NCC(ncc))
+                ncc.MaNCC = txtMaNCC.Text;
+                ncc.TenNCC = txtTenNCC.Text;
+                ncc.SoDienThoai = txtSoDienThoai.Text;
+                ncc.DiaChi = txtDiaChi.Text;
+
+                Boolean kq = bus.add_New_NCC(ncc);
+                if (!kq)
                 {
-                    LoadData();
-                    LamMoi();
-                    MessageBox.Show("Thêm nhà cung cấp thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Thêm mới không thành công. Có thể mã nhà cung cấp đã tồn tại!");
                 }
                 else
                 {
-                    MessageBox.Show("Thêm nhà cung cấp thất bại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    LoadData();
+                    lammoi();
+                    MessageBox.Show("Thêm nhà cung cấp thành công!", "Thông báo");
                 }
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Bạn chưa nhập đủ dữ liệu!");
             }
         }
 
         private void btnSua_Click(object sender, EventArgs e)
         {
-            try
+            if (dgvNhaCungCap.CurrentRow == null || dgvNhaCungCap.CurrentRow.IsNewRow)
             {
-                if (dgvNhaCungCap.CurrentRow == null || dgvNhaCungCap.CurrentRow.IsNewRow)
-                {
-                    MessageBox.Show("Chưa chọn nhà cung cấp cần sửa!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-                if (!checkInput()) return;
-                int maNCC = Convert.ToInt32(dgvNhaCungCap.CurrentRow.Cells["MaNCC"].Value);
+                MessageBox.Show("Chưa chọn nhà cung cấp cần sửa!", "Thông báo");
+                return;
+            }
+
+            if (checkInput())
+            {
                 NhaCungCapDTO ncc = new NhaCungCapDTO();
-                ncc.MaNCC = maNCC;
+                ncc.MaNCC = txtMaNCC.Text.Trim();
                 ncc.TenNCC = txtTenNCC.Text.Trim();
                 ncc.SoDienThoai = txtSoDienThoai.Text.Trim();
                 ncc.DiaChi = txtDiaChi.Text.Trim();
-                
+
                 if (bus.update_NCC(ncc))
                 {
                     LoadData();
-                    LamMoi();
-                    MessageBox.Show("Sửa nhà cung cấp thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    lammoi();
+                    MessageBox.Show("Cập nhật thành công!", "Thông báo");
                 }
                 else
                 {
-                    MessageBox.Show("Không tìm thấy nhà cung cấp để sửa!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Cập nhật thất bại!", "Lỗi");
                 }
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Bạn chưa nhập đủ dữ liệu!");
             }
         }
 
         private void btnXoa_Click(object sender, EventArgs e)
         {
-            try
+            if (dgvNhaCungCap.CurrentRow == null || dgvNhaCungCap.CurrentRow.IsNewRow)
             {
-                if (dgvNhaCungCap.CurrentRow == null || dgvNhaCungCap.CurrentRow.IsNewRow)
-                {
-                    MessageBox.Show("Chưa chọn nhà cung cấp cần xóa!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-                DialogResult dr = MessageBox.Show("Bạn có chắc muốn xóa?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (dr == DialogResult.Yes)
-                {
-                    int maNCC = Convert.ToInt32(dgvNhaCungCap.CurrentRow.Cells["MaNCC"].Value);
-                    if (bus.delete_NCC(maNCC))
-                    {
-                        LoadData();
-                        LamMoi();
-                        MessageBox.Show("Xóa nhà cung cấp thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Không tìm thấy nhà cung cấp để xóa!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
+                MessageBox.Show("Chưa chọn nhà cung cấp cần xoá!", "Thông báo");
+                return;
             }
-            catch (Exception ex)
+
+            string maNCC = dgvNhaCungCap.CurrentRow.Cells["MaNCC"].Value.ToString();
+            DialogResult ret = MessageBox.Show("Bạn có chắc chắn muốn xoá nhà cung cấp " + maNCC + "?", "Xác nhận",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (ret == DialogResult.Yes)
             {
-                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (bus.delete_NCC(maNCC))
+                {
+                    LoadData();
+                    lammoi();
+                    MessageBox.Show("Xoá thành công!", "Thông báo");
+                }
+                else
+                {
+                    MessageBox.Show("Xoá thất bại!", "Lỗi");
+                }
             }
         }
 
         private void btnLamMoi_Click(object sender, EventArgs e)
         {
-            LamMoi();
+            lammoi();
         }
 
-        private void LamMoi()
+        private void lammoi()
         {
+            txtMaNCC.Enabled = true;
+            txtMaNCC.Clear();
             txtTenNCC.Clear();
             txtSoDienThoai.Clear();
             txtDiaChi.Clear();
             txtTimKiem.Clear();
             dgvNhaCungCap.ClearSelection();
-            txtTenNCC.Focus();
+            txtMaNCC.Focus();
         }
     }
 }

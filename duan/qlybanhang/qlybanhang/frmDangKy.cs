@@ -7,7 +7,7 @@ namespace qlybanhang
 {
     public partial class frmDangKy : Form
     {
-        MyBUS bus = new MyBUS();
+        TaiKhoanBUS bus = new TaiKhoanBUS();
 
         public frmDangKy()
         {
