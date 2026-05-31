@@ -40,8 +40,17 @@ namespace qlybanhang
 
         private void LoadData()
         {
-            // Trả về toàn bộ danh sách để xem được cả NV đã nghỉ
-            filter_dsnv();
+            DataViewManager dvm = bus.getDataset().DefaultViewManager;
+            if (!chkHienThiDaXoa.Checked)
+            {
+                dvm.DataViewSettings["NhanVien"].RowFilter = "TrangThai = 1 OR TrangThai IS NULL";
+            }
+            else
+            {
+                dvm.DataViewSettings["NhanVien"].RowFilter = "";
+            }
+            dgvNhanVien.DataSource = dvm;
+            dgvNhanVien.DataMember = "NhanVien";
 
             if (dgvNhanVien.Columns.Count > 0)
             {
@@ -65,6 +74,12 @@ namespace qlybanhang
         private void filter_dsnv()
         {
             string keyword = txtTimKiem.Text.Replace("'", "''");
+            if (string.IsNullOrEmpty(keyword))
+            {
+                LoadData();
+                return;
+            }
+
             string strFilter = "(TenNV LIKE '%" + keyword + "%' OR MaNV LIKE '%" + keyword + "%')";
             if (!chkHienThiDaXoa.Checked)
             {

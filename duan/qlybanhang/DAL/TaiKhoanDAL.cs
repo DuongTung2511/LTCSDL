@@ -12,9 +12,16 @@ namespace DAL
         public TaiKhoanDAL()
         {
             ds = new DataSet();
-            da = new SqlDataAdapter("SELECT * FROM TaiKhoan", conn);
-            new SqlCommandBuilder(da);
+            da = new SqlDataAdapter();
+            SqlCommandBuilder cb = new SqlCommandBuilder(da);
+            da.SelectCommand = new SqlCommand("SELECT * FROM TaiKhoan", conn);
+            da.TableMappings.Add("Table", "TaiKhoan");
             da.Fill(ds, "TaiKhoan");
+        }
+
+        public DataSet getDBtoDataset()
+        {
+            return ds;
         }
 
         public DataTable getTable()

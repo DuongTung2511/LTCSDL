@@ -11,12 +11,13 @@ namespace BUS
 
         public DataSet getDataset()
         {
-            return dal.ds;
+            return dal.getDBtoDataset();
         }
 
         public DataTable getTableNhaCungCap()
         {
-            return dal.getTable();
+            DataTable dt = dal.getTable();
+            return dt;
         }
 
         public Boolean MaNCC_not_Exist(string maNCC)
@@ -35,7 +36,7 @@ namespace BUS
             Boolean kq = false;
             if (MaNCC_not_Exist(ncc.MaNCC))
             {
-                DataRow r = dal.ds.Tables["NhaCungCap"].NewRow();
+                DataRow r = dal.getTable().NewRow();
                 r["MaNCC"] = ncc.MaNCC;
                 r["TenNCC"] = ncc.TenNCC;
                 r["SoDienThoai"] = ncc.SoDienThoai;

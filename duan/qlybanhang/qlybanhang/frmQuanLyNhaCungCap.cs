@@ -34,7 +34,17 @@ namespace qlybanhang
 
         private void LoadData()
         {
-            filter_dsncc();
+            DataViewManager dvm = bus.getDataset().DefaultViewManager;
+            if (!chkHienThiDaXoa.Checked)
+            {
+                dvm.DataViewSettings["NhaCungCap"].RowFilter = "TrangThai = 1 OR TrangThai IS NULL";
+            }
+            else
+            {
+                dvm.DataViewSettings["NhaCungCap"].RowFilter = "";
+            }
+            dgvNhaCungCap.DataSource = dvm;
+            dgvNhaCungCap.DataMember = "NhaCungCap";
 
             if (dgvNhaCungCap.Columns.Count > 0)
             {
@@ -50,6 +60,12 @@ namespace qlybanhang
         private void filter_dsncc()
         {
             string keyword = txtTimKiem.Text.Replace("'", "''");
+            if (string.IsNullOrEmpty(keyword))
+            {
+                LoadData();
+                return;
+            }
+
             string strFilter = "(TenNCC LIKE '%" + keyword + "%' OR MaNCC LIKE '%" + keyword + "%')";
             if (!chkHienThiDaXoa.Checked)
             {

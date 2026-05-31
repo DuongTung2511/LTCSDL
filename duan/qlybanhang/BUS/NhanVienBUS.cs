@@ -11,12 +11,13 @@ namespace BUS
 
         public DataSet getDataset()
         {
-            return dal.ds;
+            return dal.getDBtoDataset();
         }
 
         public DataTable getTableNhanVien()
         {
-            return dal.getTable();
+            DataTable dt = dal.getTable();
+            return dt;
         }
 
         public Boolean MaNV_not_Exist(string maNV)
@@ -35,7 +36,7 @@ namespace BUS
             Boolean kq = false;
             if (MaNV_not_Exist(nv.MaNV))
             {
-                DataRow r = dal.ds.Tables["NhanVien"].NewRow();
+                DataRow r = dal.getTable().NewRow();
                 r["MaNV"] = nv.MaNV;
                 r["TenNV"] = nv.TenNV;
                 r["GioiTinh"] = nv.GioiTinh;

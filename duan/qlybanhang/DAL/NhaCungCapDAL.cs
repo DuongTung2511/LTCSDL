@@ -12,9 +12,16 @@ namespace DAL
         public NhaCungCapDAL()
         {
             ds = new DataSet();
-            da = new SqlDataAdapter("SELECT * FROM NhaCungCap", conn);
-            new SqlCommandBuilder(da);
+            da = new SqlDataAdapter();
+            SqlCommandBuilder cb = new SqlCommandBuilder(da);
+            da.SelectCommand = new SqlCommand("SELECT * FROM NhaCungCap", conn);
+            da.TableMappings.Add("Table", "NhaCungCap");
             da.Fill(ds, "NhaCungCap");
+        }
+
+        public DataSet getDBtoDataset()
+        {
+            return ds;
         }
 
         public DataTable getTable()

@@ -55,6 +55,12 @@ namespace qlybanhang
         private void filter_dstk()
         {
             string keyword = txtTimKiem.Text.Replace("'", "''");
+            if (string.IsNullOrEmpty(keyword))
+            {
+                LoadData();
+                return;
+            }
+
             DataTable dtDayDu = bus.LayDanhSachTaiKhoanDayDu();
             DataRow[] rows = dtDayDu.Select("TenDangNhap LIKE '%" + keyword + "%' OR TenNV LIKE '%" + keyword + "%'");
             if (rows.Length > 0)

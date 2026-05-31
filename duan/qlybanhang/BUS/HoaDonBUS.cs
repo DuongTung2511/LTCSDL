@@ -15,7 +15,7 @@ namespace BUS
 
         public DataSet getDataset()
         {
-            return hdDal.ds;
+            return hdDal.getDBtoDataset();
         }
 
         public DataTable getTableHoaDon()

@@ -12,12 +12,13 @@ namespace BUS
 
         public DataSet getDataset()
         {
-            return dal.ds;
+            return dal.getDBtoDataset();
         }
 
         public DataTable getTableChiTietHD()
         {
-            return dal.getTable();
+            DataTable dt = dal.getTable();
+            return dt;
         }
 
         public DataTable LayDanhSachChiTietHDDayDu(string maHD)

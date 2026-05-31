@@ -12,9 +12,16 @@ namespace DAL
         public KhachHangDAL()
         {
             ds = new DataSet();
-            da = new SqlDataAdapter("SELECT * FROM KhachHang", conn);
-            new SqlCommandBuilder(da);
+            da = new SqlDataAdapter();
+            SqlCommandBuilder cb = new SqlCommandBuilder(da);
+            da.SelectCommand = new SqlCommand("SELECT * FROM KhachHang", conn);
+            da.TableMappings.Add("Table", "KhachHang");
             da.Fill(ds, "KhachHang");
+        }
+
+        public DataSet getDBtoDataset()
+        {
+            return ds;
         }
 
         public DataTable getTable()

@@ -11,12 +11,13 @@ namespace BUS
 
         public DataSet getDataset()
         {
-            return dal.ds;
+            return dal.getDBtoDataset();
         }
 
         public DataTable getTableSanPham()
         {
-            return dal.getTable();
+            DataTable dt = dal.getTable();
+            return dt;
         }
 
         public Boolean MaSP_not_Exist(string maSP)
@@ -35,7 +36,7 @@ namespace BUS
             Boolean kq = false;
             if (MaSP_not_Exist(sp.MaSP.ToString()))
             {
-                DataRow r = dal.ds.Tables["SanPham"].NewRow();
+                DataRow r = dal.getTable().NewRow();
                 r["MaSP"] = sp.MaSP;
                 r["TenSP"] = sp.TenSP;
                 r["MaNCC"] = sp.MaNCC;

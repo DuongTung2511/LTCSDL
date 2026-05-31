@@ -11,12 +11,13 @@ namespace BUS
 
         public DataSet getDataset()
         {
-            return dal.ds;
+            return dal.getDBtoDataset();
         }
 
         public DataTable getTableKhachHang()
         {
-            return dal.getTable();
+            DataTable dt = dal.getTable();
+            return dt;
         }
 
         public Boolean MaKH_not_Exist(string maKH)
@@ -35,7 +36,7 @@ namespace BUS
             Boolean kq = false;
             if (MaKH_not_Exist(kh.MaKH))
             {
-                DataRow r = dal.ds.Tables["KhachHang"].NewRow();
+                DataRow r = dal.getTable().NewRow();
                 r["MaKH"] = kh.MaKH;
                 r["TenKH"] = kh.TenKH;
                 r["SoDienThoai"] = kh.SoDienThoai;

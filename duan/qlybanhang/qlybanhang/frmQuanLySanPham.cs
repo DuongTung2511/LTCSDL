@@ -39,7 +39,17 @@ namespace qlybanhang
 
         private void LoadData()
         {
-            filter_dssp();
+            DataViewManager dvm = bus.getDataset().DefaultViewManager;
+            if (!chkHienThiDaXoa.Checked)
+            {
+                dvm.DataViewSettings["SanPham"].RowFilter = "TrangThai = 1 OR TrangThai IS NULL";
+            }
+            else
+            {
+                dvm.DataViewSettings["SanPham"].RowFilter = "";
+            }
+            dgvSanPham.DataSource = dvm;
+            dgvSanPham.DataMember = "SanPham";
 
             if (dgvSanPham.Columns.Count > 0)
             {
@@ -56,6 +66,12 @@ namespace qlybanhang
         private void filter_dssp()
         {
             string keyword = txtTimKiem.Text.Replace("'", "''");
+            if (string.IsNullOrEmpty(keyword))
+            {
+                LoadData();
+                return;
+            }
+
             string strFilter = "(TenSP LIKE '%" + keyword + "%' OR MaSP LIKE '%" + keyword + "%')";
             if (!chkHienThiDaXoa.Checked)
             {

@@ -11,7 +11,7 @@ namespace BUS
 
         public DataSet getDataset()
         {
-            return dal.ds;
+            return dal.getDBtoDataset();
         }
 
         public DataRow DangNhap(string tenDangNhap, string matKhau)
@@ -46,7 +46,7 @@ namespace BUS
             Boolean kq = false;
             if (MaTK_not_Exist(tk.TenDangNhap))
             {
-                DataRow r = dal.ds.Tables["TaiKhoan"].NewRow();
+                DataRow r = dal.getTable().NewRow();
                 r["TenDangNhap"] = tk.TenDangNhap;
                 r["MatKhau"] = tk.MatKhau;
                 r["Quyen"] = "nhanvien";
@@ -59,7 +59,8 @@ namespace BUS
 
         public DataTable getTableTaiKhoan()
         {
-            return dal.getTable();
+            DataTable dt = dal.getTable();
+            return dt;
         }
 
         public DataTable LayDanhSachTaiKhoanDayDu()
@@ -108,7 +109,7 @@ namespace BUS
             Boolean kq = false;
             if (MaTK_not_Exist(tk.TenDangNhap))
             {
-                DataRow r = dal.ds.Tables["TaiKhoan"].NewRow();
+                DataRow r = dal.getTable().NewRow();
                 r["TenDangNhap"] = tk.TenDangNhap;
                 r["MatKhau"] = tk.MatKhau;
                 r["Quyen"] = tk.Quyen;

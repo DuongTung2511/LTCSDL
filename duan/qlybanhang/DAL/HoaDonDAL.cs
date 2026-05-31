@@ -12,9 +12,16 @@ namespace DAL
         public HoaDonDAL()
         {
             ds = new DataSet();
-            da = new SqlDataAdapter("SELECT * FROM HoaDon", conn);
-            new SqlCommandBuilder(da);
+            da = new SqlDataAdapter();
+            SqlCommandBuilder cb = new SqlCommandBuilder(da);
+            da.SelectCommand = new SqlCommand("SELECT * FROM HoaDon", conn);
+            da.TableMappings.Add("Table", "HoaDon");
             da.Fill(ds, "HoaDon");
+        }
+
+        public DataSet getDBtoDataset()
+        {
+            return ds;
         }
 
         public DataTable getTable()

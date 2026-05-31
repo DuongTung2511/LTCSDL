@@ -12,9 +12,16 @@ namespace DAL
         public SanPhamDAL()
         {
             ds = new DataSet();
-            da = new SqlDataAdapter("SELECT * FROM SanPham", conn);
-            new SqlCommandBuilder(da);
+            da = new SqlDataAdapter();
+            SqlCommandBuilder cb = new SqlCommandBuilder(da);
+            da.SelectCommand = new SqlCommand("SELECT * FROM SanPham", conn);
+            da.TableMappings.Add("Table", "SanPham");
             da.Fill(ds, "SanPham");
+        }
+
+        public DataSet getDBtoDataset()
+        {
+            return ds;
         }
 
         public DataTable getTable()

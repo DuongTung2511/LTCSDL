@@ -12,9 +12,16 @@ namespace DAL
         public NhanVienDAL()
         {
             ds = new DataSet();
-            da = new SqlDataAdapter("SELECT * FROM NhanVien", conn);
-            new SqlCommandBuilder(da);
+            da = new SqlDataAdapter();
+            SqlCommandBuilder cb = new SqlCommandBuilder(da);
+            da.SelectCommand = new SqlCommand("SELECT * FROM NhanVien", conn);
+            da.TableMappings.Add("Table", "NhanVien");
             da.Fill(ds, "NhanVien");
+        }
+
+        public DataSet getDBtoDataset()
+        {
+            return ds;
         }
 
         public DataTable getTable()

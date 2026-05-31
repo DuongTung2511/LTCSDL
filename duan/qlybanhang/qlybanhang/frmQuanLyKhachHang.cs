@@ -34,7 +34,17 @@ namespace qlybanhang
 
         private void LoadData()
         {
-            filter_dskh();
+            DataViewManager dvm = bus.getDataset().DefaultViewManager;
+            if (!chkHienThiDaXoa.Checked)
+            {
+                dvm.DataViewSettings["KhachHang"].RowFilter = "TrangThai = 1 OR TrangThai IS NULL";
+            }
+            else
+            {
+                dvm.DataViewSettings["KhachHang"].RowFilter = "";
+            }
+            dgvKhachHang.DataSource = dvm;
+            dgvKhachHang.DataMember = "KhachHang";
 
             if (dgvKhachHang.Columns.Count > 0)
             {
@@ -50,6 +60,12 @@ namespace qlybanhang
         private void filter_dskh()
         {
             string keyword = txtTimKiem.Text.Replace("'", "''");
+            if (string.IsNullOrEmpty(keyword))
+            {
+                LoadData();
+                return;
+            }
+
             string strFilter = "(TenKH LIKE '%" + keyword + "%' OR SoDienThoai LIKE '%" + keyword + "%')";
             if (!chkHienThiDaXoa.Checked)
             {

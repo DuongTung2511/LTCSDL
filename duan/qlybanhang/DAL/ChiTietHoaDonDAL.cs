@@ -12,9 +12,16 @@ namespace DAL
         public ChiTietHoaDonDAL()
         {
             ds = new DataSet();
-            da = new SqlDataAdapter("SELECT * FROM ChiTietHoaDon", conn);
-            new SqlCommandBuilder(da);
+            da = new SqlDataAdapter();
+            SqlCommandBuilder cb = new SqlCommandBuilder(da);
+            da.SelectCommand = new SqlCommand("SELECT * FROM ChiTietHoaDon", conn);
+            da.TableMappings.Add("Table", "ChiTietHoaDon");
             da.Fill(ds, "ChiTietHoaDon");
+        }
+
+        public DataSet getDBtoDataset()
+        {
+            return ds;
         }
 
         public DataTable getTable()
