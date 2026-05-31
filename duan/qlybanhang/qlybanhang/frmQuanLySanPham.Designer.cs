@@ -30,13 +30,13 @@ namespace qlybanhang
             this.btnXoa = new System.Windows.Forms.Button();
             this.btnSua = new System.Windows.Forms.Button();
             this.btnThem = new System.Windows.Forms.Button();
+            this.cboTrangThai = new System.Windows.Forms.ComboBox();
+            this.lblTrangThai = new System.Windows.Forms.Label();
             this.txtMaSP = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.txtTenSP = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.lblTrangThai = new System.Windows.Forms.Label();
-            this.cboTrangThai = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSanPham)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -167,7 +167,7 @@ namespace qlybanhang
             this.btnXoa.Name = "btnXoa";
             this.btnXoa.Size = new System.Drawing.Size(100, 28);
             this.btnXoa.TabIndex = 8;
-            this.btnXoa.Text = "Xóa";
+            this.btnXoa.Text = "Dừng bán";
             this.btnXoa.UseVisualStyleBackColor = true;
             this.btnXoa.Click += new System.EventHandler(this.btnXoa_Click);
             // 
@@ -192,6 +192,27 @@ namespace qlybanhang
             this.btnThem.Text = "Thêm";
             this.btnThem.UseVisualStyleBackColor = true;
             this.btnThem.Click += new System.EventHandler(this.btnThem_Click);
+            // 
+            // cboTrangThai
+            // 
+            this.cboTrangThai.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboTrangThai.FormattingEnabled = true;
+            this.cboTrangThai.Items.AddRange(new object[] {
+            "Ngừng kinh doanh",
+            "Đang bán"});
+            this.cboTrangThai.Location = new System.Drawing.Point(656, 112);
+            this.cboTrangThai.Name = "cboTrangThai";
+            this.cboTrangThai.Size = new System.Drawing.Size(192, 24);
+            this.cboTrangThai.TabIndex = 16;
+            // 
+            // lblTrangThai
+            // 
+            this.lblTrangThai.AutoSize = true;
+            this.lblTrangThai.Location = new System.Drawing.Point(555, 115);
+            this.lblTrangThai.Name = "lblTrangThai";
+            this.lblTrangThai.Size = new System.Drawing.Size(70, 16);
+            this.lblTrangThai.TabIndex = 15;
+            this.lblTrangThai.Text = "Trạng thái:";
             // 
             // txtMaSP
             // 
@@ -220,27 +241,6 @@ namespace qlybanhang
             this.label2.Size = new System.Drawing.Size(93, 16);
             this.label2.TabIndex = 2;
             this.label2.Text = "Nhà cung cấp:";
-            // 
-            // lblTrangThai
-            // 
-            this.lblTrangThai.AutoSize = true;
-            this.lblTrangThai.Location = new System.Drawing.Point(555, 115);
-            this.lblTrangThai.Name = "lblTrangThai";
-            this.lblTrangThai.Size = new System.Drawing.Size(70, 16);
-            this.lblTrangThai.TabIndex = 15;
-            this.lblTrangThai.Text = "Trạng thái:";
-            // 
-            // cboTrangThai
-            // 
-            this.cboTrangThai.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboTrangThai.FormattingEnabled = true;
-            this.cboTrangThai.Items.AddRange(new object[] {
-            "Ngừng kinh doanh",
-            "Đang bán"});
-            this.cboTrangThai.Location = new System.Drawing.Point(656, 112);
-            this.cboTrangThai.Name = "cboTrangThai";
-            this.cboTrangThai.Size = new System.Drawing.Size(192, 24);
-            this.cboTrangThai.TabIndex = 16;
             // 
             // txtTenSP
             // 

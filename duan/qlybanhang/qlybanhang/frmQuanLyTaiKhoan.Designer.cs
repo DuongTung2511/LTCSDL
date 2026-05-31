@@ -28,6 +28,8 @@ namespace qlybanhang
             this.label2 = new System.Windows.Forms.Label();
             this.txtTenDangNhap = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.lblMaNV = new System.Windows.Forms.Label();
+            this.txtMaNV = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.dgvTaiKhoan = new System.Windows.Forms.DataGridView();
             this.txtTimKiem = new System.Windows.Forms.TextBox();
@@ -47,6 +49,8 @@ namespace qlybanhang
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.txtMatKhau);
             this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.lblMaNV);
+            this.groupBox1.Controls.Add(this.txtMaNV);
             this.groupBox1.Controls.Add(this.txtTenDangNhap);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(16, 15);
@@ -158,6 +162,22 @@ namespace qlybanhang
             this.label1.TabIndex = 0;
             this.label1.Text = "Tên đăng nhập:";
             // 
+            // lblMaNV
+            // 
+            this.lblMaNV.AutoSize = true;
+            this.lblMaNV.Location = new System.Drawing.Point(460, 98);
+            this.lblMaNV.Name = "lblMaNV";
+            this.lblMaNV.Size = new System.Drawing.Size(123, 16);
+            this.lblMaNV.TabIndex = 10;
+            this.lblMaNV.Text = "Mã NV (Tùy chọn):";
+            // 
+            // txtMaNV
+            // 
+            this.txtMaNV.Location = new System.Drawing.Point(597, 95);
+            this.txtMaNV.Name = "txtMaNV";
+            this.txtMaNV.Size = new System.Drawing.Size(299, 22);
+            this.txtMaNV.TabIndex = 11;
+            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.txtTimKiem);
@@ -234,6 +254,8 @@ namespace qlybanhang
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TextBox txtTenDangNhap;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblMaNV;
+        private System.Windows.Forms.TextBox txtMaNV;
         private System.Windows.Forms.TextBox txtMatKhau;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;

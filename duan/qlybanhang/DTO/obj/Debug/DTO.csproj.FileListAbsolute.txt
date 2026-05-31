@@ -2,4 +2,5 @@ d:\LTCSDL\duan\qlybanhang\DTO\bin\Debug\DTO.dll
 d:\LTCSDL\duan\qlybanhang\DTO\bin\Debug\DTO.pdb
 d:\LTCSDL\duan\qlybanhang\DTO\obj\Debug\DTO.dll
 d:\LTCSDL\duan\qlybanhang\DTO\obj\Debug\DTO.pdb
-d:\LTCSDL\duan\qlybanhang\DTO\obj\Debug\DTO.csprojResolveAssemblyReference.cache
+d:\LTCSDL\duan\qlybanhang\DTO\obj\Debug\DTO.csproj.AssemblyReference.cache
+d:\LTCSDL\duan\qlybanhang\DTO\obj\Debug\DTO.csproj.CoreCompileInputs.cache

@@ -15,23 +15,8 @@ namespace qlybanhang
             InitializeComponent();
         }
 
-        private TextBox txtMaNV;
-        private Label lblMaNV;
-
         private void frmQuanLyTaiKhoan_Load(object sender, EventArgs e)
         {
-            lblMaNV = new Label();
-            lblMaNV.Text = "Mã NV (Tùy chọn):";
-            lblMaNV.AutoSize = true;
-            lblMaNV.Location = new System.Drawing.Point(460, 98);
-
-            txtMaNV = new TextBox();
-            txtMaNV.Location = new System.Drawing.Point(597, 95);
-            txtMaNV.Size = new System.Drawing.Size(299, 22);
-
-            groupBox1.Controls.Add(lblMaNV);
-            groupBox1.Controls.Add(txtMaNV);
-
             cboQuyen.Items.Add("Quản lý");
             cboQuyen.Items.Add("Nhân viên");
             cboQuyen.SelectedIndex = 1;
