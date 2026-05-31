@@ -70,5 +70,17 @@ namespace DAL
             ds.Tables["HoaDon"].Clear();
             da.Fill(ds, "HoaDon");
         }
+
+        public bool KiemTraKhachHangTonTai(string maKH)
+        {
+            DataRow[] rows = ds.Tables["HoaDon"].Select("MaKH = '" + maKH.Replace("'", "''") + "'");
+            return rows.Length > 0;
+        }
+
+        public bool KiemTraNhanVienTonTai(string maNV)
+        {
+            DataRow[] rows = ds.Tables["HoaDon"].Select("MaNV = '" + maNV.Replace("'", "''") + "'");
+            return rows.Length > 0;
+        }
     }
 }

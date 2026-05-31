@@ -34,16 +34,14 @@ namespace qlybanhang
 
         private void LoadData()
         {
-            DataViewManager dvm = bus.getDataset().DefaultViewManager;
-            dgvKhachHang.DataSource = dvm;
-            dgvKhachHang.DataMember = "KhachHang";
+            filter_dskh();
 
             if (dgvKhachHang.Columns.Count > 0)
             {
-                dgvKhachHang.Columns["MaKH"].HeaderText = "Mã KH";
-                dgvKhachHang.Columns["TenKH"].HeaderText = "Tên khách hàng";
-                dgvKhachHang.Columns["SoDienThoai"].HeaderText = "Số điện thoại";
-                dgvKhachHang.Columns["DiaChi"].HeaderText = "Địa chỉ";
+                if(dgvKhachHang.Columns.Contains("MaKH")) dgvKhachHang.Columns["MaKH"].HeaderText = "Mã KH";
+                if(dgvKhachHang.Columns.Contains("TenKH")) dgvKhachHang.Columns["TenKH"].HeaderText = "Tên khách hàng";
+                if(dgvKhachHang.Columns.Contains("SoDienThoai")) dgvKhachHang.Columns["SoDienThoai"].HeaderText = "Số điện thoại";
+                if(dgvKhachHang.Columns.Contains("DiaChi")) dgvKhachHang.Columns["DiaChi"].HeaderText = "Địa chỉ";
                 if(dgvKhachHang.Columns.Contains("TrangThai")) dgvKhachHang.Columns["TrangThai"].HeaderText = "Trạng thái";
             }
             dgvKhachHang.ReadOnly = true;
@@ -51,10 +49,22 @@ namespace qlybanhang
 
         private void filter_dskh()
         {
-            DataRow[] rows = bus.getFilter_KH("TenKH LIKE '%" + txtTimKiem.Text.Replace("'", "''") + "%' OR SoDienThoai LIKE '%" + txtTimKiem.Text.Replace("'", "''") + "%'");
+            string keyword = txtTimKiem.Text.Replace("'", "''");
+            string strFilter = "(TenKH LIKE '%" + keyword + "%' OR SoDienThoai LIKE '%" + keyword + "%')";
+            if (!chkHienThiDaXoa.Checked)
+            {
+                strFilter += " AND (TrangThai = 1 OR TrangThai IS NULL)";
+            }
+
+            DataTable dt = bus.getTableKhachHang();
+            DataRow[] rows = bus.getFilter_KH(strFilter);
             if (rows.Length > 0)
             {
                 dgvKhachHang.DataSource = rows.CopyToDataTable();
+            }
+            else
+            {
+                dgvKhachHang.DataSource = dt.Clone();
             }
         }
 
@@ -212,6 +222,39 @@ namespace qlybanhang
             if (cboTrangThai != null) cboTrangThai.SelectedIndex = 1;
             dgvKhachHang.ClearSelection();
             txtMaKH.Focus();
+        }
+
+        private void chkHienThiDaXoa_CheckedChanged(object sender, EventArgs e)
+        {
+            filter_dskh();
+        }
+
+        private void btnXoaVinhVien_Click(object sender, EventArgs e)
+        {
+            if (dgvKhachHang.CurrentRow == null || dgvKhachHang.CurrentRow.IsNewRow)
+            {
+                MessageBox.Show("Chưa chọn khách hàng cần thao tác!", "Thông báo");
+                return;
+            }
+
+            string maKH = dgvKhachHang.CurrentRow.Cells["MaKH"].Value.ToString();
+            DialogResult ret = MessageBox.Show("Bạn có chắc chắn muốn xóa VĨNH VIỄN khách hàng " + maKH + "? Hành động này không thể hoàn tác!", "Cảnh báo",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (ret == DialogResult.Yes)
+            {
+                string msg = bus.XoaVinhVien(maKH);
+                if (msg == "")
+                {
+                    bus = new KhachHangBUS(); // Reload từ DB
+                    LoadData();
+                    lammoi();
+                    MessageBox.Show("Đã xóa vĩnh viễn khách hàng!", "Thông báo");
+                }
+                else
+                {
+                    MessageBox.Show(msg, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }

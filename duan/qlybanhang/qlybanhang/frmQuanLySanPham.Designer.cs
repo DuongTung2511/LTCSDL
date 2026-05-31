@@ -30,6 +30,7 @@ namespace qlybanhang
             this.btnXoa = new System.Windows.Forms.Button();
             this.btnSua = new System.Windows.Forms.Button();
             this.btnThem = new System.Windows.Forms.Button();
+            this.btnXoaVinhVien = new System.Windows.Forms.Button();
             this.cboTrangThai = new System.Windows.Forms.ComboBox();
             this.lblTrangThai = new System.Windows.Forms.Label();
             this.txtMaSP = new System.Windows.Forms.TextBox();
@@ -37,6 +38,7 @@ namespace qlybanhang
             this.label2 = new System.Windows.Forms.Label();
             this.txtTenSP = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.chkHienThiDaXoa = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSanPham)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -87,6 +89,7 @@ namespace qlybanhang
             this.groupBox1.Controls.Add(this.btnXoa);
             this.groupBox1.Controls.Add(this.btnSua);
             this.groupBox1.Controls.Add(this.btnThem);
+            this.groupBox1.Controls.Add(this.btnXoaVinhVien);
             this.groupBox1.Controls.Add(this.cboTrangThai);
             this.groupBox1.Controls.Add(this.lblTrangThai);
             this.groupBox1.Controls.Add(this.txtMaSP);
@@ -193,6 +196,17 @@ namespace qlybanhang
             this.btnThem.UseVisualStyleBackColor = true;
             this.btnThem.Click += new System.EventHandler(this.btnThem_Click);
             // 
+            // btnXoaVinhVien
+            // 
+            this.btnXoaVinhVien.Location = new System.Drawing.Point(645, 140);
+            this.btnXoaVinhVien.Margin = new System.Windows.Forms.Padding(4);
+            this.btnXoaVinhVien.Name = "btnXoaVinhVien";
+            this.btnXoaVinhVien.Size = new System.Drawing.Size(120, 28);
+            this.btnXoaVinhVien.TabIndex = 10;
+            this.btnXoaVinhVien.Text = "Xóa vĩnh viễn";
+            this.btnXoaVinhVien.UseVisualStyleBackColor = true;
+            this.btnXoaVinhVien.Click += new System.EventHandler(this.btnXoaVinhVien_Click);
+            // 
             // cboTrangThai
             // 
             this.cboTrangThai.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -260,11 +274,23 @@ namespace qlybanhang
             this.label1.TabIndex = 0;
             this.label1.Text = "Tên sản phẩm:";
             // 
+            // chkHienThiDaXoa
+            // 
+            this.chkHienThiDaXoa.AutoSize = true;
+            this.chkHienThiDaXoa.Location = new System.Drawing.Point(798, 12);
+            this.chkHienThiDaXoa.Name = "chkHienThiDaXoa";
+            this.chkHienThiDaXoa.Size = new System.Drawing.Size(231, 20);
+            this.chkHienThiDaXoa.TabIndex = 11;
+            this.chkHienThiDaXoa.Text = "Hiển thị bản ghi đã xóa/ngừng bán";
+            this.chkHienThiDaXoa.UseVisualStyleBackColor = true;
+            this.chkHienThiDaXoa.CheckedChanged += new System.EventHandler(this.chkHienThiDaXoa_CheckedChanged);
+            // 
             // frmQuanLySanPham
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1050, 631);
+            this.Controls.Add(this.chkHienThiDaXoa);
             this.Controls.Add(this.txtTimKiem);
             this.Controls.Add(this.lblTimKiem);
             this.Controls.Add(this.groupBox1);
@@ -304,5 +330,7 @@ namespace qlybanhang
         private System.Windows.Forms.ComboBox cboNhaCungCap;
         private System.Windows.Forms.Label lblTrangThai;
         private System.Windows.Forms.ComboBox cboTrangThai;
+        private System.Windows.Forms.Button btnXoaVinhVien;
+        private System.Windows.Forms.CheckBox chkHienThiDaXoa;
     }
 }

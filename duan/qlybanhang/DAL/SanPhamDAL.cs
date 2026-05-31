@@ -68,5 +68,22 @@ namespace DAL
             ds.Tables["SanPham"].Clear();
             da.Fill(ds, "SanPham");
         }
+
+        public bool KiemTraNhaCungCapTonTai(string maNCC)
+        {
+            DataRow[] rows = ds.Tables["SanPham"].Select("MaNCC = '" + maNCC.Replace("'", "''") + "'");
+            return rows.Length > 0;
+        }
+
+        public void hardDelete(string maSP)
+        {
+            DataRow[] rows = ds.Tables["SanPham"].Select("MaSP = '" + maSP.Replace("'", "''") + "'");
+            if (rows.Length > 0)
+            {
+                rows[0].Delete();
+                da.Update(ds, "SanPham");
+                ds.AcceptChanges();
+            }
+        }
     }
 }

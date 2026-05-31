@@ -41,17 +41,17 @@ namespace qlybanhang
         private void LoadData()
         {
             // Trả về toàn bộ danh sách để xem được cả NV đã nghỉ
-            dgvNhanVien.DataSource = bus.getTableNhanVien();
+            filter_dsnv();
 
             if (dgvNhanVien.Columns.Count > 0)
             {
-                dgvNhanVien.Columns["MaNV"].HeaderText = "Mã NV";
-                dgvNhanVien.Columns["TenNV"].HeaderText = "Tên nhân viên";
+                if(dgvNhanVien.Columns.Contains("MaNV")) dgvNhanVien.Columns["MaNV"].HeaderText = "Mã NV";
+                if(dgvNhanVien.Columns.Contains("TenNV")) dgvNhanVien.Columns["TenNV"].HeaderText = "Tên nhân viên";
                 if(dgvNhanVien.Columns.Contains("TenDangNhap")) dgvNhanVien.Columns["TenDangNhap"].Visible = false; // Ẩn cột cũ nếu còn tồn dư trong View
-                dgvNhanVien.Columns["GioiTinh"].HeaderText = "Giới tính";
-                dgvNhanVien.Columns["NgaySinh"].HeaderText = "Ngày sinh";
-                dgvNhanVien.Columns["SoDienThoai"].HeaderText = "Số điện thoại";
-                dgvNhanVien.Columns["DiaChi"].HeaderText = "Địa chỉ";
+                if(dgvNhanVien.Columns.Contains("GioiTinh")) dgvNhanVien.Columns["GioiTinh"].HeaderText = "Giới tính";
+                if(dgvNhanVien.Columns.Contains("NgaySinh")) dgvNhanVien.Columns["NgaySinh"].HeaderText = "Ngày sinh";
+                if(dgvNhanVien.Columns.Contains("SoDienThoai")) dgvNhanVien.Columns["SoDienThoai"].HeaderText = "Số điện thoại";
+                if(dgvNhanVien.Columns.Contains("DiaChi")) dgvNhanVien.Columns["DiaChi"].HeaderText = "Địa chỉ";
                 if(dgvNhanVien.Columns.Contains("TrangThai"))
                 {
                     dgvNhanVien.Columns["TrangThai"].HeaderText = "Trạng thái";
@@ -65,8 +65,14 @@ namespace qlybanhang
         private void filter_dsnv()
         {
             string keyword = txtTimKiem.Text.Replace("'", "''");
+            string strFilter = "(TenNV LIKE '%" + keyword + "%' OR MaNV LIKE '%" + keyword + "%')";
+            if (!chkHienThiDaXoa.Checked)
+            {
+                strFilter += " AND (TrangThai = 1 OR TrangThai IS NULL)";
+            }
+
             DataTable dt = bus.getTableNhanVien();
-            DataRow[] rows = dt.Select("TenNV LIKE '%" + keyword + "%' OR MaNV LIKE '%" + keyword + "%'");
+            DataRow[] rows = dt.Select(strFilter);
             if (rows.Length > 0)
             {
                 dgvNhanVien.DataSource = rows.CopyToDataTable();
@@ -281,6 +287,39 @@ namespace qlybanhang
             if(cboTrangThai != null) cboTrangThai.SelectedIndex = 1;
             dgvNhanVien.ClearSelection();
             txtMaNV.Focus();
+        }
+
+        private void chkHienThiDaXoa_CheckedChanged(object sender, EventArgs e)
+        {
+            filter_dsnv();
+        }
+
+        private void btnXoaVinhVien_Click(object sender, EventArgs e)
+        {
+            if (dgvNhanVien.CurrentRow == null || dgvNhanVien.CurrentRow.IsNewRow)
+            {
+                MessageBox.Show("Chưa chọn nhân viên cần thao tác!", "Thông báo");
+                return;
+            }
+
+            string maNV = dgvNhanVien.CurrentRow.Cells["MaNV"].Value.ToString();
+            DialogResult ret = MessageBox.Show("Bạn có chắc chắn muốn xóa VĨNH VIỄN nhân viên " + maNV + "? Hành động này không thể hoàn tác và sẽ xóa luôn tài khoản tương ứng!", "Cảnh báo",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (ret == DialogResult.Yes)
+            {
+                string msg = bus.XoaVinhVien(maNV);
+                if (msg == "")
+                {
+                    bus = new NhanVienBUS(); // Reload từ DB
+                    LoadData();
+                    lammoi();
+                    MessageBox.Show("Đã xóa vĩnh viễn nhân viên và tài khoản!", "Thông báo");
+                }
+                else
+                {
+                    MessageBox.Show(msg, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }

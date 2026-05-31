@@ -76,5 +76,18 @@ namespace BUS
             dal.delete(maKH);
             return true;
         }
+
+        public string XoaVinhVien(string maKH)
+        {
+            if (MaKH_not_Exist(maKH))
+                return "Khách hàng không tồn tại!";
+
+            HoaDonDAL hdDal = new HoaDonDAL();
+            if (hdDal.KiemTraKhachHangTonTai(maKH))
+                return "Khách hàng đã phát sinh Hóa Đơn, không thể xóa vĩnh viễn!";
+
+            dal.hardDelete(maKH);
+            return ""; 
+        }
     }
 }

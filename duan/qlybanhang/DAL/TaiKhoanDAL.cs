@@ -56,5 +56,16 @@ namespace DAL
             ds.Tables["TaiKhoan"].Clear();
             da.Fill(ds, "TaiKhoan");
         }
+
+        public void deleteTaiKhoanByMaNV(string maNV)
+        {
+            DataRow[] rows = ds.Tables["TaiKhoan"].Select("MaNV = '" + maNV.Replace("'", "''") + "'");
+            foreach (DataRow r in rows)
+            {
+                r.Delete();
+            }
+            da.Update(ds, "TaiKhoan");
+            ds.AcceptChanges();
+        }
     }
 }

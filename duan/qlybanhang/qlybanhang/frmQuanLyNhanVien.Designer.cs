@@ -25,6 +25,7 @@ namespace qlybanhang
             this.btnXoa = new System.Windows.Forms.Button();
             this.btnSua = new System.Windows.Forms.Button();
             this.btnThem = new System.Windows.Forms.Button();
+            this.btnXoaVinhVien = new System.Windows.Forms.Button();
             this.cboTrangThai = new System.Windows.Forms.ComboBox();
             this.lblTrangThai = new System.Windows.Forms.Label();
             this.txtDiaChi = new System.Windows.Forms.TextBox();
@@ -39,6 +40,7 @@ namespace qlybanhang
             this.label6 = new System.Windows.Forms.Label();
             this.dtpNgaySinh = new System.Windows.Forms.DateTimePicker();
             this.label7 = new System.Windows.Forms.Label();
+            this.chkHienThiDaXoa = new System.Windows.Forms.CheckBox();
             this.txtTenDangNhap = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvNhanVien)).BeginInit();
@@ -86,6 +88,7 @@ namespace qlybanhang
             this.groupBox1.Controls.Add(this.btnXoa);
             this.groupBox1.Controls.Add(this.btnSua);
             this.groupBox1.Controls.Add(this.btnThem);
+            this.groupBox1.Controls.Add(this.btnXoaVinhVien);
             this.groupBox1.Controls.Add(this.cboTrangThai);
             this.groupBox1.Controls.Add(this.lblTrangThai);
             this.groupBox1.Controls.Add(this.txtDiaChi);
@@ -152,6 +155,17 @@ namespace qlybanhang
             this.btnThem.Text = "Thêm";
             this.btnThem.UseVisualStyleBackColor = true;
             this.btnThem.Click += new System.EventHandler(this.btnThem_Click);
+            // 
+            // btnXoaVinhVien
+            // 
+            this.btnXoaVinhVien.Location = new System.Drawing.Point(645, 140);
+            this.btnXoaVinhVien.Margin = new System.Windows.Forms.Padding(4);
+            this.btnXoaVinhVien.Name = "btnXoaVinhVien";
+            this.btnXoaVinhVien.Size = new System.Drawing.Size(120, 28);
+            this.btnXoaVinhVien.TabIndex = 10;
+            this.btnXoaVinhVien.Text = "Xóa vĩnh viễn";
+            this.btnXoaVinhVien.UseVisualStyleBackColor = true;
+            this.btnXoaVinhVien.Click += new System.EventHandler(this.btnXoaVinhVien_Click);
             // 
             // cboTrangThai
             // 
@@ -289,6 +303,17 @@ namespace qlybanhang
             this.label7.TabIndex = 15;
             this.label7.Text = "Ngày sinh:";
             // 
+            // chkHienThiDaXoa
+            // 
+            this.chkHienThiDaXoa.AutoSize = true;
+            this.chkHienThiDaXoa.Location = new System.Drawing.Point(834, 17);
+            this.chkHienThiDaXoa.Name = "chkHienThiDaXoa";
+            this.chkHienThiDaXoa.Size = new System.Drawing.Size(195, 20);
+            this.chkHienThiDaXoa.TabIndex = 11;
+            this.chkHienThiDaXoa.Text = "Hiển thị bản ghi đã nghỉ việc";
+            this.chkHienThiDaXoa.UseVisualStyleBackColor = true;
+            this.chkHienThiDaXoa.CheckedChanged += new System.EventHandler(this.chkHienThiDaXoa_CheckedChanged);
+            // 
             // txtTenDangNhap
             // 
             this.txtTenDangNhap.Location = new System.Drawing.Point(418, 60);
@@ -312,10 +337,13 @@ namespace qlybanhang
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1045, 629);
+            this.Controls.Add(this.chkHienThiDaXoa);
             this.Controls.Add(this.txtTimKiem);
             this.Controls.Add(this.lblTimKiem);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.dgvNhanVien);
+            this.Controls.Add(this.txtTenDangNhap);
+            this.Controls.Add(this.label4);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "frmQuanLyNhanVien";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -355,5 +383,7 @@ namespace qlybanhang
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label lblTrangThai;
         private System.Windows.Forms.ComboBox cboTrangThai;
+        private System.Windows.Forms.Button btnXoaVinhVien;
+        private System.Windows.Forms.CheckBox chkHienThiDaXoa;
     }
 }

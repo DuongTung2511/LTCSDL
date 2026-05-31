@@ -56,5 +56,16 @@ namespace DAL
             ds.Tables["KhachHang"].Clear();
             da.Fill(ds, "KhachHang");
         }
+
+        public void hardDelete(string maKH)
+        {
+            DataRow[] rows = ds.Tables["KhachHang"].Select("MaKH = '" + maKH.Replace("'", "''") + "'");
+            if (rows.Length > 0)
+            {
+                rows[0].Delete();
+                da.Update(ds, "KhachHang");
+                ds.AcceptChanges();
+            }
+        }
     }
 }

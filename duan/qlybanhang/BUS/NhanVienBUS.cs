@@ -81,6 +81,23 @@ namespace BUS
             return true;
         }
 
+        public string XoaVinhVien(string maNV)
+        {
+            if (MaNV_not_Exist(maNV))
+                return "Nhân viên không tồn tại!";
+
+            HoaDonDAL hdDal = new HoaDonDAL();
+            if (hdDal.KiemTraNhanVienTonTai(maNV))
+                return "Nhân viên đã tạo Hóa Đơn, không thể xóa vĩnh viễn!";
+
+            // Xóa tài khoản trước (nếu có)
+            TaiKhoanDAL tkDal = new TaiKhoanDAL();
+            tkDal.deleteTaiKhoanByMaNV(maNV);
+
+            dal.hardDelete(maNV);
+            return ""; 
+        }
+
         public string LayMaNV(string tenDangNhap)
         {
             TaiKhoanBUS tkBus = new TaiKhoanBUS();

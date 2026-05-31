@@ -83,5 +83,11 @@ namespace DAL
             ds.Tables["ChiTietHoaDon"].Clear();
             da.Fill(ds, "ChiTietHoaDon");
         }
+
+        public bool KiemTraSanPhamTonTai(string maSP)
+        {
+            DataRow[] rows = ds.Tables["ChiTietHoaDon"].Select("MaSP = '" + maSP.Replace("'", "''") + "'");
+            return rows.Length > 0;
+        }
     }
 }

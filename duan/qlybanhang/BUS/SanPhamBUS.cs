@@ -78,5 +78,18 @@ namespace BUS
             dal.delete(maSP);
             return true;
         }
+
+        public string XoaVinhVien(string maSP)
+        {
+            if (MaSP_not_Exist(maSP))
+                return "Sản phẩm không tồn tại!";
+
+            ChiTietHoaDonDAL ctDal = new ChiTietHoaDonDAL();
+            if (ctDal.KiemTraSanPhamTonTai(maSP))
+                return "Sản phẩm đã tồn tại trong Hóa Đơn, không thể xóa vĩnh viễn!";
+
+            dal.hardDelete(maSP);
+            return ""; 
+        }
     }
 }

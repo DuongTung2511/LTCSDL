@@ -56,5 +56,16 @@ namespace DAL
             ds.Tables["NhanVien"].Clear();
             da.Fill(ds, "NhanVien");
         }
+
+        public void hardDelete(string maNV)
+        {
+            DataRow[] rows = ds.Tables["NhanVien"].Select("MaNV = '" + maNV.Replace("'", "''") + "'");
+            if (rows.Length > 0)
+            {
+                rows[0].Delete();
+                da.Update(ds, "NhanVien");
+                ds.AcceptChanges();
+            }
+        }
     }
 }

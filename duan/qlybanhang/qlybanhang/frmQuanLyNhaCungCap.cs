@@ -34,19 +34,15 @@ namespace qlybanhang
 
         private void LoadData()
         {
-            dgvNhaCungCap.DataSource = bus.getTableNhaCungCap(); // Trả lại toàn bộ danh sách
+            filter_dsncc();
 
             if (dgvNhaCungCap.Columns.Count > 0)
             {
-                dgvNhaCungCap.Columns["MaNCC"].HeaderText = "Mã NCC";
-                dgvNhaCungCap.Columns["TenNCC"].HeaderText = "Tên nhà cung cấp";
-                dgvNhaCungCap.Columns["SoDienThoai"].HeaderText = "Số điện thoại";
-                dgvNhaCungCap.Columns["DiaChi"].HeaderText = "Địa chỉ";
-                if(dgvNhaCungCap.Columns.Contains("TrangThai"))
-                {
-                    dgvNhaCungCap.Columns["TrangThai"].HeaderText = "Trạng thái";
-                    dgvNhaCungCap.Columns["TrangThai"].Visible = true;
-                }
+                if(dgvNhaCungCap.Columns.Contains("MaNCC")) dgvNhaCungCap.Columns["MaNCC"].HeaderText = "Mã nhà cung cấp";
+                if(dgvNhaCungCap.Columns.Contains("TenNCC")) dgvNhaCungCap.Columns["TenNCC"].HeaderText = "Tên nhà cung cấp";
+                if(dgvNhaCungCap.Columns.Contains("SoDienThoai")) dgvNhaCungCap.Columns["SoDienThoai"].HeaderText = "Số điện thoại";
+                if(dgvNhaCungCap.Columns.Contains("DiaChi")) dgvNhaCungCap.Columns["DiaChi"].HeaderText = "Địa chỉ";
+                if(dgvNhaCungCap.Columns.Contains("TrangThai")) dgvNhaCungCap.Columns["TrangThai"].HeaderText = "Trạng thái";
             }
             dgvNhaCungCap.ReadOnly = true;
         }
@@ -54,8 +50,14 @@ namespace qlybanhang
         private void filter_dsncc()
         {
             string keyword = txtTimKiem.Text.Replace("'", "''");
+            string strFilter = "(TenNCC LIKE '%" + keyword + "%' OR MaNCC LIKE '%" + keyword + "%')";
+            if (!chkHienThiDaXoa.Checked)
+            {
+                strFilter += " AND (TrangThai = 1 OR TrangThai IS NULL)";
+            }
+
             DataTable dt = bus.getTableNhaCungCap();
-            DataRow[] rows = dt.Select("TenNCC LIKE '%" + keyword + "%' OR SoDienThoai LIKE '%" + keyword + "%'");
+            DataRow[] rows = bus.getFilter_NCC(strFilter);
             if (rows.Length > 0)
             {
                 dgvNhaCungCap.DataSource = rows.CopyToDataTable();
@@ -234,6 +236,39 @@ namespace qlybanhang
             if(cboTrangThai != null) cboTrangThai.SelectedIndex = 1;
             dgvNhaCungCap.ClearSelection();
             txtMaNCC.Focus();
+        }
+
+        private void chkHienThiDaXoa_CheckedChanged(object sender, EventArgs e)
+        {
+            filter_dsncc();
+        }
+
+        private void btnXoaVinhVien_Click(object sender, EventArgs e)
+        {
+            if (dgvNhaCungCap.CurrentRow == null || dgvNhaCungCap.CurrentRow.IsNewRow)
+            {
+                MessageBox.Show("Chưa chọn nhà cung cấp cần thao tác!", "Thông báo");
+                return;
+            }
+
+            string maNCC = dgvNhaCungCap.CurrentRow.Cells["MaNCC"].Value.ToString();
+            DialogResult ret = MessageBox.Show("Bạn có chắc chắn muốn xóa VĨNH VIỄN nhà cung cấp " + maNCC + "? Hành động này không thể hoàn tác!", "Cảnh báo",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (ret == DialogResult.Yes)
+            {
+                string msg = bus.XoaVinhVien(maNCC);
+                if (msg == "")
+                {
+                    bus = new NhaCungCapBUS(); // Reload từ DB
+                    LoadData();
+                    lammoi();
+                    MessageBox.Show("Đã xóa vĩnh viễn nhà cung cấp!", "Thông báo");
+                }
+                else
+                {
+                    MessageBox.Show(msg, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }

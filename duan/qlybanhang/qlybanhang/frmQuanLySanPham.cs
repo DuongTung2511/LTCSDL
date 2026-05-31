@@ -39,17 +39,15 @@ namespace qlybanhang
 
         private void LoadData()
         {
-            DataViewManager dvm = bus.getDataset().DefaultViewManager;
-            dgvSanPham.DataSource = dvm;
-            dgvSanPham.DataMember = "SanPham";
+            filter_dssp();
 
             if (dgvSanPham.Columns.Count > 0)
             {
-                dgvSanPham.Columns["MaSP"].HeaderText = "Mã SP";
-                dgvSanPham.Columns["TenSP"].HeaderText = "Tên sản phẩm";
-                dgvSanPham.Columns["MaNCC"].HeaderText = "Mã NCC";
-                dgvSanPham.Columns["GiaBan"].HeaderText = "Giá bán";
-                dgvSanPham.Columns["SoLuongTon"].HeaderText = "Số lượng tồn";
+                if(dgvSanPham.Columns.Contains("MaSP")) dgvSanPham.Columns["MaSP"].HeaderText = "Mã SP";
+                if(dgvSanPham.Columns.Contains("TenSP")) dgvSanPham.Columns["TenSP"].HeaderText = "Tên sản phẩm";
+                if(dgvSanPham.Columns.Contains("MaNCC")) dgvSanPham.Columns["MaNCC"].HeaderText = "Mã NCC";
+                if(dgvSanPham.Columns.Contains("GiaBan")) dgvSanPham.Columns["GiaBan"].HeaderText = "Giá bán";
+                if(dgvSanPham.Columns.Contains("SoLuongTon")) dgvSanPham.Columns["SoLuongTon"].HeaderText = "Số lượng tồn";
                 if(dgvSanPham.Columns.Contains("TrangThai")) dgvSanPham.Columns["TrangThai"].HeaderText = "Trạng thái";
             }
             dgvSanPham.ReadOnly = true;
@@ -57,10 +55,22 @@ namespace qlybanhang
 
         private void filter_dssp()
         {
-            DataRow[] rows = bus.getFilter_SP("TenSP LIKE '%" + txtTimKiem.Text.Replace("'", "''") + "%'");
+            string keyword = txtTimKiem.Text.Replace("'", "''");
+            string strFilter = "(TenSP LIKE '%" + keyword + "%' OR MaSP LIKE '%" + keyword + "%')";
+            if (!chkHienThiDaXoa.Checked)
+            {
+                strFilter += " AND (TrangThai = 1 OR TrangThai IS NULL)";
+            }
+
+            DataTable dt = bus.getTableSanPham();
+            DataRow[] rows = bus.getFilter_SP(strFilter);
             if (rows.Length > 0)
             {
                 dgvSanPham.DataSource = rows.CopyToDataTable();
+            }
+            else
+            {
+                dgvSanPham.DataSource = dt.Clone();
             }
         }
 
@@ -228,6 +238,39 @@ namespace qlybanhang
             if (cboTrangThai != null) cboTrangThai.SelectedIndex = 1;
             dgvSanPham.ClearSelection();
             txtMaSP.Focus();
+        }
+
+        private void chkHienThiDaXoa_CheckedChanged(object sender, EventArgs e)
+        {
+            filter_dssp();
+        }
+
+        private void btnXoaVinhVien_Click(object sender, EventArgs e)
+        {
+            if (dgvSanPham.CurrentRow == null || dgvSanPham.CurrentRow.IsNewRow)
+            {
+                MessageBox.Show("Chưa chọn sản phẩm cần thao tác!", "Thông báo");
+                return;
+            }
+
+            string maSP = dgvSanPham.CurrentRow.Cells["MaSP"].Value.ToString();
+            DialogResult ret = MessageBox.Show("Bạn có chắc chắn muốn xóa VĨNH VIỄN sản phẩm " + maSP + "? Hành động này không thể hoàn tác!", "Cảnh báo",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (ret == DialogResult.Yes)
+            {
+                string msg = bus.XoaVinhVien(maSP);
+                if (msg == "")
+                {
+                    bus = new SanPhamBUS(); // Reload từ DB
+                    LoadData();
+                    lammoi();
+                    MessageBox.Show("Đã xóa vĩnh viễn sản phẩm!", "Thông báo");
+                }
+                else
+                {
+                    MessageBox.Show(msg, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }

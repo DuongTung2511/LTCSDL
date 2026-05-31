@@ -56,5 +56,16 @@ namespace DAL
             ds.Tables["NhaCungCap"].Clear();
             da.Fill(ds, "NhaCungCap");
         }
+
+        public void hardDelete(string maNCC)
+        {
+            DataRow[] rows = ds.Tables["NhaCungCap"].Select("MaNCC = '" + maNCC.Replace("'", "''") + "'");
+            if (rows.Length > 0)
+            {
+                rows[0].Delete();
+                da.Update(ds, "NhaCungCap");
+                ds.AcceptChanges();
+            }
+        }
     }
 }

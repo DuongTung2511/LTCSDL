@@ -86,5 +86,18 @@ namespace BUS
             dal.delete(maNCC);
             return true;
         }
+
+        public string XoaVinhVien(string maNCC)
+        {
+            if (MaNCC_not_Exist(maNCC))
+                return "Nhà cung cấp không tồn tại!";
+
+            SanPhamDAL spDal = new SanPhamDAL();
+            if (spDal.KiemTraNhaCungCapTonTai(maNCC))
+                return "Nhà cung cấp này đã có Sản Phẩm liên kết, không thể xóa vĩnh viễn!";
+
+            dal.hardDelete(maNCC);
+            return ""; 
+        }
     }
 }
