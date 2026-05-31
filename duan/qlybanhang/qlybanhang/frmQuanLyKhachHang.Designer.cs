@@ -113,7 +113,7 @@ namespace qlybanhang
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(45, 32);
+            this.label4.Location = new System.Drawing.Point(54, 32);
             this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(50, 16);
@@ -190,7 +190,7 @@ namespace qlybanhang
             // lblTrangThai
             // 
             this.lblTrangThai.AutoSize = true;
-            this.lblTrangThai.Location = new System.Drawing.Point(492, 106);
+            this.lblTrangThai.Location = new System.Drawing.Point(510, 106);
             this.lblTrangThai.Name = "lblTrangThai";
             this.lblTrangThai.Size = new System.Drawing.Size(70, 16);
             this.lblTrangThai.TabIndex = 12;
@@ -207,7 +207,7 @@ namespace qlybanhang
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(45, 106);
+            this.label3.Location = new System.Drawing.Point(54, 106);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(50, 16);
@@ -234,7 +234,7 @@ namespace qlybanhang
             // 
             // txtTenKH
             // 
-            this.txtTenKH.Location = new System.Drawing.Point(123, 61);
+            this.txtTenKH.Location = new System.Drawing.Point(123, 66);
             this.txtTenKH.Margin = new System.Windows.Forms.Padding(4);
             this.txtTenKH.Name = "txtTenKH";
             this.txtTenKH.Size = new System.Drawing.Size(347, 22);
@@ -243,7 +243,7 @@ namespace qlybanhang
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(40, 64);
+            this.label1.Location = new System.Drawing.Point(49, 69);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(55, 16);

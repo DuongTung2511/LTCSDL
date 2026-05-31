@@ -21,8 +21,12 @@ namespace qlybanhang
 
         private void frmBanHang_Load(object sender, EventArgs e)
         {
-            // Load Khách Hàng
-            cboKhachHang.DataSource = khBus.getTableKhachHang();
+            // Load Khách Hàng (chỉ hiển thị khách hàng có trạng thái = 1)
+            DataRow[] activeKHs = khBus.getFilter_KH("TrangThai = 1 OR TrangThai IS NULL");
+            DataTable dtKH = khBus.getTableKhachHang().Clone();
+            if (activeKHs.Length > 0) dtKH = activeKHs.CopyToDataTable();
+            
+            cboKhachHang.DataSource = dtKH;
             cboKhachHang.DisplayMember = "TenKH";
             cboKhachHang.ValueMember = "MaKH";
 
@@ -56,17 +60,15 @@ namespace qlybanhang
 
         private void LoadDataSanPham()
         {
-            DataViewManager dvm = spBus.getDataset().DefaultViewManager;
-            dgvSanPham.DataSource = dvm;
-            dgvSanPham.DataMember = "SanPham";
+            filter_dssp();
 
             if (dgvSanPham.Columns.Count > 0)
             {
-                dgvSanPham.Columns["MaSP"].HeaderText = "Mã SP";
-                dgvSanPham.Columns["TenSP"].HeaderText = "Tên sản phẩm";
-                dgvSanPham.Columns["MaNCC"].HeaderText = "Mã NCC";
-                dgvSanPham.Columns["GiaBan"].HeaderText = "Giá bán";
-                dgvSanPham.Columns["SoLuongTon"].HeaderText = "Số lượng tồn";
+                if (dgvSanPham.Columns.Contains("MaSP")) dgvSanPham.Columns["MaSP"].HeaderText = "Mã SP";
+                if (dgvSanPham.Columns.Contains("TenSP")) dgvSanPham.Columns["TenSP"].HeaderText = "Tên sản phẩm";
+                if (dgvSanPham.Columns.Contains("MaNCC")) dgvSanPham.Columns["MaNCC"].HeaderText = "Mã NCC";
+                if (dgvSanPham.Columns.Contains("GiaBan")) dgvSanPham.Columns["GiaBan"].HeaderText = "Giá bán";
+                if (dgvSanPham.Columns.Contains("SoLuongTon")) dgvSanPham.Columns["SoLuongTon"].HeaderText = "Số lượng tồn";
             }
             dgvSanPham.ReadOnly = true;
         }
@@ -79,10 +81,28 @@ namespace qlybanhang
 
         private void filter_dssp()
         {
-            DataRow[] rows = spBus.getFilter_SP("TenSP LIKE '%" + txtTimKiemSanPham.Text.Replace("'", "''") + "%'");
+            // Lấy danh sách Nhà cung cấp đang giao dịch
+            NhaCungCapBUS nccBus = new NhaCungCapBUS();
+            DataTable dtNCC = nccBus.LayDanhSachNCCDangHoatDong();
+            System.Collections.Generic.List<string> listMaNCC = new System.Collections.Generic.List<string>();
+            foreach (DataRow r in dtNCC.Rows)
+            {
+                listMaNCC.Add("'" + r["MaNCC"].ToString() + "'");
+            }
+            string inClause = string.Join(",", listMaNCC);
+            if (inClause == "") inClause = "''";
+
+            string keyword = txtTimKiemSanPham.Text.Replace("'", "''");
+            string strFilter = $"(TenSP LIKE '%{keyword}%') AND (TrangThai = 1 OR TrangThai IS NULL) AND (MaNCC IN ({inClause}))";
+
+            DataRow[] rows = spBus.getFilter_SP(strFilter);
             if (rows.Length > 0)
             {
                 dgvSanPham.DataSource = rows.CopyToDataTable();
+            }
+            else
+            {
+                dgvSanPham.DataSource = spBus.getTableSanPham().Clone();
             }
         }
 

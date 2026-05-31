@@ -26,14 +26,14 @@ namespace qlybanhang
             this.label3 = new System.Windows.Forms.Label();
             this.txtMatKhau = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.txtTenDangNhap = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.lblMaNV = new System.Windows.Forms.Label();
             this.txtMaNV = new System.Windows.Forms.TextBox();
+            this.txtTenDangNhap = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.dgvTaiKhoan = new System.Windows.Forms.DataGridView();
             this.txtTimKiem = new System.Windows.Forms.TextBox();
             this.lblTimKiem = new System.Windows.Forms.Label();
+            this.dgvTaiKhoan = new System.Windows.Forms.DataGridView();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTaiKhoan)).BeginInit();
@@ -119,7 +119,7 @@ namespace qlybanhang
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(72, 98);
+            this.label3.Location = new System.Drawing.Point(124, 98);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(49, 16);
@@ -137,12 +137,28 @@ namespace qlybanhang
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(487, 43);
+            this.label2.Location = new System.Drawing.Point(513, 43);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(64, 16);
             this.label2.TabIndex = 2;
             this.label2.Text = "Mật khẩu:";
+            // 
+            // lblMaNV
+            // 
+            this.lblMaNV.AutoSize = true;
+            this.lblMaNV.Location = new System.Drawing.Point(460, 98);
+            this.lblMaNV.Name = "lblMaNV";
+            this.lblMaNV.Size = new System.Drawing.Size(117, 16);
+            this.lblMaNV.TabIndex = 10;
+            this.lblMaNV.Text = "Mã NV (Tùy chọn):";
+            // 
+            // txtMaNV
+            // 
+            this.txtMaNV.Location = new System.Drawing.Point(597, 95);
+            this.txtMaNV.Name = "txtMaNV";
+            this.txtMaNV.Size = new System.Drawing.Size(299, 22);
+            this.txtMaNV.TabIndex = 11;
             // 
             // txtTenDangNhap
             // 
@@ -162,22 +178,6 @@ namespace qlybanhang
             this.label1.TabIndex = 0;
             this.label1.Text = "Tên đăng nhập:";
             // 
-            // lblMaNV
-            // 
-            this.lblMaNV.AutoSize = true;
-            this.lblMaNV.Location = new System.Drawing.Point(460, 98);
-            this.lblMaNV.Name = "lblMaNV";
-            this.lblMaNV.Size = new System.Drawing.Size(123, 16);
-            this.lblMaNV.TabIndex = 10;
-            this.lblMaNV.Text = "Mã NV (Tùy chọn):";
-            // 
-            // txtMaNV
-            // 
-            this.txtMaNV.Location = new System.Drawing.Point(597, 95);
-            this.txtMaNV.Name = "txtMaNV";
-            this.txtMaNV.Size = new System.Drawing.Size(299, 22);
-            this.txtMaNV.TabIndex = 11;
-            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.txtTimKiem);
@@ -191,23 +191,6 @@ namespace qlybanhang
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Danh sách Tài khoản";
-            // 
-            // dgvTaiKhoan
-            // 
-            this.dgvTaiKhoan.AllowUserToAddRows = false;
-            this.dgvTaiKhoan.AllowUserToDeleteRows = false;
-            this.dgvTaiKhoan.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvTaiKhoan.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvTaiKhoan.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.dgvTaiKhoan.Location = new System.Drawing.Point(4, 50);
-            this.dgvTaiKhoan.Margin = new System.Windows.Forms.Padding(4);
-            this.dgvTaiKhoan.Name = "dgvTaiKhoan";
-            this.dgvTaiKhoan.ReadOnly = true;
-            this.dgvTaiKhoan.RowHeadersWidth = 51;
-            this.dgvTaiKhoan.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvTaiKhoan.Size = new System.Drawing.Size(1005, 359);
-            this.dgvTaiKhoan.TabIndex = 0;
-            this.dgvTaiKhoan.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTaiKhoan_CellEnter);
             // 
             // txtTimKiem
             // 
@@ -227,6 +210,23 @@ namespace qlybanhang
             this.lblTimKiem.Size = new System.Drawing.Size(65, 16);
             this.lblTimKiem.TabIndex = 2;
             this.lblTimKiem.Text = "Tìm kiếm:";
+            // 
+            // dgvTaiKhoan
+            // 
+            this.dgvTaiKhoan.AllowUserToAddRows = false;
+            this.dgvTaiKhoan.AllowUserToDeleteRows = false;
+            this.dgvTaiKhoan.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvTaiKhoan.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvTaiKhoan.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.dgvTaiKhoan.Location = new System.Drawing.Point(4, 50);
+            this.dgvTaiKhoan.Margin = new System.Windows.Forms.Padding(4);
+            this.dgvTaiKhoan.Name = "dgvTaiKhoan";
+            this.dgvTaiKhoan.ReadOnly = true;
+            this.dgvTaiKhoan.RowHeadersWidth = 51;
+            this.dgvTaiKhoan.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvTaiKhoan.Size = new System.Drawing.Size(1005, 359);
+            this.dgvTaiKhoan.TabIndex = 0;
+            this.dgvTaiKhoan.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTaiKhoan_CellEnter);
             // 
             // frmQuanLyTaiKhoan
             // 

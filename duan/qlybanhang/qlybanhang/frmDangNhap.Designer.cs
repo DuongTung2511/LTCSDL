@@ -40,9 +40,10 @@ namespace qlybanhang
             // lblTitle
             // 
             this.lblTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold);
-            this.lblTitle.Location = new System.Drawing.Point(0, 20);
+            this.lblTitle.Location = new System.Drawing.Point(0, 25);
+            this.lblTitle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(420, 40);
+            this.lblTitle.Size = new System.Drawing.Size(560, 49);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "ĐĂNG NHẬP HỆ THỐNG";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -50,41 +51,46 @@ namespace qlybanhang
             // lblUser
             // 
             this.lblUser.AutoSize = true;
-            this.lblUser.Location = new System.Drawing.Point(50, 90);
+            this.lblUser.Location = new System.Drawing.Point(51, 108);
+            this.lblUser.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblUser.Name = "lblUser";
-            this.lblUser.Size = new System.Drawing.Size(95, 13);
+            this.lblUser.Size = new System.Drawing.Size(101, 16);
             this.lblUser.TabIndex = 1;
             this.lblUser.Text = "Tên đăng nhập:";
             // 
             // txtTenDangNhap
             // 
-            this.txtTenDangNhap.Location = new System.Drawing.Point(180, 87);
+            this.txtTenDangNhap.Location = new System.Drawing.Point(160, 105);
+            this.txtTenDangNhap.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtTenDangNhap.Name = "txtTenDangNhap";
-            this.txtTenDangNhap.Size = new System.Drawing.Size(180, 20);
+            this.txtTenDangNhap.Size = new System.Drawing.Size(239, 22);
             this.txtTenDangNhap.TabIndex = 2;
             // 
             // lblPass
             // 
             this.lblPass.AutoSize = true;
-            this.lblPass.Location = new System.Drawing.Point(50, 130);
+            this.lblPass.Location = new System.Drawing.Point(88, 160);
+            this.lblPass.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblPass.Name = "lblPass";
-            this.lblPass.Size = new System.Drawing.Size(57, 13);
+            this.lblPass.Size = new System.Drawing.Size(64, 16);
             this.lblPass.TabIndex = 3;
             this.lblPass.Text = "Mật khẩu:";
             // 
             // txtMatKhau
             // 
-            this.txtMatKhau.Location = new System.Drawing.Point(180, 127);
+            this.txtMatKhau.Location = new System.Drawing.Point(160, 157);
+            this.txtMatKhau.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtMatKhau.Name = "txtMatKhau";
             this.txtMatKhau.PasswordChar = '*';
-            this.txtMatKhau.Size = new System.Drawing.Size(180, 20);
+            this.txtMatKhau.Size = new System.Drawing.Size(239, 22);
             this.txtMatKhau.TabIndex = 4;
             // 
             // btnDangNhap
             // 
-            this.btnDangNhap.Location = new System.Drawing.Point(120, 180);
+            this.btnDangNhap.Location = new System.Drawing.Point(160, 222);
+            this.btnDangNhap.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnDangNhap.Name = "btnDangNhap";
-            this.btnDangNhap.Size = new System.Drawing.Size(160, 35);
+            this.btnDangNhap.Size = new System.Drawing.Size(213, 43);
             this.btnDangNhap.TabIndex = 5;
             this.btnDangNhap.Text = "Đăng nhập";
             this.btnDangNhap.UseVisualStyleBackColor = true;
@@ -93,9 +99,10 @@ namespace qlybanhang
             // lnkDangKy
             // 
             this.lnkDangKy.AutoSize = true;
-            this.lnkDangKy.Location = new System.Drawing.Point(115, 230);
+            this.lnkDangKy.Location = new System.Drawing.Point(153, 283);
+            this.lnkDangKy.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lnkDangKy.Name = "lnkDangKy";
-            this.lnkDangKy.Size = new System.Drawing.Size(168, 13);
+            this.lnkDangKy.Size = new System.Drawing.Size(172, 16);
             this.lnkDangKy.TabIndex = 6;
             this.lnkDangKy.TabStop = true;
             this.lnkDangKy.Text = "Chưa có tài khoản? Đăng ký";
@@ -104,9 +111,9 @@ namespace qlybanhang
             // frmDangNhap
             // 
             this.AcceptButton = this.btnDangNhap;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(404, 281);
+            this.ClientSize = new System.Drawing.Size(539, 346);
             this.Controls.Add(this.lnkDangKy);
             this.Controls.Add(this.btnDangNhap);
             this.Controls.Add(this.txtMatKhau);
@@ -115,12 +122,14 @@ namespace qlybanhang
             this.Controls.Add(this.lblUser);
             this.Controls.Add(this.lblTitle);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.Name = "frmDangNhap";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Đăng nhập - Quản Lý Bán Hàng";
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         #endregion

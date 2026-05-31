@@ -23,6 +23,13 @@ namespace BUS
             return rows.Length > 0 ? rows[0] : null;
         }
 
+        public Boolean KiemTraNhanVienDaCoTaiKhoan(string maNV)
+        {
+            if (string.IsNullOrEmpty(maNV)) return false;
+            DataRow[] rows = dal.getTable().Select("MaNV = '" + maNV.Replace("'", "''") + "'");
+            return rows.Length > 0;
+        }
+
         public Boolean MaTK_not_Exist(string tenDangNhap)
         {
             Boolean kq = true;
@@ -43,6 +50,7 @@ namespace BUS
                 r["TenDangNhap"] = tk.TenDangNhap;
                 r["MatKhau"] = tk.MatKhau;
                 r["Quyen"] = "nhanvien";
+                r["MaNV"] = string.IsNullOrEmpty(tk.MaNV) ? (object)DBNull.Value : tk.MaNV;
                 dal.addRow(r);
                 kq = true;
             }

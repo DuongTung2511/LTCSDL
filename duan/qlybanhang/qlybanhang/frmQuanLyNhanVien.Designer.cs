@@ -182,7 +182,7 @@ namespace qlybanhang
             // lblTrangThai
             // 
             this.lblTrangThai.AutoSize = true;
-            this.lblTrangThai.Location = new System.Drawing.Point(601, 105);
+            this.lblTrangThai.Location = new System.Drawing.Point(619, 105);
             this.lblTrangThai.Name = "lblTrangThai";
             this.lblTrangThai.Size = new System.Drawing.Size(70, 16);
             this.lblTrangThai.TabIndex = 18;
@@ -287,7 +287,7 @@ namespace qlybanhang
             // dtpNgaySinh
             // 
             this.dtpNgaySinh.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpNgaySinh.Location = new System.Drawing.Point(418, 18);
+            this.dtpNgaySinh.Location = new System.Drawing.Point(397, 60);
             this.dtpNgaySinh.Margin = new System.Windows.Forms.Padding(4);
             this.dtpNgaySinh.Name = "dtpNgaySinh";
             this.dtpNgaySinh.Size = new System.Drawing.Size(132, 22);
@@ -296,7 +296,7 @@ namespace qlybanhang
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(342, 21);
+            this.label7.Location = new System.Drawing.Point(321, 63);
             this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(70, 16);
