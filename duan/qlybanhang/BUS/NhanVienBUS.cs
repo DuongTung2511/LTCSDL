@@ -61,6 +61,7 @@ namespace BUS
             r["NgaySinh"] = nv.NgaySinh;
             r["SoDienThoai"] = nv.SoDienThoai;
             r["DiaChi"] = nv.DiaChi;
+            r["TrangThai"] = nv.TrangThai;
             r.EndEdit();
             
             try 

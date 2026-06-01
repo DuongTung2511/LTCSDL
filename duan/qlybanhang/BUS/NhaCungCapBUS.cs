@@ -57,6 +57,7 @@ namespace BUS
             r["TenNCC"] = ncc.TenNCC;
             r["SoDienThoai"] = ncc.SoDienThoai;
             r["DiaChi"] = ncc.DiaChi;
+            r["TrangThai"] = ncc.TrangThai;
             r.EndEdit();
             
             try 

@@ -1,0 +1,363 @@
+                TRƯỜNG ĐẠI HỌC HẠ LONG
+             KHOA CÔNG NGHỆ THÔNG TIN 
+           
+                      BÁO CÁO KẾT THÚC HỌC PHẦN
+  MÔN: LẬP TRÌNH CƠ SỞ DỮ LIỆU
+Tác giả 
+Điểm
+Síu Văn Chung
+Giảng viên chấm 1 Giảng viên chấm 1 Giảng viên chấm 2Giảng viên chấm 2Quảng Ninh, tháng 5 năm 2025Quảng Ninh, tháng 5 năm 2025          Đề tài: Quản Lý Quán Cà Phê
+Giảng viên chấm 1 
+Giảng viên chấm 1 
+Giảng viên chấm 2
+Giảng viên chấm 2
+Quảng Ninh, tháng 5 năm 2025
+Quảng Ninh, tháng 5 năm 2025
+LỜI CẢM ƠN
+Lời đầu tiên, tôi xin gửi lời cảm ơn chân thành và sâu sắc nhất đến Thầy TS Lê Anh Tú – người đã tận tình giảng dạy và hướng dẫn tôi trong học phần "Lập Trình Cơ Sở Dữ Liệu". Nhờ sự giảng dạy tận tâm và chuyên sâu của Thầy, tôi không chỉ nắm vững các kiến thức nền tảng về thiết kế, quản lý và lập trình cơ sở dữ liệu mà còn có cơ hội khám phá những kỹ thuật thực tế, sáng tạo trong việc xây dựng ứng dụng. Những kiến thức này đã trở thành nền tảng quan trọng, góp phần đáng kể vào sự phát triển kỹ năng chuyên môn của tôi trong lĩnh vực công nghệ thông tin.
+Tôi đặc biệt biết ơn Thầy vì sự hỗ trợ nhiệt tình và những chỉ dẫn chi tiết trong suốt quá trình học tập. Thầy không chỉ kiên nhẫn giải đáp mọi thắc mắc của tôi mà còn khích lệ tôi vượt qua những khó khăn, từ việc thiết kế cơ sở dữ liệu đến việc triển khai ứng dụng quản lý quán cà phê. Sự định hướng của Thầy đã giúp tôi hiểu rõ hơn về mô hình 3 lớp, cách tối ưu hóa truy vấn SQL, và cách áp dụng thực tế vào dự án, từ đó hoàn thiện báo cáo này một cách hiệu quả.
+Báo cáo "Quản lý quán cà phê" không chỉ là sản phẩm thể hiện kiến thức tôi đã học từ môn học mà còn là minh chứng cho sự nỗ lực và sự hỗ trợ quý báu từ Thầy. Những bài học, kinh nghiệm và động lực mà Thầy mang lại đã trở thành nguồn cảm hứng lớn, giúp tôi tự tin hơn trong việc đối mặt với các thử thách trong tương lai.
+Một lần nữa, tôi xin bày tỏ lòng biết ơn chân thành đến Thầy TS Lê Anh Tú vì tất cả những đóng góp vô giá của Thầy trong hành trình học tập của tôi. Hy vọng rằng báo cáo này sẽ phản ánh được phần nào sự nỗ lực và những gì tôi đã học được từ sự hướng dẫn tận tình của Thầy. Tôi xin chân thành cảm ơn!
+Tôi xin chân thành cảm ơn!
+MỤC LỤC
+LỜI CẢM ƠN1
+LỜI MỞ ĐẦU5
+CHƯƠNG 1 MÔ TẢ BÀI TOÁN8
+1.1Giới Thiệu Bài Toán8
+1.2Những Chức Năng Phần Mềm Cần Giải Quyết9
+1.2.1 Quản lý bàn ăn9
+1.2.2 Quản lý món ăn10
+1.2.3 Quản lý danh mục10
+1.2.4 Quản lý hóa đơn11
+1.2.5 Quản lý tài khoản11
+1.2.6 Báo cáo và thống kê12
+ 1.2 Sơ đồ thực thể liên kết12
+1.2.1 TableFood (Bàn ăn)12
+1.2.2 Account (Tài khoản)13
+1.2.3 FoodCategory (Danh mục món ăn)13
+1.2.4 Food (Món ăn)14
+1.2.5 Bill (Hóa đơn)14
+1.2.6 BillInfo (Chi tiết hóa đơn)15
+CHƯƠNG II XÂY DỰNG CHƯƠNG TRÌNH15
+2.1Giới Thiệu Tổng Quan15
+2.2Hướng Dẫn Thực Hành16
+2.2.1 Cài đặt môi trường phát triển16
+2.2.2 Thiết Lập Cơ Sở Dữ Liệu16
+2.2.3 Xây Dựng Cấu Trúc Dự Án17
+2.2.4 Triển Khai Chức Năng18
+2.2.5 Thiết Kế Giao Diện19
+2.2 Đánh giá quá trình thực hiện23
+KẾT LUẬN24
+b. Chưa làm được gì, hạn chế là gì24
+c. Hướng phát triển24
+TÀI LIỆU THAM KHẢO26
+GHI CHÚ27
+DANH MỤC CÁC KÝ HIỆU, THUẬT NGỮ, TỪ VIẾT TẮT
+Từ viết tắt
+Cụm từ đầy đủ
+Giải nghĩa
+CSDL
+Cơ sở dữ liệu
+Cơ sở dữ liệu
+IDE
+Integrated Development Enviroment
+Môi trường tích hợp để viết code và phát triển ứng dụng
+Sql sever 
+Microsoft SQL Server
+được sử dụng để lưu trữ, truy vấn và quản lý dữ liệu
+SSMS 
+Microsoft SQL Server ManagementStudio
+ là một môi trường tích hợp để quản lý cơ sở hạ tầng SQL Server
+DANH MỤC HÌNH ẢNH
+Hình 1.1: sơ đồ thực thể liên kết14
+Bảng 1.2: Bảng TableFood15
+Bảng 1.4: Bảng FoodCategory15
+Bảng 1.5: Bảng Food16
+Bảng 1.6: Bảng Bill16
+Bảng 1.7: Bảng BillInfo17
+Hình 2.1:  Ví dụ về stored procedure19
+Hình 2.2: Xây dựng phương thức ResetPassword20
+Hình 2.3: tiến hành xây dựng sự kiện btnReseartPassword_Click21
+Hình 2.4: giao diện tab doanh thu22
+Hình 2.5: giao diện Tab thức ăn23
+Hình 2.6: Giao diện chính24
+Hình 2.7: Giao diện đổi thông tin tài khoản26
+LỜI MỞ ĐẦU
+Trong thời đại công nghệ thông tin phát triển mạnh mẽ như hiện nay, cơ sở dữ liệu đã trở thành một thành phần không thể thiếu trong việc xây dựng và vận hành các ứng dụng phần mềm. Lập trình cơ sở dữ liệu không chỉ là một kỹ năng quan trọng đối với các lập trình viên mà còn là nền tảng để xây dựng các hệ thống quản lý hiệu quả, từ quản lý doanh nghiệp đến các ứng dụng phục vụ đời sống hàng ngày. Việc hiểu biết và áp dụng các kỹ thuật lập trình cơ sở dữ liệu giúp tối ưu hóa việc lưu trữ, truy xuất và quản lý dữ liệu một cách an toàn, nhanh chóng và chính xác.
+Lập trình cơ sở dữ liệu là quá trình thiết kế, xây dựng và thao tác với các hệ thống cơ sở dữ liệu nhằm đáp ứng các yêu cầu của ứng dụng. Quá trình này bao gồm việc phân tích yêu cầu, thiết kế mô hình dữ liệu thông qua các sơ đồ như ER (Entity-Relationship), xây dựng các bảng dữ liệu với các mối quan hệ phù hợp, và sử dụng ngôn ngữ truy vấn như SQL để thực hiện các thao tác thêm, sửa, xóa, và tìm kiếm dữ liệu. Một hệ thống cơ sở dữ liệu hiệu quả không chỉ đảm bảo tính toàn vẹn dữ liệu mà còn cần được tối ưu hóa về hiệu suất và bảo mật, điều này đòi hỏi lập trình viên phải nắm vững các kỹ thuật như chuẩn hóa dữ liệu (Normalization), sử dụng chỉ mục (Indexing), và áp dụng các ràng buộc (Constraints).
+Để hỗ trợ quá trình lập trình cơ sở dữ liệu, nhiều công cụ hiện đại đã được phát triển và ứng dụng rộng rãi. Microsoft SQL Server Management Studio (SSMS) là một công cụ mạnh mẽ để quản lý và thiết kế cơ sở dữ liệu SQL Server, cho phép người dùng viết truy vấn, trực quan hóa dữ liệu và quản lý các đối tượng cơ sở dữ liệu một cách dễ dàng. Visual Studio, với tích hợp ADO.NET, là môi trường phát triển lý tưởng để lập trình các ứng dụng C# kết nối với cơ sở dữ liệu. Ngoài ra, các công cụ như Draw.io hoặc Lucidchart hỗ trợ vẽ sơ đồ ER và UML, giúp lập trình viên hình dung cấu trúc dữ liệu trước khi triển khai. Những công cụ này không chỉ giúp tiết kiệm thời gian mà còn đảm bảo tính chính xác trong quá trình phát triển phần mềm.
+Đề tài "Quản lý quán cà phê" được lựa chọn với mục tiêu áp dụng các kiến thức đã học từ học phần "Lập Trình Cơ Sở Dữ Liệu" vào một dự án thực tế. Lý do chọn đề tài xuất phát từ nhu cầu thực tiễn trong ngành dịch vụ, nơi các quán cà phê thường gặp khó khăn trong việc quản lý bàn ăn, thực đơn, hóa đơn, và doanh thu một cách thủ công. Việc xây dựng một ứng dụng quản lý quán cà phê không chỉ giúp tự động hóa các quy trình, giảm thiểu sai sót mà còn cung cấp các báo cáo chi tiết để hỗ trợ chủ quán đưa ra quyết định kinh doanh. Đồng thời, đây cũng là cơ hội để tôi rèn luyện kỹ năng lập trình cơ sở dữ liệu, từ thiết kế bảng, viết truy vấn SQL, đến triển khai ứng dụng theo mô hình 3 lớp.
+Dự án này sẽ giải quyết các vấn đề chính sau:
+Quản lý bàn ăn: Theo dõi trạng thái bàn, thêm, sửa, xóa và tìm kiếm bàn một cách nhanh chóng.
+Quản lý món ăn và danh mục: Hỗ trợ thêm, sửa, xóa, và tìm kiếm món ăn, đồng thời phân loại theo danh mục.
+Quản lý hóa đơn: Tạo, thanh toán và theo dõi hóa đơn, đảm bảo tính toán chính xác.
+Quản lý tài khoản: Quản lý thông tin nhân viên, bao gồm thêm, sửa, xóa, tìm kiếm và đặt lại mật khẩu.
+Báo cáo doanh thu: Cung cấp báo cáo chi tiết về doanh thu và món ăn bán chạy để hỗ trợ quyết định kinh doanh.
+Báo cáo này được cấu trúc thành các phần chính như sau:
+Lời mở đầu: Tổng quan về lập trình cơ sở dữ liệu, lý do chọn đề tài và mục tiêu của dự án.
+Chương 1: Mô tả bài toán: Giới thiệu bài toán, các chức năng chính của phần mềm, và sơ đồ thực thể liên kết (ERD).
+Chương 2: Xây dựng chương trình: Trình bày chi tiết quá trình thiết kế và triển khai ứng dụng, bao gồm hướng dẫn thực hành.
+Kết luận: Đánh giá những gì đã đạt được, các hạn chế còn tồn tại và hướng phát triển trong tương lai.
+Tài liệu tham khảo: Danh sách các tài liệu và nguồn tham khảo được sử dụng trong quá trình thực hiện dự án.
+Báo cáo này không chỉ là sản phẩm thể hiện kiến thức và kỹ năng tôi đã tích lũy được từ học phần "Lập Trình Cơ Sở Dữ Liệu" mà còn là cơ hội để tôi áp dụng các kỹ thuật lập trình vào một dự án thực tế. Hy vọng rằng báo cáo sẽ phản ánh được sự nỗ lực và những giá trị mà dự án mang lại trong việc giải quyết các vấn đề thực tiễn của ngành dịch vụ.
+CHƯƠNG 1 MÔ TẢ BÀI TOÁN
+ Giới Thiệu Bài Toán
+Trong bối cảnh ngành dịch vụ ăn uống ngày càng phát triển, các quán cà phê nhỏ và vừa thường đối mặt với nhiều thách thức trong việc quản lý hoạt động kinh doanh hàng ngày. Các công việc như theo dõi trạng thái bàn ăn, ghi nhận đơn hàng, tính toán hóa đơn, quản lý nhân viên, và thống kê doanh thu thường được thực hiện thủ công bằng sổ sách hoặc phần mềm đơn giản, dẫn đến nguy cơ sai sót cao, mất thời gian và khó khăn trong việc đưa ra các quyết định kinh doanh dựa trên dữ liệu. Bài toán "Quản lý quán cà phê" ra đời nhằm giải quyết những vấn đề này bằng cách xây dựng một ứng dụng phần mềm tích hợp, giúp tự động hóa các quy trình quản lý và cung cấp các báo cáo chi tiết để hỗ trợ chủ quán.
+Hệ thống quản lý quán cà phê được thiết kế để hỗ trợ cả chủ quán và nhân viên trong việc quản lý các khía cạnh quan trọng của quán, bao gồm bàn ăn, thực đơn, hóa đơn, và tài khoản nhân viên. Phần mềm sẽ được phát triển dựa trên mô hình 3 lớp (3-tier architecture), bao gồm tầng giao diện (Presentation Layer), tầng logic nghiệp vụ (Business Logic Layer), và tầng truy cập dữ liệu (Data Access Layer). Ngôn ngữ lập trình chính là C# với Visual Studio làm môi trường phát triển, kết hợp với cơ sở dữ liệu Microsoft SQL Server để lưu trữ và xử lý thông tin. Mục tiêu của bài toán không chỉ là tối ưu hóa quy trình làm việc mà còn đảm bảo tính chính xác, bảo mật, và khả năng mở rộng cho các quán cà phê trong tương lai.
+Bài toán này được triển khai dưới dạng một dự án học tập, nơi tôi áp dụng các kiến thức từ học phần "Lập Trình Cơ Sở Dữ Liệu" để xây dựng một sản phẩm thực tế. Hệ thống sẽ cung cấp giao diện thân thiện, dễ sử dụng, và các báo cáo chi tiết như doanh thu theo ngày, món ăn bán chạy, giúp chủ quán dễ dàng theo dõi và cải thiện hiệu quả kinh doanh. Đây là một cơ hội để tôi không chỉ rèn luyện kỹ năng lập trình mà còn hiểu sâu hơn về cách áp dụng cơ sở dữ liệu vào giải quyết các vấn đề thực tiễn.
+ Những Chức Năng Phần Mềm Cần Giải Quyết
+Phần mềm quản lý quán cà phê được thiết kế với nhiều chức năng quan trọng nhằm đáp ứng các nhu cầu cơ bản của một quán cà phê. Dưới đây là danh sách chi tiết các chức năng mà phần mềm cần giải quyết
+    1.2.1 Quản lý bàn ăn
+Quản lý bàn ăn là một trong những chức năng cốt lõi của phần mềm, giúp theo dõi trạng thái của các bàn trong quán (trống hoặc đang sử dụng). Chức năng này cho phép:
+Hiển thị danh sách bàn: Tất cả các bàn được liệt kê trên giao diện, kèm theo trạng thái hiện tại (trống hoặc có người). Điều này giúp nhân viên nhanh chóng xác định bàn trống để sắp xếp khách hàng.
+Thêm bàn mới: Người dùng có thể thêm bàn mới bằng cách nhập tên bàn và trạng thái mặc định. Chức năng này hữu ích khi quán mở rộng quy mô hoặc thay đổi bố trí.
+Sửa thông tin bàn: Cho phép chỉnh sửa tên hoặc trạng thái của bàn nếu cần, ví dụ đổi trạng thái từ "Trống" sang "Có người" khi khách đến.
+Xóa bàn: Xóa bàn không còn sử dụng, với điều kiện bàn đó không liên quan đến hóa đơn chưa thanh toán.
+Tìm kiếm bàn: Tìm kiếm bàn theo tên để quản lý nhanh chóng khi quán có nhiều bàn.
+Chuyển bàn: Hỗ trợ chuyển khách từ bàn này sang bàn khác mà không làm mất thông tin hóa đơn, rất tiện lợi khi khách yêu cầu thay đổi vị trí.
+Việc quản lý bàn ăn giúp giảm thiểu tình trạng xếp khách sai bàn hoặc bỏ sót bàn trống, đồng thời tăng hiệu quả phục vụ. Giao diện sẽ sử dụng DataGridView để hiển thị danh sách bàn, với các nút bấm như "Thêm", "Sửa", "Xóa", và "Tìm kiếm" để thực hiện các thao tác.
+    1.2.2 Quản lý món ăn
+Chức năng quản lý món ăn cho phép quán cà phê xây dựng và duy trì một thực đơn linh hoạt. Các tính năng bao gồm:
+Thêm món ăn: Người dùng nhập tên món, chọn danh mục (nước, đồ ăn vặt, ...), và giá tiền. Chức năng này hỗ trợ quán cập nhật thực đơn khi có món mới.
+Sửa món ăn: Chỉnh sửa thông tin món ăn như tên, giá, hoặc danh mục nếu có thay đổi (ví dụ: tăng giá theo mùa).
+Xóa món ăn: Xóa món không còn bán, với kiểm tra để đảm bảo món đó không xuất hiện trong hóa đơn chưa thanh toán.
+Tìm kiếm món ăn: Tìm kiếm theo tên món để quản lý nhanh khi thực đơn lớn.
+Phân loại theo danh mục: Mỗi món ăn được gán vào một danh mục, giúp phân biệt rõ ràng và dễ dàng quản lý.
+Chức năng này sử dụng ComboBox để chọn danh mục và NumericUpDown để nhập giá, đảm bảo dữ liệu đầu vào chính xác. Việc quản lý món ăn giúp quán dễ dàng điều chỉnh thực đơn theo nhu cầu khách hàng và theo dõi giá cả.
+1.2.3 Quản lý danh mục
+Danh mục món ăn là nền tảng để phân loại thực đơn, với các chức năng sau:
+Thêm danh mục: Tạo danh mục mới (ví dụ: "Trà", "Cà phê") để tổ chức món ăn.
+Sửa danh mục: Chỉnh sửa tên danh mục khi cần thay đổi cách phân loại.
+Xóa danh mục: Xóa danh mục không còn sử dụng, với kiểm tra để tránh xóa danh mục đang có món ăn liên kết.
+Tìm kiếm danh mục: Tìm kiếm theo tên để quản lý khi có nhiều danh mục.
+Chức năng này đảm bảo tính nhất quán giữa danh mục và món ăn, tránh lỗi dữ liệu khi thao tác. Giao diện sẽ hiển thị danh sách danh mục trên DataGridView, với các nút bấm tương ứng.
+    1.2.4 Quản lý hóa đơn
+Quản lý hóa đơn là chức năng quan trọng để theo dõi doanh thu và phục vụ khách hàng. Các tính năng bao gồm:
+Tạo hóa đơn: Tự động tạo hóa đơn khi khách ngồi vào bàn, liên kết với mã bàn.
+Thêm món vào hóa đơn: Nhân viên chọn món và số lượng, hệ thống tự động tính tổng tiền dựa trên giá món.
+Thanh toán hóa đơn: Cập nhật trạng thái hóa đơn thành "Đã thanh toán", ghi nhận ngày thanh toán và tổng tiền.
+Xem danh sách hóa đơn: Hiển thị danh sách hóa đơn theo ngày, bao gồm thông tin bàn, ngày, và tổng tiền.
+Chức năng này sử dụng DateTimePicker để chọn khoảng thời gian và DataGridView để hiển thị hóa đơn. Nó giúp giảm sai sót khi tính tiền và hỗ trợ theo dõi doanh thu.
+    1.2.5 Quản lý tài khoản
+Chức năng quản lý tài khoản hỗ trợ quản lý nhân viên, với các tính năng:
+Thêm tài khoản: Tạo tài khoản mới cho nhân viên (admin/staff), với mật khẩu mặc định.
+Sửa tài khoản: Chỉnh sửa thông tin như tên hiển thị hoặc loại tài khoản.
+Xóa tài khoản: Xóa tài khoản không còn sử dụng.
+Tìm kiếm tài khoản: Tìm kiếm theo tên tài khoản.
+Đặt lại mật khẩu: Reset mật khẩu về giá trị mặc định (ví dụ: "1") khi nhân viên quên mật khẩu.
+Chức năng này sử dụng ComboBox để chọn loại tài khoản (0: Staff, 1: Admin) và đảm bảo bảo mật thông tin nhân viên.
+    1.2.6 Báo cáo và thống kê
+Chức năng báo cáo cung cấp dữ liệu để hỗ trợ quyết định kinh doanh:
+Tổng doanh thu: Tính tổng doanh thu trong khoảng thời gian nhất định.
+Danh sách hóa đơn chi tiết: Liệt kê hóa đơn đã thanh toán, bao gồm ngày, bàn, và tổng tiền.
+Món ăn bán chạy: Xác định món ăn có số lượng bán cao nhất trong khoảng thời gian.
+Chức năng này sử dụng stored procedure và hiển thị trên DataGridView, giúp chủ quán dễ dàng phân tích hiệu quả kinh doanh.
+1.2 Sơ đồ thực thể liên kết
+Hình 1.1: sơ đồ thực thể liên kết
+TableFood (1-n) Bill.
+FoodCategory (1-n)
+ Food.Food (n-n) Bill qua BillInfo.
+Account không có mối quan hệ trực tiếp.
+Bảng mô tả chi tiết về các thực thể
+    1.2.1 TableFood (Bàn ăn)
+Thành phần
+Thuộc tính
+Mô tả
+id
+Khóa chính, kiểu int, tự tăng.
+Lưu id của bàn
+name
+kiểu nvarchar(100), mặc định "Chưa đặt tên".
+Lưu tên của bàn
+status
+kiểu nvarchar(100), mặc định "Trống".
+Lưu trạng thái bàn
+Bảng 1.2: Bảng TableFood
+    1.2.2 Account (Tài khoản)
+Thành phần
+Thuộc tính
+Mô tả
+id
+Khóa chính, kiểu int, tự tăng.
+Lưu id của tài khoản
+userName
+kiểu nvarchar(100)
+Lưu tên đăng nhập
+disPlayName
+kiểu nvarchar(100)
+Lưu tên hiển thị
+passWord
+kiểu nvarchar(100), mặc định "0"
+Lưu mặt khẩu đăng nhập
+type
+kiểu int, mặc định 0 (0: Staff, 1: Admin).
+Để phân quyền người dùng
+Bảng 1.3: Bảng Account
+    1.2.3 FoodCategory (Danh mục món ăn)
+Thành phần
+Thuộc tính
+Mô tả
+id
+Khóa chính, kiểu int, tự tăng.
+Lưu id của danh mục
+name
+Tên danh mục,  kiểu nvarchar(100), mặc định "Chưa đặt tên".
+Lưu tên danh mục
+Bảng 1.4: Bảng FoodCategory
+    1.2.4 Food (Món ăn)
+Thành phần
+Thuộc tính
+Mô tả
+id
+Khóa chính, kiểu int, tự tăng.
+Lưu id của món ăn
+name
+kiểu nvarchar(100), mặc định "Chưa đặt tên"
+Lưu tên món ăn
+idCategory
+Khóa ngoại, kiểu int
+Liên kết với bảng danh mục món ăn
+price
+Giá, kiểu float, mặc định 0
+Lưu giá món ăn
+Bảng 1.5: Bảng Food
+    1.2.5 Bill (Hóa đơn)
+Thành phần
+Thuộc tính
+Mô tả
+id
+Khóa chính, kiểu int, tự tăng.
+Lưu id hóa đơn
+dateCheckIn
+Ngày tạo, kiểu date, mặc định getdate()
+Lưu ngày tạo hóa đơn
+dateCheckOut
+Ngày thanh toán, kiểu date
+Lưu ngày thanh toán hóa đơn
+idTable
+Khóa ngoại, kiểu int
+Liên kết với bảng table
+stataus
+Trạng thái, kiểu int, mặc định 0 (0: Chưa thanh toán, 1: Đã thanh toán)
+Lưu trạng thái hóa đơn
+Bảng 1.6: Bảng Bill 
+    1.2.6 BillInfo (Chi tiết hóa đơn)
+Thành phần
+Thuộc tính
+Mô tả
+id
+Khóa chính, kiểu int, tự tăng.
+Lưu id chi tiết hóa đơn
+idBill
+Khóa ngoại, kiểu int 
+Liên kết với bảng hóa đơn
+idFood
+Khóa ngoại, kiểu int 
+Liên kết với bảng món ăn
+Count
+Số lượng, kiểu int
+Lưu số lượng món ăn
+Bảng 1.7: Bảng BillInfo
+CHƯƠNG II XÂY DỰNG CHƯƠNG TRÌNH
+ Giới Thiệu Tổng Quan
+Chương trình quản lý quán cà phê được xây dựng nhằm hiện thực hóa các chức năng dựa trên nền tảng mô hình 3 lớp (3-tier architecture) với ngôn ngữ lập trình C# và cơ sở dữ liệu Microsoft SQL Server. Mô hình này bao gồm ba tầng chính: tầng giao diện (Presentation Layer) sử dụng form fAdmin.cs để tương tác với người dùng, tầng logic nghiệp vụ (Business Logic Layer) với các lớp DAO (Data Access Object) để xử lý nghiệp vụ, và tầng truy cập dữ liệu (Data Access Layer) thông qua lớp DataProvider.cs để kết nối và thao tác với cơ sở dữ liệu. Phương pháp tiếp cận này không chỉ đảm bảo tính tổ chức mà còn tạo điều kiện cho việc bảo trì và mở rộng hệ thống trong tương lai. Trong chương này, quá trình xây dựng chương trình sẽ được trình bày chi tiết thông qua các bước hướng dẫn thực hành, từ cài đặt môi trường đến thử nghiệm và tối ưu hóa.
+ 2.1Hướng Dẫn Thực Hành
+Để xây dựng và triển khai thành công chương trình quản lý quán cà phê, các bước thực hành được thực hiện một cách có hệ thống như sau
+    2.1.1 Cài đặt môi trường phát triển
+Bước đầu tiên là chuẩn bị môi trường làm việc. Người dùng cần cài đặt các công cụ sau:
+Microsoft SQL Server: Được sử dụng để tạo và quản lý cơ sở dữ liệu QuanLyCoffee. Phiên bản SQL Server 2019 hoặc cao hơn được khuyến nghị để đảm bảo tính tương thích.
+SQL Server Management Studio (SSMS): Công cụ quản lý cơ sở dữ liệu, hỗ trợ viết và thực thi các script SQL, bao gồm script tạo bảng và stored procedure.
+Visual Studio: Môi trường phát triển tích hợp (IDE) với phiên bản Community 2019 hoặc 2022, cài đặt cùng .NET Framework 4.7.2 hoặc cao hơn để lập trình ứng dụng C#.
+Sau khi cài đặt, người dùng cần đảm bảo các công cụ được cấu hình đúng, đặc biệt là chuỗi kết nối tới SQL Server (connection string) trong dự án C#.
+    2.1.2 Thiết Lập Cơ Sở Dữ Liệu
+Tạo cơ sở dữ liệu: Mở SSMS, chạy script SQL đã cung cấp để tạo cơ sở dữ liệu QuanLyCoffee với các bảng TableFood, Account, FoodCategory, Food, Bill, và BillInfo. Script này bao gồm các ràng buộc khóa chính, khóa ngoại, và giá trị mặc định.
+Tạo stored procedure: Thêm các thủ tục lưu trữ (stored procedure) như USP_GetTotalRevenueByDate, USP_GetBillDetailsByDate, và USP_GetTopSellingFoodByDate để hỗ trợ báo cáo. Ví dụ, stored procedure USP_GetTotalRevenueByDate được viết như sau:
+Hình 2.1:  Ví dụ về stored procedure
+    2.1.3 Xây Dựng Cấu Trúc Dự Án
+Tạo giải pháp trong Visual Studio: Mở Visual Studio, tạo một dự án Windows Forms Application với tên QuanLyCoffee. 
+ Tạo các lớp DAL: Thêm các file như DataProvider.cs, tableDAl.cs, accountDAL.cs, FoodDAL.cs, CategoryDAl.cs, BillDAl.cs, và BilllInfoDAL.cs trong thư mục DAL. Mỗi file DAL chứa các phương thức xử lý nghiệp vụ, ví dụ: 
+Trong accountDAL.cs, thêm phương thức ResetPassword
+Hình 2.2: Xây dựng phương thức ResetPassword
+Thiết kế form fAdmin: Sử dụng giao diện đồ họa với TabControl chứa 5 tab (Doanh thu, Thức ăn, Danh mục, Bàn ăn, Tài khoản). Thêm các điều khiển như DataGridView, TextBox, ComboBox, và Button để thực hiện các chức năng.
+ 2.1.4 Triển Khai Chức Năng
+Hình 2.3: tiến hành xây dựng sự kiện btnReseartPassword_Click
+Kết nối dữ liệu: Trong DataProvider.cs, cấu hình chuỗi kết nối tới SQL Server và triển khai các phương thức ExecuteQuery và ExecuteNonQuery. 
+Lập trình sự kiện: Trong fAdmin.cs, thêm các sự kiện cho nút bấm. Ví dụ, sự kiện btnReseartPassword_Click: 
+Hiển thị dữ liệu: Sử dụng BindingSource để liên kết dữ liệu từ DAL tới DataGridView, đảm bảo giao diện cập nhật tự động khi dữ liệu thay đổi.
+2.2 Thiết Kế Giao Diện
+Giao diện người dùng là yếu tố quan trọng trong ứng dụng quản lý quán cà phê, giúp tối ưu hóa trải nghiệm cho cả quản trị viên, nhân viên, và người dùng cá nhân. Hệ thống bao gồm ba form chính: fAdmin (dành cho quản trị viên), fManager (dành cho nhân viên phục vụ để đặt đồ và quản lý bàn), và fProfile (cho phép thay đổi thông tin tài khoản). Các form được thiết kế bằng Windows Forms trong Visual Studio với ngôn ngữ C#, đảm bảo tính trực quan và dễ sử dụng. Dưới đây là mô tả chi tiết về bố trí và chức năng của từng form, kèm theo gợi ý chèn hình ảnh.
+      2.2.1 Form fAdmin
+Mô tả: Form fAdmin được thiết kế cho quản trị viên để quản lý toàn bộ hệ thống, bao gồm doanh thu, thức ăn, danh mục, bàn ăn, và tài khoản. Giao diện sử dụng TabControl để tổ chức năm tab chính
+Hình 2.4: giao diện tab doanh thu
+Tab Doanh thu: 
+Điều khiển: DateTimePicker dtpkFromDate, DateTimePicker dtpkToDate, Button btnShowRevenue, DataGridView dtgrvBill, TextBox txtTotalRevenue.Bố trí: Hai DateTimePicker ở trên cùng bên trái, btnShowRevenue bên phải, dtgrvBill chiếm phần giữa, txtTotalRevenue ở dưới cùng bên phải.
+Tab Thức ăn: 
+Điều khiển: DataGridView dtgrvFood, TextBox txtFoodName, ComboBox cbFoodCategory, NumericUpDown nudFoodPrice, Button btnAddFood, btnEditFood, btnDeleteFood, btnSearchFood.
+Bố trí: dtgrvFood bên trái (2/3 diện tích), các điều khiển nhập liệu bên phải, nút bấm bên dưới.
+Hình 2.5: giao diện Tab thức ăn
+Tab Danh mục, Tab Bàn ăn, Tab Tài khoản: (Giống mô tả trước đó, giữ nguyên bố trí và hình ảnh từ Hình 2.3, 2.4).
+        2.2.2 Form fManager
+Mô tả: Form fManager được thiết kế cho nhân viên phục vụ để đặt đồ (thêm món vào hóa đơn) và quản lý bàn (chuyển bàn, cập nhật trạng thái). Giao diện tập trung vào tính năng phục vụ khách hàng, với bố cục đơn giản và trực quan.
+Điều khiển: 
+ComboBox cbTableList: Chọn bàn để đặt đồ hoặc quản lý.
+DataGridView dtgrvAvailableFood: Hiển thị danh sách món ăn có sẵn.
+DataGridView dtgrvOrder: Hiển thị danh sách món đã đặt cho bàn.
+NumericUpDown nudQuantity: Nhập số lượng món ăn.
+Button btnAddToOrder, Button btnRemoveFromOrder, Button btnPlaceOrder, Button btnTransferTable, Button btnUpdateStatus: Nút bấm để thêm món, xóa món, đặt hàng, chuyển bàn, và cập nhật trạng thái bàn.
+ComboBox cbNewTable: Chọn bàn mới khi chuyển bàn.
+Bố trí: 
+cbTableList đặt ở góc trên cùng bên trái để chọn bàn.
+dtgrvAvailableFood chiếm 1/2 không gian bên trái, hiển thị danh sách món ăn.
+dtgrvOrder chiếm 1/2 không gian bên phải, hiển thị đơn hàng.
+nudQuantity và btnAddToOrder, btnRemoveFromOrder đặt bên dưới dtgrvAvailableFood.
+Hình 2.6: Giao diện chính
+         2.2.3 Form fProfile
+Mô tả: Form fProfile cho phép người dùng (nhân viên hoặc quản trị viên) thay đổi thông tin tài khoản, bao gồm tên hiển thị và mật khẩu, nhằm tăng tính cá nhân hóa và bảo mật.
+Điều khiển: 
+TextBox txtCurrentUsername: Hiển thị tên đăng nhập hiện tại (không cho phép chỉnh sửa).
+TextBox txtNewDisplayName: Nhập tên hiển thị mới.
+TextBox txtOldPassword, TextBox txtNewPassword, TextBox txtConfirmPassword: Nhập mật khẩu cũ, mật khẩu mới, và xác nhận mật khẩu.
+Button btnSaveChanges, Button btnCancel: Nút bấm để lưu thay đổi hoặc hủy.
+Label lblMessage: Hiển thị thông báo kết quả (thành công/thất bại).
+Bố trí: 
+txtCurrentUsername đặt ở trên cùng, không cho phép chỉnh sửa, với nhãn "Tên đăng nhập".
+txtNewDisplayName và các ô mật khẩu (txtOldPassword, txtNewPassword, txtConfirmPassword) xếp theo chiều dọc bên dưới, mỗi ô có nhãn tương ứng.
+btnSaveChanges và btnCancel đặt ở dưới cùng bên phải.
+lblMessage đặt bên dưới các nút bấm để hiển thị thông báo.
+Hình 2.7: Giao diện đổi thông tin tài khoản
+Thử Nghiệm Và Tối Ưu Hóa
+Thử nghiệm: Chạy chương trình, thêm dữ liệu mẫu, và kiểm tra từng chức năng (thêm bàn, đặt lại mật khẩu, xem báo cáo). Ghi nhận lỗi (nếu có) và sửa chữa. 
+Tối ưu hóa: Thêm chỉ mục (index) trên các cột khóa ngoại như idTable trong Bill và idCategory trong Food để tăng tốc truy vấn. Kiểm tra hiệu suất với lượng dữ liệu lớn (ví dụ: 1000 hóa đơn).
+2.2.4 Đánh giá quá trình thực hiện 
+Quá trình xây dựng chương trình đòi hỏi sự kết hợp chặt chẽ giữa thiết kế cơ sở dữ liệu, lập trình logic, và giao diện người dùng. Các bước hướng dẫn trên được thực hiện tuần tự, đảm bảo tính nhất quán và dễ dàng tái hiện. Tuy nhiên, việc tối ưu hóa và xử lý lỗi chiếm nhiều thời gian do cần kiểm tra kỹ lưỡng từng chức năng.
+KẾT LUẬN
+a. Đã làm, đã đạt được gì
+Qua quá trình xây dựng, dự án quản lý quán cà phê đã hoàn thành các mục tiêu đề ra. Cụ thể:
+Hoàn thiện chức năng cơ bản: Hệ thống cho phép quản lý bàn ăn, món ăn, danh mục, hóa đơn, tài khoản, và báo cáo doanh thu một cách hiệu quả.
+Áp dụng mô hình 3 lớp: Việc sử dụng mô hình 3 tầng đã đảm bảo sự tách biệt rõ ràng giữa giao diện, logic nghiệp vụ, và truy cập dữ liệu, tạo điều kiện cho việc bảo trì và mở rộng.
+Cung cấp báo cáo chi tiết: Báo cáo doanh thu theo ngày, danh sách hóa đơn, và món ăn bán chạy đã được triển khai thành công, hỗ trợ chủ quán đưa ra quyết định kinh doanh.
+Kỹ năng thực tế: Dự án giúp tôi nâng cao kỹ năng lập trình C#, thiết kế cơ sở dữ liệu, và tối ưu hóa truy vấn SQL.
+b. Chưa làm được gì, hạn chế là gì
+Dù đã đạt được nhiều thành tựu, dự án vẫn tồn tại một số hạn chế:
+Chưa quản lý hàng tồn kho: Không có chức năng theo dõi nguyên liệu, dẫn đến khó khăn trong việc kiểm soát hàng hóa.
+Hiệu suất với dữ liệu lớn: Khi số lượng hóa đơn hoặc món ăn tăng lên (hơn 1.000 bản ghi), tốc độ truy vấn giảm do thiếu cơ chế caching hoặc indexing nâng cao.
+Giao diện đơn giản: Giao diện chưa hỗ trợ đa ngôn ngữ hoặc giao diện người dùng thân thiện hơn (ví dụ: giao diện responsive).
+c. Hướng phát triển
+Để nâng cao giá trị của dự án, các hướng phát triển sau có thể được xem xét:
+Tích hợp máy in: Thêm chức năng xuất hóa đơn trực tiếp từ phần mềm, sử dụng thư viện như System.Drawing.Printing trong C#.
+Quản lý hàng tồn kho: Phát triển module theo dõi nguyên liệu và cảnh báo khi hết hàng, liên kết với bảng Food để cập nhật số lượng.
+Tối ưu hiệu suất: Áp dụng caching (sử dụng Redis) và chỉ mục phức tạp hơn để tăng tốc truy vấn với dữ liệu lớn.
+Phiên bản di động: Xây dựng ứng dụng Android/iOS để quản lý từ xa, sử dụng nền tảng như Xamarin hoặc Flutter.
+Hỗ trợ đa ngôn ngữ: Thêm khả năng chuyển đổi ngôn ngữ (Việt Nam, Anh) để phục vụ đối tượng quốc tế.
+Những hướng phát triển này không chỉ khắc phục hạn chế hiện tại mà còn mở ra tiềm năng ứng dụng rộng rãi hơn cho dự án trong tương lai.
+TÀI LIỆU THAM KHẢO
+Microsoft SQL Server Documentation. Truy cập tại: https://docs.microsoft.com/en-us/sql/.
+C# Programming Guide. Truy cập tại: https://docs.microsoft.com/en-us/dotnet/csharp/.
+Nguyễn Tuấn Anh, "Lập trình cơ sở dữ liệu với SQL Server", Nhà xuất bản Giáo dục, 2020.
+Trần Văn Hùng, "Xây dựng ứng dụng quản lý bằng C#", Nhà xuất bản Thông tin và Truyền thông, 2019.
+Welling, L., & Thomson, L., "PHP and MySQL Web Development", Addison-Wesley Professional, 2016 (tham khảo kỹ thuật lập trình cơ sở dữ liệu nói chung).
+GHI CHÚ
+Cấu trúc bài luận: Nội dung được trình bày theo thứ tự logic, từ giới thiệu, hướng dẫn thực hành, đến đánh giá và kết luận, giống một bài luận học thuật.
+Hướng dẫn thực hành: Chi tiết từng bước, bao gồm cài đặt, thiết kế, triển khai, và thử nghiệm, giúp người đọc dễ dàng tái hiện.
+Kết luận: Đánh giá toàn diện, nhấn mạnh thành tựu, hạn chế, và đề xuất phát triển thực tế.
+Tài liệu tham khảo: Bao gồm các nguồn chính thống, phù hợp với nội dung báo cáo.

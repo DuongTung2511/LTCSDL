@@ -95,15 +95,9 @@ namespace qlybanhang
             string keyword = txtTimKiemSanPham.Text.Replace("'", "''");
             string strFilter = $"(TenSP LIKE '%{keyword}%') AND (TrangThai = 1 OR TrangThai IS NULL) AND (MaNCC IN ({inClause}))";
 
-            DataRow[] rows = spBus.getFilter_SP(strFilter);
-            if (rows.Length > 0)
-            {
-                dgvSanPham.DataSource = rows.CopyToDataTable();
-            }
-            else
-            {
-                dgvSanPham.DataSource = spBus.getTableSanPham().Clone();
-            }
+            DataView dv = spBus.getTableSanPham().DefaultView;
+            dv.RowFilter = strFilter;
+            dgvSanPham.DataSource = dv;
         }
 
         private void txtTimKiemSanPham_TextChanged(object sender, EventArgs e)
@@ -134,11 +128,6 @@ namespace qlybanhang
             if (existing.Length > 0)
             {
                 int soLuongHienTai = Convert.ToInt32(existing[0]["SoLuong"]);
-                if (soLuongTon < soLuongHienTai + soLuongThem)
-                {
-                    MessageBox.Show("Số lượng tồn không đủ!");
-                    return;
-                }
                 existing[0]["SoLuong"] = soLuongHienTai + soLuongThem;
                 existing[0]["ThanhTien"] = (soLuongHienTai + soLuongThem) * donGia;
             }
@@ -153,6 +142,11 @@ namespace qlybanhang
                 gioHang.Rows.Add(r);
             }
 
+            // Trừ số lượng tồn ngay trên UI
+            drvSP.Row.BeginEdit();
+            drvSP["SoLuongTon"] = soLuongTon - soLuongThem;
+            drvSP.Row.EndEdit();
+
             CapNhatTongTien();
         }
 
@@ -162,6 +156,20 @@ namespace qlybanhang
             DataRowView drvGH = dgvGioHang.CurrentRow.DataBoundItem as DataRowView;
             if (drvGH != null)
             {
+                string maSPStr = drvGH["MaSP"].ToString();
+                int soLuongTraLai = Convert.ToInt32(drvGH["SoLuong"]);
+
+                // Hoàn lại số lượng tồn trên UI
+                DataRow[] rowsSP = spBus.getTableSanPham().Select("MaSP = '" + maSPStr.Replace("'", "''") + "'");
+                if (rowsSP.Length > 0)
+                {
+                    DataRow rSP = rowsSP[0];
+                    rSP.BeginEdit();
+                    int tonHienTai = Convert.ToInt32(rSP["SoLuongTon"]);
+                    rSP["SoLuongTon"] = tonHienTai + soLuongTraLai;
+                    rSP.EndEdit();
+                }
+
                 drvGH.Row.Delete();
                 gioHang.AcceptChanges();
                 CapNhatTongTien();
@@ -212,6 +220,7 @@ namespace qlybanhang
                     gioHang.Rows.Clear();
                     txtMaHD.Clear();
                     CapNhatTongTien();
+                    spBus = new SanPhamBUS(); // Tải lại dữ liệu mới nhất từ CSDL
                     LoadDataSanPham();
                     LoadmaHD();
                 }

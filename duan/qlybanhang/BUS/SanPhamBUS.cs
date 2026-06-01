@@ -59,6 +59,7 @@ namespace BUS
             r["MaNCC"] = sp.MaNCC;
             r["GiaBan"] = sp.GiaBan;
             r["SoLuongTon"] = sp.SoLuongTon;
+            r["TrangThai"] = sp.TrangThai;
             r.EndEdit();
             
             try 

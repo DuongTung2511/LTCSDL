@@ -39,17 +39,16 @@ namespace qlybanhang
 
         private void LoadData()
         {
-            DataViewManager dvm = bus.getDataset().DefaultViewManager;
+            DataView dv = bus.getTableSanPham().DefaultView;
             if (!chkHienThiDaXoa.Checked)
             {
-                dvm.DataViewSettings["SanPham"].RowFilter = "TrangThai = 1 OR TrangThai IS NULL";
+                dv.RowFilter = "TrangThai = 1 OR TrangThai IS NULL";
             }
             else
             {
-                dvm.DataViewSettings["SanPham"].RowFilter = "";
+                dv.RowFilter = "";
             }
-            dgvSanPham.DataSource = dvm;
-            dgvSanPham.DataMember = "SanPham";
+            dgvSanPham.DataSource = dv;
 
             if (dgvSanPham.Columns.Count > 0)
             {
@@ -79,10 +78,9 @@ namespace qlybanhang
                 strFilter += "(TrangThai = 1 OR TrangThai IS NULL)";
             }
 
-            DataViewManager dvm = bus.getDataset().DefaultViewManager;
-            dvm.DataViewSettings["SanPham"].RowFilter = strFilter;
-            dgvSanPham.DataSource = dvm;
-            dgvSanPham.DataMember = "SanPham";
+            DataView dv = bus.getTableSanPham().DefaultView;
+            dv.RowFilter = strFilter;
+            dgvSanPham.DataSource = dv;
         }
 
         private void txtTimKiem_TextChanged(object sender, EventArgs e)
