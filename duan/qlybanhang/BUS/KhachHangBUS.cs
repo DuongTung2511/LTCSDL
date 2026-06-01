@@ -23,7 +23,7 @@ namespace BUS
         public Boolean MaKH_not_Exist(string maKH)
         {
             Boolean kq = true;
-            DataRow[] rows = dal.getTable().Select("MaKH='" + maKH.Replace("'", "''") + "'");
+            DataRow[] rows = dal.TimKiemTheoMa(maKH);
             if (rows.Length > 0)
             {
                 kq = false;
@@ -36,13 +36,8 @@ namespace BUS
             Boolean kq = false;
             if (MaKH_not_Exist(kh.MaKH))
             {
-                DataRow r = dal.getTable().NewRow();
-                r["MaKH"] = kh.MaKH;
-                r["TenKH"] = kh.TenKH;
-                r["SoDienThoai"] = kh.SoDienThoai;
-                r["DiaChi"] = kh.DiaChi;
-                r["TrangThai"] = 1;
-                dal.addRow(r);
+                kh.TrangThai = 1;
+                dal.Add(kh);
                 kq = true;
             }
             return kq;
@@ -50,23 +45,15 @@ namespace BUS
 
         public DataRow[] getFilter_KH(string strFilter)
         {
-            return dal.getTable().Select(strFilter);
+            return dal.TimKiemTheoDieuKien(strFilter);
         }
 
         public Boolean update_KH(KhachHangDTO kh)
         {
-            DataRow[] rows = dal.getTable().Select("MaKH = '" + kh.MaKH.Replace("'", "''") + "'");
-            if (rows.Length == 0)
+            if (MaKH_not_Exist(kh.MaKH))
                 return false;
             
-            DataRow r = rows[0];
-            r.BeginEdit();
-            r["TenKH"] = kh.TenKH;
-            r["SoDienThoai"] = kh.SoDienThoai;
-            r["DiaChi"] = kh.DiaChi;
-            r["TrangThai"] = kh.TrangThai;
-            r.EndEdit();
-            dal.update();
+            dal.Update(kh);
             return true;
         }
 

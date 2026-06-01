@@ -23,7 +23,7 @@ namespace BUS
         public Boolean MaNV_not_Exist(string maNV)
         {
             Boolean kq = true;
-            DataRow[] rows = dal.getTable().Select("MaNV='" + maNV.Replace("'", "''") + "'");
+            DataRow[] rows = dal.TimKiemTheoMa(maNV);
             if (rows.Length > 0)
             {
                 kq = false;
@@ -34,17 +34,10 @@ namespace BUS
         public Boolean add_New_NV(NhanVienDTO nv)
         {
             Boolean kq = false;
-            if (MaNV_not_Exist(nv.MaNV))
+            if (MaNV_not_Exist(nv.MaNV.ToString()))
             {
-                DataRow r = dal.getTable().NewRow();
-                r["MaNV"] = nv.MaNV;
-                r["TenNV"] = nv.TenNV;
-                r["GioiTinh"] = nv.GioiTinh;
-                r["NgaySinh"] = nv.NgaySinh;
-                r["SoDienThoai"] = nv.SoDienThoai;
-                r["DiaChi"] = nv.DiaChi;
-                r["TrangThai"] = 1;
-                dal.addRow(r);
+                nv.TrangThai = 1;
+                dal.Add(nv);
                 kq = true;
             }
             return kq;
@@ -52,25 +45,15 @@ namespace BUS
 
         public DataRow[] getFilter_NV(string strFilter)
         {
-            return dal.getTable().Select(strFilter);
+            return dal.TimKiemTheoDieuKien(strFilter);
         }
 
         public Boolean update_NV(NhanVienDTO nv)
         {
-            DataRow[] rows = dal.getTable().Select("MaNV = '" + nv.MaNV.Replace("'", "''") + "'");
-            if (rows.Length == 0)
+            if (MaNV_not_Exist(nv.MaNV.ToString()))
                 return false;
-
-            DataRow r = rows[0];
-            r.BeginEdit();
-            r["TenNV"] = nv.TenNV;
-            r["GioiTinh"] = nv.GioiTinh;
-            r["NgaySinh"] = nv.NgaySinh;
-            r["SoDienThoai"] = nv.SoDienThoai;
-            r["DiaChi"] = nv.DiaChi;
-            r["TrangThai"] = nv.TrangThai;
-            r.EndEdit();
-            dal.update();
+            
+            dal.Update(nv);
             return true;
         }
 
@@ -89,11 +72,10 @@ namespace BUS
 
             HoaDonDAL hdDal = new HoaDonDAL();
             if (hdDal.KiemTraNhanVienTonTai(maNV))
-                return "Nhân viên đã tạo Hóa Đơn, không thể xóa vĩnh viễn!";
+                return "Nhân viên đã phát sinh Hóa Đơn, không thể xóa vĩnh viễn!";
 
-            // Xóa tài khoản trước (nếu có)
             TaiKhoanDAL tkDal = new TaiKhoanDAL();
-            tkDal.deleteTaiKhoanByMaNV(maNV);
+            tkDal.deleteByMaNV(maNV);
 
             dal.hardDelete(maNV);
             return ""; 
@@ -101,20 +83,13 @@ namespace BUS
 
         public string LayMaNV(string tenDangNhap)
         {
-            TaiKhoanBUS tkBus = new TaiKhoanBUS();
-            DataTable dtTK = tkBus.getTableTaiKhoan();
-            DataRow[] rows = dtTK.Select("TenDangNhap = '" + tenDangNhap.Replace("'", "''") + "'");
-            return rows.Length > 0 ? rows[0]["MaNV"].ToString() : "";
-        }
-
-        public DataTable LayDanhSachNVDangLam()
-        {
-            DataTable dt = dal.getTable();
-            DataRow[] rows = dt.Select("TrangThai = 1 OR TrangThai IS NULL");
-            if (rows.Length > 0)
-                return rows.CopyToDataTable();
-            else
-                return dt.Clone();
+            TaiKhoanDAL tkDal = new TaiKhoanDAL();
+            DataRow[] rows = tkDal.TimKiemTheoTenDangNhap(tenDangNhap);
+            if (rows.Length > 0 && rows[0]["MaNV"] != DBNull.Value)
+            {
+                return rows[0]["MaNV"].ToString();
+            }
+            return "";
         }
     }
 }

@@ -20,10 +20,15 @@ namespace BUS
             return dt;
         }
 
+        public DataTable LayDanhSachNCCDangHoatDong()
+        {
+            return dal.LayDanhSachNCCDangHoatDong();
+        }
+
         public Boolean MaNCC_not_Exist(string maNCC)
         {
             Boolean kq = true;
-            DataRow[] rows = dal.getTable().Select("MaNCC='" + maNCC.Replace("'", "''") + "'");
+            DataRow[] rows = dal.TimKiemTheoMa(maNCC);
             if (rows.Length > 0)
             {
                 kq = false;
@@ -34,49 +39,26 @@ namespace BUS
         public Boolean add_New_NCC(NhaCungCapDTO ncc)
         {
             Boolean kq = false;
-            if (MaNCC_not_Exist(ncc.MaNCC))
+            if (MaNCC_not_Exist(ncc.MaNCC.ToString()))
             {
-                DataRow r = dal.getTable().NewRow();
-                r["MaNCC"] = ncc.MaNCC;
-                r["TenNCC"] = ncc.TenNCC;
-                r["SoDienThoai"] = ncc.SoDienThoai;
-                r["DiaChi"] = ncc.DiaChi;
-                r["TrangThai"] = 1;
-                dal.addRow(r);
+                ncc.TrangThai = 1;
+                dal.Add(ncc);
                 kq = true;
             }
             return kq;
         }
 
-        public DataTable LayDanhSachNCCDangHoatDong()
-        {
-            DataTable dt = dal.getTable();
-            DataRow[] rows = dt.Select("TrangThai = 1 OR TrangThai IS NULL"); // Đề phòng các record cũ chưa update 1
-            if (rows.Length > 0)
-                return rows.CopyToDataTable();
-            else
-                return dt.Clone();
-        }
-
         public DataRow[] getFilter_NCC(string strFilter)
         {
-            return dal.getTable().Select(strFilter);
+            return dal.TimKiemTheoDieuKien(strFilter);
         }
 
         public Boolean update_NCC(NhaCungCapDTO ncc)
         {
-            DataRow[] rows = dal.getTable().Select("MaNCC = '" + ncc.MaNCC.Replace("'", "''") + "'");
-            if (rows.Length == 0)
+            if (MaNCC_not_Exist(ncc.MaNCC.ToString()))
                 return false;
 
-            DataRow r = rows[0];
-            r.BeginEdit();
-            r["TenNCC"] = ncc.TenNCC;
-            r["SoDienThoai"] = ncc.SoDienThoai;
-            r["DiaChi"] = ncc.DiaChi;
-            r["TrangThai"] = ncc.TrangThai;
-            r.EndEdit();
-            dal.update();
+            dal.Update(ncc);
             return true;
         }
 
@@ -95,7 +77,7 @@ namespace BUS
 
             SanPhamDAL spDal = new SanPhamDAL();
             if (spDal.KiemTraNhaCungCapTonTai(maNCC))
-                return "Nhà cung cấp này đã có Sản Phẩm liên kết, không thể xóa vĩnh viễn!";
+                return "Nhà cung cấp đã có Sản Phẩm, không thể xóa vĩnh viễn!";
 
             dal.hardDelete(maNCC);
             return ""; 

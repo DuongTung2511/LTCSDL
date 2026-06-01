@@ -23,7 +23,7 @@ namespace BUS
         public Boolean MaSP_not_Exist(string maSP)
         {
             Boolean kq = true;
-            DataRow[] rows = dal.getTable().Select("MaSP='" + maSP.Replace("'", "''") + "'");
+            DataRow[] rows = dal.TimKiemTheoMa(maSP);
             if (rows.Length > 0)
             {
                 kq = false;
@@ -36,14 +36,8 @@ namespace BUS
             Boolean kq = false;
             if (MaSP_not_Exist(sp.MaSP.ToString()))
             {
-                DataRow r = dal.getTable().NewRow();
-                r["MaSP"] = sp.MaSP;
-                r["TenSP"] = sp.TenSP;
-                r["MaNCC"] = sp.MaNCC;
-                r["GiaBan"] = sp.GiaBan;
-                r["SoLuongTon"] = sp.SoLuongTon;
-                r["TrangThai"] = 1;
-                dal.addRow(r);
+                sp.TrangThai = 1;
+                dal.Add(sp);
                 kq = true;
             }
             return kq;
@@ -51,24 +45,15 @@ namespace BUS
 
         public DataRow[] getFilter_SP(string strFilter)
         {
-            return dal.getTable().Select(strFilter);
+            return dal.TimKiemTheoDieuKien(strFilter);
         }
 
         public Boolean update_SP(SanPhamDTO sp)
         {
-            DataRow[] rows = dal.getTable().Select("MaSP = '" + sp.MaSP.Replace("'", "''") + "'");
-            if (rows.Length == 0)
+            if (MaSP_not_Exist(sp.MaSP.ToString()))
                 return false;
 
-            DataRow r = rows[0];
-            r.BeginEdit();
-            r["TenSP"] = sp.TenSP;
-            r["MaNCC"] = sp.MaNCC;
-            r["GiaBan"] = sp.GiaBan;
-            r["SoLuongTon"] = sp.SoLuongTon;
-            r["TrangThai"] = sp.TrangThai;
-            r.EndEdit();
-            dal.update();
+            dal.Update(sp);
             return true;
         }
 

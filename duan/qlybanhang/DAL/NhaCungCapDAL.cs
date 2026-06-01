@@ -29,27 +29,51 @@ namespace DAL
             return ds.Tables["NhaCungCap"];
         }
 
-        public void addRow(DataRow r)
+        public DataRow[] TimKiemTheoMa(string maNCC)
+        {
+            return ds.Tables["NhaCungCap"].Select("MaNCC = '" + maNCC.Replace("'", "''") + "'");
+        }
+
+        public DataRow[] TimKiemTheoDieuKien(string strFilter)
+        {
+            return ds.Tables["NhaCungCap"].Select(strFilter);
+        }
+
+        public void Add(DTO.NhaCungCapDTO ncc)
         {
             try
             {
+                DataRow r = ds.Tables["NhaCungCap"].NewRow();
+                r["MaNCC"] = ncc.MaNCC;
+                r["TenNCC"] = ncc.TenNCC;
+                r["SoDienThoai"] = ncc.SoDienThoai;
+                r["DiaChi"] = ncc.DiaChi;
+                r["TrangThai"] = ncc.TrangThai; // Default from BUS
                 ds.Tables["NhaCungCap"].Rows.Add(r);
                 da.Update(ds, "NhaCungCap");
                 ds.AcceptChanges();
             }
             catch { }
-            reload();
         }
 
-        public void update()
+        public void Update(DTO.NhaCungCapDTO ncc)
         {
-            da.Update(ds, "NhaCungCap");
-            ds.AcceptChanges();
+            DataRow[] rows = TimKiemTheoMa(ncc.MaNCC.ToString());
+            if (rows.Length > 0)
+            {
+                DataRow r = rows[0];
+                r["TenNCC"] = ncc.TenNCC;
+                r["SoDienThoai"] = ncc.SoDienThoai;
+                r["DiaChi"] = ncc.DiaChi;
+                r["TrangThai"] = ncc.TrangThai;
+                da.Update(ds, "NhaCungCap");
+                ds.AcceptChanges();
+            }
         }
 
         public void delete(string maNCC)
         {
-            DataRow[] rows = ds.Tables["NhaCungCap"].Select("MaNCC = '" + maNCC.Replace("'", "''") + "'");
+            DataRow[] rows = TimKiemTheoMa(maNCC);
             if (rows.Length > 0)
             {
                 rows[0]["TrangThai"] = 0;
@@ -58,15 +82,18 @@ namespace DAL
             }
         }
 
-        public void reload()
+        public DataTable LayDanhSachNCCDangHoatDong()
         {
-            ds.Tables["NhaCungCap"].Clear();
-            da.Fill(ds, "NhaCungCap");
+            DataRow[] rows = ds.Tables["NhaCungCap"].Select("TrangThai = 1");
+            if (rows.Length > 0)
+                return rows.CopyToDataTable();
+            else
+                return ds.Tables["NhaCungCap"].Clone();
         }
 
         public void hardDelete(string maNCC)
         {
-            DataRow[] rows = ds.Tables["NhaCungCap"].Select("MaNCC = '" + maNCC.Replace("'", "''") + "'");
+            DataRow[] rows = TimKiemTheoMa(maNCC);
             if (rows.Length > 0)
             {
                 rows[0].Delete();

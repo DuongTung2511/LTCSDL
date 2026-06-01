@@ -29,27 +29,55 @@ namespace DAL
             return ds.Tables["NhanVien"];
         }
 
-        public void addRow(DataRow r)
+        public DataRow[] TimKiemTheoMa(string maNV)
+        {
+            return ds.Tables["NhanVien"].Select("MaNV = '" + maNV.Replace("'", "''") + "'");
+        }
+
+        public DataRow[] TimKiemTheoDieuKien(string strFilter)
+        {
+            return ds.Tables["NhanVien"].Select(strFilter);
+        }
+
+        public void Add(DTO.NhanVienDTO nv)
         {
             try
             {
+                DataRow r = ds.Tables["NhanVien"].NewRow();
+                r["MaNV"] = nv.MaNV;
+                r["TenNV"] = nv.TenNV;
+                r["GioiTinh"] = nv.GioiTinh;
+                r["NgaySinh"] = nv.NgaySinh;
+                r["SoDienThoai"] = nv.SoDienThoai;
+                r["DiaChi"] = nv.DiaChi;
+                r["TrangThai"] = nv.TrangThai; // Default from BUS
                 ds.Tables["NhanVien"].Rows.Add(r);
                 da.Update(ds, "NhanVien");
                 ds.AcceptChanges();
             }
             catch { }
-            reload();
         }
 
-        public void update()
+        public void Update(DTO.NhanVienDTO nv)
         {
-            da.Update(ds, "NhanVien");
-            ds.AcceptChanges();
+            DataRow[] rows = TimKiemTheoMa(nv.MaNV.ToString());
+            if (rows.Length > 0)
+            {
+                DataRow r = rows[0];
+                r["TenNV"] = nv.TenNV;
+                r["GioiTinh"] = nv.GioiTinh;
+                r["NgaySinh"] = nv.NgaySinh;
+                r["SoDienThoai"] = nv.SoDienThoai;
+                r["DiaChi"] = nv.DiaChi;
+                r["TrangThai"] = nv.TrangThai;
+                da.Update(ds, "NhanVien");
+                ds.AcceptChanges();
+            }
         }
 
         public void delete(string maNV)
         {
-            DataRow[] rows = ds.Tables["NhanVien"].Select("MaNV = '" + maNV.Replace("'", "''") + "'");
+            DataRow[] rows = TimKiemTheoMa(maNV);
             if (rows.Length > 0)
             {
                 rows[0]["TrangThai"] = 0;
@@ -58,15 +86,9 @@ namespace DAL
             }
         }
 
-        public void reload()
-        {
-            ds.Tables["NhanVien"].Clear();
-            da.Fill(ds, "NhanVien");
-        }
-
         public void hardDelete(string maNV)
         {
-            DataRow[] rows = ds.Tables["NhanVien"].Select("MaNV = '" + maNV.Replace("'", "''") + "'");
+            DataRow[] rows = TimKiemTheoMa(maNV);
             if (rows.Length > 0)
             {
                 rows[0].Delete();

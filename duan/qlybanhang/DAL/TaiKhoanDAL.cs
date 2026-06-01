@@ -29,50 +29,83 @@ namespace DAL
             return ds.Tables["TaiKhoan"];
         }
 
-        public void addRow(DataRow r)
+        public DataRow[] TimKiemTheoTenDangNhap(string tenDangNhap)
+        {
+            return ds.Tables["TaiKhoan"].Select("TenDangNhap = '" + tenDangNhap.Replace("'", "''") + "'");
+        }
+
+        public DataRow[] TimKiemTheoDieuKien(string strFilter)
+        {
+            return ds.Tables["TaiKhoan"].Select(strFilter);
+        }
+
+        public void Add(DTO.TaiKhoanDTO tk)
         {
             try
             {
+                DataRow r = ds.Tables["TaiKhoan"].NewRow();
+                r["TenDangNhap"] = tk.TenDangNhap;
+                r["MatKhau"] = tk.MatKhau;
+                r["Quyen"] = tk.Quyen;
+                if (!string.IsNullOrEmpty(tk.MaNV))
+                    r["MaNV"] = tk.MaNV;
+                else
+                    r["MaNV"] = DBNull.Value;
                 ds.Tables["TaiKhoan"].Rows.Add(r);
                 da.Update(ds, "TaiKhoan");
                 ds.AcceptChanges();
             }
             catch { }
-            reload();
         }
 
-        public void update()
+        public void Update(DTO.TaiKhoanDTO tk)
         {
-            da.Update(ds, "TaiKhoan");
-            ds.AcceptChanges();
+            DataRow[] rows = TimKiemTheoTenDangNhap(tk.TenDangNhap);
+            if (rows.Length > 0)
+            {
+                DataRow r = rows[0];
+                r["MatKhau"] = tk.MatKhau;
+                r["Quyen"] = tk.Quyen;
+                if (!string.IsNullOrEmpty(tk.MaNV))
+                    r["MaNV"] = tk.MaNV;
+                else
+                    r["MaNV"] = DBNull.Value;
+                da.Update(ds, "TaiKhoan");
+                ds.AcceptChanges();
+            }
         }
 
-        public void delete(string tenDangNhap)
+        public void deleteByMaNV(string maNV)
         {
-            DataRow[] rows = ds.Tables["TaiKhoan"].Select("TenDangNhap = '" + tenDangNhap.Replace("'", "''") + "'");
+            // First we need to find the TenDangNhap associated with the maNV.
+            // But TaiKhoanDAL shouldn't ideally read NhanVien table. 
+            // However, doing it here is fine, or we let NhanVienDAL do it.
+            // Since this method was added to support hard delete of NhanVien:
+            // We can just execute a direct SQL delete, or find the account using another query.
+            // The safest is direct execute because DataSet doesn't have cross-table here.
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("DELETE FROM TaiKhoan WHERE TenDangNhap IN (SELECT TenDangNhap FROM NhanVien WHERE MaNV = @MaNV AND TenDangNhap IS NOT NULL)", conn);
+                cmd.Parameters.AddWithValue("@MaNV", maNV);
+                cmd.ExecuteNonQuery();
+                conn.Close();
+                // Then refresh dataset
+                ds.Tables["TaiKhoan"].Clear();
+                da.Fill(ds, "TaiKhoan");
+            }
+            catch { if(conn.State == ConnectionState.Open) conn.Close(); }
+        }
+        
+        public void hardDelete(string tenDangNhap)
+        {
+            DataRow[] rows = TimKiemTheoTenDangNhap(tenDangNhap);
             if (rows.Length > 0)
             {
                 rows[0].Delete();
                 da.Update(ds, "TaiKhoan");
                 ds.AcceptChanges();
             }
-        }
-
-        public void reload()
-        {
-            ds.Tables["TaiKhoan"].Clear();
-            da.Fill(ds, "TaiKhoan");
-        }
-
-        public void deleteTaiKhoanByMaNV(string maNV)
-        {
-            DataRow[] rows = ds.Tables["TaiKhoan"].Select("MaNV = '" + maNV.Replace("'", "''") + "'");
-            foreach (DataRow r in rows)
-            {
-                r.Delete();
-            }
-            da.Update(ds, "TaiKhoan");
-            ds.AcceptChanges();
         }
     }
 }
