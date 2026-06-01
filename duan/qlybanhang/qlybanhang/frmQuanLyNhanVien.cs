@@ -195,6 +195,13 @@ namespace qlybanhang
         {
             if (checkInput())
             {
+                if (!System.Text.RegularExpressions.Regex.IsMatch(txtSoDienThoai.Text, @"^0\d{9}$"))
+                {
+                    MessageBox.Show("Số điện thoại không hợp lệ! Vui lòng nhập 10 số bắt đầu bằng 0.", "Lỗi nhập liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtSoDienThoai.Focus();
+                    return;
+                }
+
                 NhanVienDTO nv = new NhanVienDTO();
                 nv.MaNV = txtMaNV.Text;
                 nv.TenNV = txtTenNV.Text;
@@ -232,6 +239,13 @@ namespace qlybanhang
 
             if (checkInput())
             {
+                if (!System.Text.RegularExpressions.Regex.IsMatch(txtSoDienThoai.Text, @"^0\d{9}$"))
+                {
+                    MessageBox.Show("Số điện thoại không hợp lệ! Vui lòng nhập 10 số bắt đầu bằng 0.", "Lỗi nhập liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtSoDienThoai.Focus();
+                    return;
+                }
+
                 NhanVienDTO nv = new NhanVienDTO();
                 nv.MaNV = txtMaNV.Text.Trim();
                 nv.TenNV = txtTenNV.Text.Trim();
