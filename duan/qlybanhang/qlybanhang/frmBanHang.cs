@@ -81,23 +81,18 @@ namespace qlybanhang
 
         private void filter_dssp()
         {
-            // Lấy danh sách Nhà cung cấp đang giao dịch
-            NhaCungCapBUS nccBus = new NhaCungCapBUS();
-            DataTable dtNCC = nccBus.LayDanhSachNCCDangHoatDong();
-            System.Collections.Generic.List<string> listMaNCC = new System.Collections.Generic.List<string>();
-            foreach (DataRow r in dtNCC.Rows)
-            {
-                listMaNCC.Add("'" + r["MaNCC"].ToString() + "'");
-            }
-            string inClause = string.Join(",", listMaNCC);
-            if (inClause == "") inClause = "''";
-
             string keyword = txtTimKiemSanPham.Text.Replace("'", "''");
-            string strFilter = $"(TenSP LIKE '%{keyword}%') AND (TrangThai = 1 OR TrangThai IS NULL) AND (MaNCC IN ({inClause}))";
+            string strFilter = $"(TenSP LIKE '%{keyword}%') AND (TrangThai = 1 OR TrangThai IS NULL)";
 
-            DataView dv = spBus.getTableSanPham().DefaultView;
-            dv.RowFilter = strFilter;
-            dgvSanPham.DataSource = dv;
+            DataRow[] rows = spBus.getFilter_SP(strFilter);
+            if (rows.Length > 0)
+            {
+                dgvSanPham.DataSource = rows.CopyToDataTable();
+            }
+            else
+            {
+                dgvSanPham.DataSource = spBus.getTableSanPham().Clone();
+            }
         }
 
         private void txtTimKiemSanPham_TextChanged(object sender, EventArgs e)
@@ -176,58 +171,56 @@ namespace qlybanhang
             }
         }
 
-        private Boolean checkInputThanhToan()
+        private bool checkInputThanhToan()
         {
-            Boolean kq = true;
             if (gioHang.Rows.Count == 0)
             {
-                kq = false;
                 MessageBox.Show("Giỏ hàng trống!");
+                return false;
             }
-            else if (cboKhachHang.SelectedIndex < 0)
+            if (cboKhachHang.SelectedIndex < 0)
             {
-                kq = false;
                 cboKhachHang.Focus();
                 MessageBox.Show("Vui lòng chọn khách hàng!");
+                return false;
             }
-            else if (txtMaHD.Text == "")
+            if (string.IsNullOrWhiteSpace(txtMaHD.Text))
             {
-                kq = false;
                 txtMaHD.Focus();
                 MessageBox.Show("Vui lòng nhập mã hóa đơn!");
+                return false;
             }
-            return kq;
+            return true;
         }
 
         private void btnThanhToan_Click(object sender, EventArgs e)
         {
-            if (checkInputThanhToan())
-            {
-                if (!hdBus.MaHD_not_Exist(txtMaHD.Text))
-                {
-                    MessageBox.Show("Mã hóa đơn đã tồn tại!");
-                    txtMaHD.Focus();
-                    return;
-                }
+            if (!checkInputThanhToan()) return;
 
-                try
-                {
-                    string maKH = cboKhachHang.SelectedValue.ToString();
-                    string maHD = txtMaHD.Text.Trim();
-                    hdBus.TaoHoaDon(maHD, maKH, MaNV, gioHang);
-                    MessageBox.Show("Thanh toán thành công!", "Thông báo");
-                    
-                    gioHang.Rows.Clear();
-                    txtMaHD.Clear();
-                    CapNhatTongTien();
-                    spBus = new SanPhamBUS(); // Tải lại dữ liệu mới nhất từ CSDL
-                    LoadDataSanPham();
-                    LoadmaHD();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Lỗi: " + ex.Message, "Lỗi");
-                }
+            if (!hdBus.MaHD_not_Exist(txtMaHD.Text))
+            {
+                MessageBox.Show("Mã hóa đơn đã tồn tại!");
+                txtMaHD.Focus();
+                return;
+            }
+
+            try
+            {
+                string maKH = cboKhachHang.SelectedValue.ToString();
+                string maHD = txtMaHD.Text.Trim();
+                hdBus.TaoHoaDon(maHD, maKH, MaNV, gioHang);
+                MessageBox.Show("Thanh toán thành công!", "Thông báo");
+                
+                gioHang.Rows.Clear();
+                txtMaHD.Clear();
+                CapNhatTongTien();
+                spBus = new SanPhamBUS(); // Tải lại dữ liệu mới nhất từ CSDL
+                LoadDataSanPham();
+                LoadmaHD();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi");
             }
         }
 

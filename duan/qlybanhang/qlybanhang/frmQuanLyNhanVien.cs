@@ -55,7 +55,6 @@ namespace qlybanhang
             {
                 if(dgvNhanVien.Columns.Contains("MaNV")) dgvNhanVien.Columns["MaNV"].HeaderText = "Mã NV";
                 if(dgvNhanVien.Columns.Contains("TenNV")) dgvNhanVien.Columns["TenNV"].HeaderText = "Tên nhân viên";
-                if(dgvNhanVien.Columns.Contains("TenDangNhap")) dgvNhanVien.Columns["TenDangNhap"].Visible = false; // Ẩn cột cũ nếu còn tồn dư trong View
                 if(dgvNhanVien.Columns.Contains("GioiTinh")) dgvNhanVien.Columns["GioiTinh"].HeaderText = "Giới tính";
                 if(dgvNhanVien.Columns.Contains("NgaySinh")) dgvNhanVien.Columns["NgaySinh"].HeaderText = "Ngày sinh";
                 if(dgvNhanVien.Columns.Contains("SoDienThoai")) dgvNhanVien.Columns["SoDienThoai"].HeaderText = "Số điện thoại";
@@ -96,35 +95,34 @@ namespace qlybanhang
             filter_dsnv();
         }
 
-        private Boolean checkInput()
+        private bool checkInput()
         {
-            Boolean kq = true;
-            if (txtMaNV.Text == "")
+            if (string.IsNullOrWhiteSpace(txtMaNV.Text))
             {
-                kq = false;
                 txtMaNV.Focus();
+                return false;
             }
-            else if (txtTenNV.Text == "")
+            if (string.IsNullOrWhiteSpace(txtTenNV.Text))
             {
-                kq = false;
                 txtTenNV.Focus();
+                return false;
             }
-            else if (cboGioiTinh.SelectedIndex < 0)
+            if (cboGioiTinh.SelectedIndex < 0)
             {
-                kq = false;
                 cboGioiTinh.Focus();
+                return false;
             }
-            else if (txtSoDienThoai.Text == "")
+            if (string.IsNullOrWhiteSpace(txtSoDienThoai.Text))
             {
-                kq = false;
                 txtSoDienThoai.Focus();
+                return false;
             }
-            else if (txtDiaChi.Text == "")
+            if (string.IsNullOrWhiteSpace(txtDiaChi.Text))
             {
-                kq = false;
                 txtDiaChi.Focus();
+                return false;
             }
-            return kq;
+            return true;
         }
 
         private void dgvNhanVien_CellEnter(object sender, DataGridViewCellEventArgs e)
@@ -186,39 +184,38 @@ namespace qlybanhang
 
         private void btnThem_Click(object sender, EventArgs e)
         {
-            if (checkInput())
+            if (!checkInput())
             {
-                if (!System.Text.RegularExpressions.Regex.IsMatch(txtSoDienThoai.Text, @"^0\d{9}$"))
-                {
-                    MessageBox.Show("Số điện thoại không hợp lệ! Vui lòng nhập 10 số bắt đầu bằng 0.", "Lỗi nhập liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    txtSoDienThoai.Focus();
-                    return;
-                }
+                MessageBox.Show("Bạn chưa nhập đủ dữ liệu!");
+                return;
+            }
 
-                NhanVienDTO nv = new NhanVienDTO();
-                nv.MaNV = txtMaNV.Text;
-                nv.TenNV = txtTenNV.Text;
-                nv.GioiTinh = cboGioiTinh.SelectedItem.ToString();
-                nv.NgaySinh = dtpNgaySinh.Value.Date;
-                nv.SoDienThoai = txtSoDienThoai.Text;
-                nv.DiaChi = txtDiaChi.Text;
-                // Không gán TrangThai vì BUS đã gán mặc định = 1
+            if (!System.Text.RegularExpressions.Regex.IsMatch(txtSoDienThoai.Text, @"^0\d{9}$"))
+            {
+                MessageBox.Show("Số điện thoại không hợp lệ! Vui lòng nhập 10 số bắt đầu bằng 0.", "Lỗi nhập liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtSoDienThoai.Focus();
+                return;
+            }
 
-                Boolean kq = bus.add_New_NV(nv);
-                if (!kq)
-                {
-                    MessageBox.Show("Thêm mới không thành công. Có thể mã nhân viên đã tồn tại!");
-                }
-                else
-                {
-                    LoadData();
-                    lammoi();
-                    MessageBox.Show("Thêm nhân viên thành công!", "Thông báo");
-                }
+            NhanVienDTO nv = new NhanVienDTO();
+            nv.MaNV = txtMaNV.Text;
+            nv.TenNV = txtTenNV.Text;
+            nv.GioiTinh = cboGioiTinh.SelectedItem.ToString();
+            nv.NgaySinh = dtpNgaySinh.Value.Date;
+            nv.SoDienThoai = txtSoDienThoai.Text;
+            nv.DiaChi = txtDiaChi.Text;
+            // Không gán TrangThai vì BUS đã gán mặc định = 1
+
+            bool kq = bus.add_New_NV(nv);
+            if (!kq)
+            {
+                MessageBox.Show("Thêm mới không thành công. Có thể mã nhân viên đã tồn tại!");
             }
             else
             {
-                MessageBox.Show("Bạn chưa nhập đủ dữ liệu!");
+                LoadData();
+                lammoi();
+                MessageBox.Show("Thêm nhân viên thành công!", "Thông báo");
             }
         }
 
@@ -230,38 +227,37 @@ namespace qlybanhang
                 return;
             }
 
-            if (checkInput())
+            if (!checkInput())
             {
-                if (!System.Text.RegularExpressions.Regex.IsMatch(txtSoDienThoai.Text, @"^0\d{9}$"))
-                {
-                    MessageBox.Show("Số điện thoại không hợp lệ! Vui lòng nhập 10 số bắt đầu bằng 0.", "Lỗi nhập liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    txtSoDienThoai.Focus();
-                    return;
-                }
+                MessageBox.Show("Bạn chưa nhập đủ dữ liệu!");
+                return;
+            }
 
-                NhanVienDTO nv = new NhanVienDTO();
-                nv.MaNV = txtMaNV.Text.Trim();
-                nv.TenNV = txtTenNV.Text.Trim();
-                nv.GioiTinh = cboGioiTinh.SelectedItem.ToString();
-                nv.NgaySinh = dtpNgaySinh.Value.Date;
-                nv.SoDienThoai = txtSoDienThoai.Text.Trim();
-                nv.DiaChi = txtDiaChi.Text.Trim();
-                nv.TrangThai = cboTrangThai.SelectedIndex; // 1 hoặc 0
+            if (!System.Text.RegularExpressions.Regex.IsMatch(txtSoDienThoai.Text, @"^0\d{9}$"))
+            {
+                MessageBox.Show("Số điện thoại không hợp lệ! Vui lòng nhập 10 số bắt đầu bằng 0.", "Lỗi nhập liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtSoDienThoai.Focus();
+                return;
+            }
 
-                if (bus.update_NV(nv))
-                {
-                    LoadData();
-                    lammoi();
-                    MessageBox.Show("Cập nhật thành công!", "Thông báo");
-                }
-                else
-                {
-                    MessageBox.Show("Cập nhật thất bại!", "Lỗi");
-                }
+            NhanVienDTO nv = new NhanVienDTO();
+            nv.MaNV = txtMaNV.Text.Trim();
+            nv.TenNV = txtTenNV.Text.Trim();
+            nv.GioiTinh = cboGioiTinh.SelectedItem.ToString();
+            nv.NgaySinh = dtpNgaySinh.Value.Date;
+            nv.SoDienThoai = txtSoDienThoai.Text.Trim();
+            nv.DiaChi = txtDiaChi.Text.Trim();
+            nv.TrangThai = cboTrangThai.SelectedIndex; // 1 hoặc 0
+
+            if (bus.update_NV(nv))
+            {
+                LoadData();
+                lammoi();
+                MessageBox.Show("Cập nhật thành công!", "Thông báo");
             }
             else
             {
-                MessageBox.Show("Bạn chưa nhập đủ dữ liệu!");
+                MessageBox.Show("Cập nhật thất bại!", "Lỗi");
             }
         }
 

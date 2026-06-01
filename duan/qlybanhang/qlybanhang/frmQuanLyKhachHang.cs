@@ -82,30 +82,29 @@ namespace qlybanhang
             filter_dskh();
         }
 
-        private Boolean checkInput()
+        private bool checkInput()
         {
-            Boolean kq = true;
-            if (txtMaKH.Text == "")
+            if (string.IsNullOrWhiteSpace(txtMaKH.Text))
             {
-                kq = false;
                 txtMaKH.Focus();
+                return false;
             }
-            else if (txtTenKH.Text == "")
+            if (string.IsNullOrWhiteSpace(txtTenKH.Text))
             {
-                kq = false;
                 txtTenKH.Focus();
+                return false;
             }
-            else if (txtSoDienThoai.Text == "")
+            if (string.IsNullOrWhiteSpace(txtSoDienThoai.Text))
             {
-                kq = false;
                 txtSoDienThoai.Focus();
+                return false;
             }
-            else if (txtDiaChi.Text == "")
+            if (string.IsNullOrWhiteSpace(txtDiaChi.Text))
             {
-                kq = false;
                 txtDiaChi.Focus();
+                return false;
             }
-            return kq;
+            return true;
         }
 
         private void dgvKhachHang_CellEnter(object sender, DataGridViewCellEventArgs e)
@@ -128,36 +127,35 @@ namespace qlybanhang
 
         private void btnThem_Click(object sender, EventArgs e)
         {
-            if (checkInput())
+            if (!checkInput())
             {
-                if (!System.Text.RegularExpressions.Regex.IsMatch(txtSoDienThoai.Text, @"^0\d{9}$"))
-                {
-                    MessageBox.Show("Số điện thoại không hợp lệ! Vui lòng nhập 10 số bắt đầu bằng 0.", "Lỗi nhập liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    txtSoDienThoai.Focus();
-                    return;
-                }
+                MessageBox.Show("Bạn chưa nhập đủ dữ liệu!");
+                return;
+            }
 
-                KhachHangDTO kh = new KhachHangDTO();
-                kh.MaKH = txtMaKH.Text;
-                kh.TenKH = txtTenKH.Text;
-                kh.SoDienThoai = txtSoDienThoai.Text;
-                kh.DiaChi = txtDiaChi.Text;
+            if (!System.Text.RegularExpressions.Regex.IsMatch(txtSoDienThoai.Text, @"^0\d{9}$"))
+            {
+                MessageBox.Show("Số điện thoại không hợp lệ! Vui lòng nhập 10 số bắt đầu bằng 0.", "Lỗi nhập liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtSoDienThoai.Focus();
+                return;
+            }
 
-                Boolean kq = bus.add_New_KH(kh);
-                if (!kq)
-                {
-                    MessageBox.Show("Thêm mới không thành công. Có thể mã khách hàng đã tồn tại!");
-                }
-                else
-                {
-                    LoadData();
-                    lammoi();
-                    MessageBox.Show("Thêm khách hàng thành công!", "Thông báo");
-                }
+            KhachHangDTO kh = new KhachHangDTO();
+            kh.MaKH = txtMaKH.Text;
+            kh.TenKH = txtTenKH.Text;
+            kh.SoDienThoai = txtSoDienThoai.Text;
+            kh.DiaChi = txtDiaChi.Text;
+
+            bool kq = bus.add_New_KH(kh);
+            if (!kq)
+            {
+                MessageBox.Show("Thêm mới không thành công. Có thể mã khách hàng đã tồn tại!");
             }
             else
             {
-                MessageBox.Show("Bạn chưa nhập đủ dữ liệu!");
+                LoadData();
+                lammoi();
+                MessageBox.Show("Thêm khách hàng thành công!", "Thông báo");
             }
         }
 
@@ -169,37 +167,35 @@ namespace qlybanhang
                 return;
             }
             
-            if (checkInput())
+            if (!checkInput())
             {
-                if (!System.Text.RegularExpressions.Regex.IsMatch(txtSoDienThoai.Text, @"^0\d{9}$"))
-                {
-                    MessageBox.Show("Số điện thoại không hợp lệ! Vui lòng nhập 10 số bắt đầu bằng 0.", "Lỗi nhập liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    txtSoDienThoai.Focus();
-                    return;
-                }
+                MessageBox.Show("Bạn chưa nhập đủ dữ liệu!");
+                return;
+            }
 
-                KhachHangDTO kh = new KhachHangDTO();
-                kh.MaKH = txtMaKH.Text.Trim();
-                kh.TenKH = txtTenKH.Text.Trim();
-                kh.SoDienThoai = txtSoDienThoai.Text.Trim();
-                kh.DiaChi = txtDiaChi.Text.Trim();
+            if (!System.Text.RegularExpressions.Regex.IsMatch(txtSoDienThoai.Text, @"^0\d{9}$"))
+            {
+                MessageBox.Show("Số điện thoại không hợp lệ! Vui lòng nhập 10 số bắt đầu bằng 0.", "Lỗi nhập liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtSoDienThoai.Focus();
+                return;
+            }
 
-                kh.TrangThai = cboTrangThai.SelectedIndex;
+            KhachHangDTO kh = new KhachHangDTO();
+            kh.MaKH = txtMaKH.Text.Trim();
+            kh.TenKH = txtTenKH.Text.Trim();
+            kh.SoDienThoai = txtSoDienThoai.Text.Trim();
+            kh.DiaChi = txtDiaChi.Text.Trim();
+            kh.TrangThai = cboTrangThai.SelectedIndex;
 
-                if (bus.update_KH(kh))
-                {
-                    LoadData();
-                    lammoi();
-                    MessageBox.Show("Cập nhật thành công!", "Thông báo");
-                }
-                else
-                {
-                    MessageBox.Show("Cập nhật thất bại!", "Lỗi");
-                }
+            if (bus.update_KH(kh))
+            {
+                LoadData();
+                lammoi();
+                MessageBox.Show("Cập nhật thành công!", "Thông báo");
             }
             else
             {
-                MessageBox.Show("Bạn chưa nhập đủ dữ liệu!");
+                MessageBox.Show("Cập nhật thất bại!", "Lỗi");
             }
         }
 

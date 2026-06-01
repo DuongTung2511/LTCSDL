@@ -22,9 +22,9 @@ namespace qlybanhang
             this.lblTimKiem = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.cboNhaCungCap = new System.Windows.Forms.ComboBox();
-            this.txtSoLuongTon = new System.Windows.Forms.TextBox();
+            this.nudSoLuongTon = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
-            this.txtGiaBan = new System.Windows.Forms.TextBox();
+            this.nudGiaBan = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
             this.btnLamMoi = new System.Windows.Forms.Button();
             this.btnXoa = new System.Windows.Forms.Button();
@@ -41,6 +41,8 @@ namespace qlybanhang
             this.chkHienThiDaXoa = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSanPham)).BeginInit();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSoLuongTon)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudGiaBan)).BeginInit();
             this.SuspendLayout();
             // 
             // dgvSanPham
@@ -81,9 +83,9 @@ namespace qlybanhang
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.cboNhaCungCap);
-            this.groupBox1.Controls.Add(this.txtSoLuongTon);
+            this.groupBox1.Controls.Add(this.nudSoLuongTon);
             this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.txtGiaBan);
+            this.groupBox1.Controls.Add(this.nudGiaBan);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.btnLamMoi);
             this.groupBox1.Controls.Add(this.btnXoa);
@@ -116,13 +118,18 @@ namespace qlybanhang
             this.cboNhaCungCap.Size = new System.Drawing.Size(323, 24);
             this.cboNhaCungCap.TabIndex = 14;
             // 
-            // txtSoLuongTon
+            // nudSoLuongTon
             // 
-            this.txtSoLuongTon.Location = new System.Drawing.Point(656, 76);
-            this.txtSoLuongTon.Margin = new System.Windows.Forms.Padding(4);
-            this.txtSoLuongTon.Name = "txtSoLuongTon";
-            this.txtSoLuongTon.Size = new System.Drawing.Size(192, 22);
-            this.txtSoLuongTon.TabIndex = 13;
+            this.nudSoLuongTon.Location = new System.Drawing.Point(656, 76);
+            this.nudSoLuongTon.Margin = new System.Windows.Forms.Padding(4);
+            this.nudSoLuongTon.Maximum = new decimal(new int[] {
+            99999999,
+            0,
+            0,
+            0});
+            this.nudSoLuongTon.Name = "nudSoLuongTon";
+            this.nudSoLuongTon.Size = new System.Drawing.Size(192, 22);
+            this.nudSoLuongTon.TabIndex = 13;
             // 
             // label5
             // 
@@ -134,13 +141,23 @@ namespace qlybanhang
             this.label5.TabIndex = 12;
             this.label5.Text = "Số lượng tồn:";
             // 
-            // txtGiaBan
+            // nudGiaBan
             // 
-            this.txtGiaBan.Location = new System.Drawing.Point(148, 89);
-            this.txtGiaBan.Margin = new System.Windows.Forms.Padding(4);
-            this.txtGiaBan.Name = "txtGiaBan";
-            this.txtGiaBan.Size = new System.Drawing.Size(192, 22);
-            this.txtGiaBan.TabIndex = 11;
+            this.nudGiaBan.Increment = new decimal(new int[] {
+            500,
+            0,
+            0,
+            0});
+            this.nudGiaBan.Location = new System.Drawing.Point(148, 89);
+            this.nudGiaBan.Margin = new System.Windows.Forms.Padding(4);
+            this.nudGiaBan.Maximum = new decimal(new int[] {
+            1410065407,
+            2,
+            0,
+            0});
+            this.nudGiaBan.Name = "nudGiaBan";
+            this.nudGiaBan.Size = new System.Drawing.Size(192, 22);
+            this.nudGiaBan.TabIndex = 11;
             // 
             // label4
             // 
@@ -154,7 +171,7 @@ namespace qlybanhang
             // 
             // btnLamMoi
             // 
-            this.btnLamMoi.Location = new System.Drawing.Point(537, 140);
+            this.btnLamMoi.Location = new System.Drawing.Point(539, 154);
             this.btnLamMoi.Margin = new System.Windows.Forms.Padding(4);
             this.btnLamMoi.Name = "btnLamMoi";
             this.btnLamMoi.Size = new System.Drawing.Size(100, 28);
@@ -165,7 +182,7 @@ namespace qlybanhang
             // 
             // btnXoa
             // 
-            this.btnXoa.Location = new System.Drawing.Point(429, 140);
+            this.btnXoa.Location = new System.Drawing.Point(431, 154);
             this.btnXoa.Margin = new System.Windows.Forms.Padding(4);
             this.btnXoa.Name = "btnXoa";
             this.btnXoa.Size = new System.Drawing.Size(100, 28);
@@ -176,7 +193,7 @@ namespace qlybanhang
             // 
             // btnSua
             // 
-            this.btnSua.Location = new System.Drawing.Point(321, 140);
+            this.btnSua.Location = new System.Drawing.Point(323, 154);
             this.btnSua.Margin = new System.Windows.Forms.Padding(4);
             this.btnSua.Name = "btnSua";
             this.btnSua.Size = new System.Drawing.Size(100, 28);
@@ -187,7 +204,7 @@ namespace qlybanhang
             // 
             // btnThem
             // 
-            this.btnThem.Location = new System.Drawing.Point(213, 140);
+            this.btnThem.Location = new System.Drawing.Point(215, 154);
             this.btnThem.Margin = new System.Windows.Forms.Padding(4);
             this.btnThem.Name = "btnThem";
             this.btnThem.Size = new System.Drawing.Size(100, 28);
@@ -198,7 +215,7 @@ namespace qlybanhang
             // 
             // btnXoaVinhVien
             // 
-            this.btnXoaVinhVien.Location = new System.Drawing.Point(645, 140);
+            this.btnXoaVinhVien.Location = new System.Drawing.Point(647, 154);
             this.btnXoaVinhVien.Margin = new System.Windows.Forms.Padding(4);
             this.btnXoaVinhVien.Name = "btnXoaVinhVien";
             this.btnXoaVinhVien.Size = new System.Drawing.Size(120, 28);
@@ -303,6 +320,8 @@ namespace qlybanhang
             ((System.ComponentModel.ISupportInitialize)(this.dgvSanPham)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSoLuongTon)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudGiaBan)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -323,9 +342,9 @@ namespace qlybanhang
         private System.Windows.Forms.Button btnThem;
         private System.Windows.Forms.TextBox txtTimKiem;
         private System.Windows.Forms.Label lblTimKiem;
-        private System.Windows.Forms.TextBox txtSoLuongTon;
+        private System.Windows.Forms.NumericUpDown nudSoLuongTon;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox txtGiaBan;
+        private System.Windows.Forms.NumericUpDown nudGiaBan;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox cboNhaCungCap;
         private System.Windows.Forms.Label lblTrangThai;

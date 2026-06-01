@@ -38,7 +38,7 @@ namespace qlybanhang
             if (dgvChiTiet.Columns.Count > 0)
             {
                 dgvChiTiet.Columns["MaHD"].Visible = false;
-                dgvChiTiet.Columns["MaSP"].Visible = false;
+                dgvChiTiet.Columns["MaSP"].HeaderText = "Mã sản phẩm";
                 dgvChiTiet.Columns["TenSP"].HeaderText = "Tên sản phẩm";
                 dgvChiTiet.Columns["SoLuong"].HeaderText = "Số lượng";
                 dgvChiTiet.Columns["DonGia"].HeaderText = "Đơn giá";

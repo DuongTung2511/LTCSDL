@@ -88,35 +88,24 @@ namespace qlybanhang
             filter_dssp();
         }
 
-        private Boolean checkInput()
+        private bool checkInput()
         {
-            Boolean kq = true;
-            if (txtMaSP.Text == "")
+            if (string.IsNullOrWhiteSpace(txtMaSP.Text))
             {
-                kq = false;
                 txtMaSP.Focus();
+                return false;
             }
-            else if (txtTenSP.Text == "")
+            if (string.IsNullOrWhiteSpace(txtTenSP.Text))
             {
-                kq = false;
                 txtTenSP.Focus();
+                return false;
             }
-            else if (cboNhaCungCap.SelectedIndex < 0)
+            if (cboNhaCungCap.SelectedIndex < 0)
             {
-                kq = false;
                 cboNhaCungCap.Focus();
+                return false;
             }
-            else if (txtGiaBan.Text == "")
-            {
-                kq = false;
-                txtGiaBan.Focus();
-            }
-            else if (txtSoLuongTon.Text == "")
-            {
-                kq = false;
-                txtSoLuongTon.Focus();
-            }
-            return kq;
+            return true;
         }
 
         private void dgvSanPham_CellEnter(object sender, DataGridViewCellEventArgs e)
@@ -131,8 +120,8 @@ namespace qlybanhang
             txtMaSP.Text = row["MaSP"].ToString();
             txtTenSP.Text = row["TenSP"].ToString();
             cboNhaCungCap.SelectedValue = row["MaNCC"];
-            txtGiaBan.Text = row["GiaBan"].ToString();
-            txtSoLuongTon.Text = row["SoLuongTon"].ToString();
+            nudGiaBan.Value = Convert.ToDecimal(row["GiaBan"]);
+            nudSoLuongTon.Value = Convert.ToDecimal(row["SoLuongTon"]);
 
             if (row["TrangThai"] != DBNull.Value)
                 cboTrangThai.SelectedIndex = (row["TrangThai"].ToString() == "1" || row["TrangThai"].ToString() == "True") ? 1 : 0;
@@ -140,30 +129,29 @@ namespace qlybanhang
 
         private void btnThem_Click(object sender, EventArgs e)
         {
-            if (checkInput())
+            if (!checkInput())
             {
-                SanPhamDTO sp = new SanPhamDTO();
-                sp.MaSP = txtMaSP.Text;
-                sp.TenSP = txtTenSP.Text;
-                sp.MaNCC = cboNhaCungCap.SelectedValue.ToString();
-                sp.GiaBan = Convert.ToDecimal(txtGiaBan.Text);
-                sp.SoLuongTon = Convert.ToInt32(txtSoLuongTon.Text);
+                MessageBox.Show("Bạn chưa nhập đủ dữ liệu!");
+                return;
+            }
 
-                Boolean kq = bus.add_New_SP(sp);
-                if (!kq)
-                {
-                    MessageBox.Show("Thêm mới không thành công. Có thể mã sản phẩm đã tồn tại!");
-                }
-                else
-                {
-                    LoadData();
-                    lammoi();
-                    MessageBox.Show("Thêm sản phẩm thành công!", "Thông báo");
-                }
+            SanPhamDTO sp = new SanPhamDTO();
+            sp.MaSP = txtMaSP.Text;
+            sp.TenSP = txtTenSP.Text;
+            sp.MaNCC = cboNhaCungCap.SelectedValue.ToString();
+            sp.GiaBan = nudGiaBan.Value;
+            sp.SoLuongTon = Convert.ToInt32(nudSoLuongTon.Value);
+
+            bool kq = bus.add_New_SP(sp);
+            if (!kq)
+            {
+                MessageBox.Show("Thêm mới không thành công. Có thể mã sản phẩm đã tồn tại!");
             }
             else
             {
-                MessageBox.Show("Bạn chưa nhập đủ dữ liệu!");
+                LoadData();
+                lammoi();
+                MessageBox.Show("Thêm sản phẩm thành công!", "Thông báo");
             }
         }
 
@@ -175,31 +163,29 @@ namespace qlybanhang
                 return;
             }
 
-            if (checkInput())
+            if (!checkInput())
             {
-                SanPhamDTO sp = new SanPhamDTO();
-                sp.MaSP = txtMaSP.Text.Trim();
-                sp.TenSP = txtTenSP.Text.Trim();
-                sp.MaNCC = cboNhaCungCap.SelectedValue.ToString();
-                sp.GiaBan = Convert.ToDecimal(txtGiaBan.Text.Trim());
-                sp.SoLuongTon = Convert.ToInt32(txtSoLuongTon.Text.Trim());
+                MessageBox.Show("Bạn chưa nhập đủ dữ liệu!");
+                return;
+            }
 
-                sp.TrangThai = cboTrangThai.SelectedIndex;
+            SanPhamDTO sp = new SanPhamDTO();
+            sp.MaSP = txtMaSP.Text.Trim();
+            sp.TenSP = txtTenSP.Text.Trim();
+            sp.MaNCC = cboNhaCungCap.SelectedValue.ToString();
+            sp.GiaBan = nudGiaBan.Value;
+            sp.SoLuongTon = Convert.ToInt32(nudSoLuongTon.Value);
+            sp.TrangThai = cboTrangThai.SelectedIndex;
 
-                if (bus.update_SP(sp))
-                {
-                    LoadData();
-                    lammoi();
-                    MessageBox.Show("Cập nhật thành công!", "Thông báo");
-                }
-                else
-                {
-                    MessageBox.Show("Cập nhật thất bại!", "Lỗi");
-                }
+            if (bus.update_SP(sp))
+            {
+                LoadData();
+                lammoi();
+                MessageBox.Show("Cập nhật thành công!", "Thông báo");
             }
             else
             {
-                MessageBox.Show("Bạn chưa nhập đủ dữ liệu!");
+                MessageBox.Show("Cập nhật thất bại!", "Lỗi");
             }
         }
 
@@ -241,8 +227,8 @@ namespace qlybanhang
             txtTenSP.Clear();
             if (cboNhaCungCap.Items.Count > 0)
                 cboNhaCungCap.SelectedIndex = 0;
-            txtGiaBan.Clear();
-            txtSoLuongTon.Clear();
+            nudGiaBan.Value = 0;
+            nudSoLuongTon.Value = 0;
             txtTimKiem.Clear();
             if (cboTrangThai != null) cboTrangThai.SelectedIndex = 1;
             dgvSanPham.ClearSelection();

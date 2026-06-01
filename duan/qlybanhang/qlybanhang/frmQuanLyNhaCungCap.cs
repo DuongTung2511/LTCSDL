@@ -82,30 +82,29 @@ namespace qlybanhang
             filter_dsncc();
         }
 
-        private Boolean checkInput()
+        private bool checkInput()
         {
-            Boolean kq = true;
-            if (txtMaNCC.Text == "")
+            if (string.IsNullOrWhiteSpace(txtMaNCC.Text))
             {
-                kq = false;
                 txtMaNCC.Focus();
+                return false;
             }
-            else if (txtTenNCC.Text == "")
+            if (string.IsNullOrWhiteSpace(txtTenNCC.Text))
             {
-                kq = false;
                 txtTenNCC.Focus();
+                return false;
             }
-            else if (txtSoDienThoai.Text == "")
+            if (string.IsNullOrWhiteSpace(txtSoDienThoai.Text))
             {
-                kq = false;
                 txtSoDienThoai.Focus();
+                return false;
             }
-            else if (txtDiaChi.Text == "")
+            if (string.IsNullOrWhiteSpace(txtDiaChi.Text))
             {
-                kq = false;
                 txtDiaChi.Focus();
+                return false;
             }
-            return kq;
+            return true;
         }
 
         private void dgvNhaCungCap_CellEnter(object sender, DataGridViewCellEventArgs e)
@@ -141,38 +140,35 @@ namespace qlybanhang
 
         private void btnThem_Click(object sender, EventArgs e)
         {
-            if (checkInput())
+            if (!checkInput())
             {
-                if (!System.Text.RegularExpressions.Regex.IsMatch(txtSoDienThoai.Text, @"^0\d{9}$"))
-                {
-                    MessageBox.Show("Số điện thoại không hợp lệ! Vui lòng nhập 10 số bắt đầu bằng 0.", "Lỗi nhập liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    txtSoDienThoai.Focus();
-                    return;
-                }
+                MessageBox.Show("Bạn chưa nhập đủ dữ liệu!");
+                return;
+            }
 
-                NhaCungCapDTO ncc = new NhaCungCapDTO();
-                ncc.MaNCC = txtMaNCC.Text;
-                ncc.TenNCC = txtTenNCC.Text;
-                ncc.SoDienThoai = txtSoDienThoai.Text;
-                ncc.DiaChi = txtDiaChi.Text;
-                // Hàm thêm mới luôn gán cứng TrangThai = 1 trong BUS, người dùng không tự nhập khi Thêm.
-                // Trừ khi bạn muốn cho phép thêm NCC đã ngừng CC ngay từ đầu (ít xảy ra).
+            if (!System.Text.RegularExpressions.Regex.IsMatch(txtSoDienThoai.Text, @"^0\d{9}$"))
+            {
+                MessageBox.Show("Số điện thoại không hợp lệ! Vui lòng nhập 10 số bắt đầu bằng 0.", "Lỗi nhập liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtSoDienThoai.Focus();
+                return;
+            }
 
-                Boolean kq = bus.add_New_NCC(ncc);
-                if (!kq)
-                {
-                    MessageBox.Show("Thêm mới không thành công. Có thể mã nhà cung cấp đã tồn tại!");
-                }
-                else
-                {
-                    LoadData();
-                    lammoi();
-                    MessageBox.Show("Thêm nhà cung cấp thành công!", "Thông báo");
-                }
+            NhaCungCapDTO ncc = new NhaCungCapDTO();
+            ncc.MaNCC = txtMaNCC.Text;
+            ncc.TenNCC = txtTenNCC.Text;
+            ncc.SoDienThoai = txtSoDienThoai.Text;
+            ncc.DiaChi = txtDiaChi.Text;
+
+            bool kq = bus.add_New_NCC(ncc);
+            if (!kq)
+            {
+                MessageBox.Show("Thêm mới không thành công. Có thể mã nhà cung cấp đã tồn tại!");
             }
             else
             {
-                MessageBox.Show("Bạn chưa nhập đủ dữ liệu!");
+                LoadData();
+                lammoi();
+                MessageBox.Show("Thêm nhà cung cấp thành công!", "Thông báo");
             }
         }
 
@@ -184,36 +180,35 @@ namespace qlybanhang
                 return;
             }
 
-            if (checkInput())
+            if (!checkInput())
             {
-                if (!System.Text.RegularExpressions.Regex.IsMatch(txtSoDienThoai.Text, @"^0\d{9}$"))
-                {
-                    MessageBox.Show("Số điện thoại không hợp lệ! Vui lòng nhập 10 số bắt đầu bằng 0.", "Lỗi nhập liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    txtSoDienThoai.Focus();
-                    return;
-                }
+                MessageBox.Show("Bạn chưa nhập đủ dữ liệu!");
+                return;
+            }
 
-                NhaCungCapDTO ncc = new NhaCungCapDTO();
-                ncc.MaNCC = txtMaNCC.Text.Trim();
-                ncc.TenNCC = txtTenNCC.Text.Trim();
-                ncc.SoDienThoai = txtSoDienThoai.Text.Trim();
-                ncc.DiaChi = txtDiaChi.Text.Trim();
-                ncc.TrangThai = cboTrangThai.SelectedIndex; // 0 = Ngừng cung cấp, 1 = Đang cung cấp
+            if (!System.Text.RegularExpressions.Regex.IsMatch(txtSoDienThoai.Text, @"^0\d{9}$"))
+            {
+                MessageBox.Show("Số điện thoại không hợp lệ! Vui lòng nhập 10 số bắt đầu bằng 0.", "Lỗi nhập liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtSoDienThoai.Focus();
+                return;
+            }
 
-                if (bus.update_NCC(ncc))
-                {
-                    LoadData();
-                    lammoi();
-                    MessageBox.Show("Cập nhật thành công!", "Thông báo");
-                }
-                else
-                {
-                    MessageBox.Show("Cập nhật thất bại!", "Lỗi");
-                }
+            NhaCungCapDTO ncc = new NhaCungCapDTO();
+            ncc.MaNCC = txtMaNCC.Text.Trim();
+            ncc.TenNCC = txtTenNCC.Text.Trim();
+            ncc.SoDienThoai = txtSoDienThoai.Text.Trim();
+            ncc.DiaChi = txtDiaChi.Text.Trim();
+            ncc.TrangThai = cboTrangThai.SelectedIndex;
+
+            if (bus.update_NCC(ncc))
+            {
+                LoadData();
+                lammoi();
+                MessageBox.Show("Cập nhật thành công!", "Thông báo");
             }
             else
             {
-                MessageBox.Show("Bạn chưa nhập đủ dữ liệu!");
+                MessageBox.Show("Cập nhật thất bại!", "Lỗi");
             }
         }
 

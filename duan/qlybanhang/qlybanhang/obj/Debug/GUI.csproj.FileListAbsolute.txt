@@ -26,3 +26,4 @@ D:\LTCSDL\duan\qlybanhang\qlybanhang\obj\Debug\qlybanhang.frmLichSuHoaDon.resour
 D:\LTCSDL\duan\qlybanhang\qlybanhang\obj\Debug\qlybanhang.frmChiTietHoaDon.resources
 D:\LTCSDL\duan\qlybanhang\qlybanhang\obj\Debug\qlybanhang.frmDangKy.resources
 D:\LTCSDL\duan\qlybanhang\qlybanhang\obj\Debug\qlybanhang.frmDangNhap.resources
+D:\LTCSDL\duan\qlybanhang\qlybanhang\obj\Debug\qlybanhang.exe.config

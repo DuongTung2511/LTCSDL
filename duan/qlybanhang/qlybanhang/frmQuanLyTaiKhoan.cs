@@ -69,20 +69,19 @@ namespace qlybanhang
             filter_dstk();
         }
 
-        private Boolean checkInput()
+        private bool checkInput()
         {
-            Boolean kq = true;
-            if (txtTenDangNhap.Text == "")
+            if (string.IsNullOrWhiteSpace(txtTenDangNhap.Text))
             {
-                kq = false;
                 txtTenDangNhap.Focus();
+                return false;
             }
-            else if (txtMatKhau.Text == "")
+            if (string.IsNullOrWhiteSpace(txtMatKhau.Text))
             {
-                kq = false;
                 txtMatKhau.Focus();
+                return false;
             }
-            return kq;
+            return true;
         }
 
         private void dgvTaiKhoan_CellEnter(object sender, DataGridViewCellEventArgs e)
@@ -122,30 +121,29 @@ namespace qlybanhang
 
         private void btnThem_Click(object sender, EventArgs e)
         {
-            if (checkInput())
+            if (!checkInput())
             {
-                string dbRole = cboQuyen.Text == "Quản lý" ? "quanly" : "nhanvien";
-                TaiKhoanDTO tk = new TaiKhoanDTO();
-                tk.TenDangNhap = txtTenDangNhap.Text;
-                tk.MatKhau = txtMatKhau.Text;
-                tk.Quyen = dbRole;
-                tk.MaNV = txtMaNV.Text.Trim();
+                MessageBox.Show("Bạn chưa nhập đủ dữ liệu!");
+                return;
+            }
 
-                Boolean kq = bus.add_New_TK(tk);
-                if (!kq)
-                {
-                    MessageBox.Show("Thêm mới không thành công. Có thể tên đăng nhập đã tồn tại!");
-                }
-                else
-                {
-                    LoadData();
-                    lammoi();
-                    MessageBox.Show("Thêm tài khoản thành công!", "Thông báo");
-                }
+            string dbRole = cboQuyen.Text == "Quản lý" ? "quanly" : "nhanvien";
+            TaiKhoanDTO tk = new TaiKhoanDTO();
+            tk.TenDangNhap = txtTenDangNhap.Text;
+            tk.MatKhau = txtMatKhau.Text;
+            tk.Quyen = dbRole;
+            tk.MaNV = txtMaNV.Text.Trim();
+
+            bool kq = bus.add_New_TK(tk);
+            if (!kq)
+            {
+                MessageBox.Show("Thêm mới không thành công. Có thể tên đăng nhập đã tồn tại!");
             }
             else
             {
-                MessageBox.Show("Bạn chưa nhập đủ dữ liệu!");
+                LoadData();
+                lammoi();
+                MessageBox.Show("Thêm tài khoản thành công!", "Thông báo");
             }
         }
 
@@ -157,29 +155,28 @@ namespace qlybanhang
                 return;
             }
 
-            if (checkInput())
+            if (!checkInput())
             {
-                string dbRole = cboQuyen.Text == "Quản lý" ? "quanly" : "nhanvien";
-                TaiKhoanDTO tk = new TaiKhoanDTO();
-                tk.TenDangNhap = txtTenDangNhap.Text.Trim();
-                tk.MatKhau = txtMatKhau.Text.Trim();
-                tk.Quyen = dbRole;
-                tk.MaNV = txtMaNV.Text.Trim();
+                MessageBox.Show("Bạn chưa nhập đủ dữ liệu!");
+                return;
+            }
 
-                if (bus.update_TK(tk))
-                {
-                    LoadData();
-                    lammoi();
-                    MessageBox.Show("Cập nhật thành công!", "Thông báo");
-                }
-                else
-                {
-                    MessageBox.Show("Cập nhật thất bại!", "Lỗi");
-                }
+            string dbRole = cboQuyen.Text == "Quản lý" ? "quanly" : "nhanvien";
+            TaiKhoanDTO tk = new TaiKhoanDTO();
+            tk.TenDangNhap = txtTenDangNhap.Text.Trim();
+            tk.MatKhau = txtMatKhau.Text.Trim();
+            tk.Quyen = dbRole;
+            tk.MaNV = txtMaNV.Text.Trim();
+
+            if (bus.update_TK(tk))
+            {
+                LoadData();
+                lammoi();
+                MessageBox.Show("Cập nhật thành công!", "Thông báo");
             }
             else
             {
-                MessageBox.Show("Bạn chưa nhập đủ dữ liệu!");
+                MessageBox.Show("Cập nhật thất bại!", "Lỗi");
             }
         }
 
