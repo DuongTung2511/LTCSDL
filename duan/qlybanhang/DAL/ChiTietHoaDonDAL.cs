@@ -29,52 +29,24 @@ namespace DAL
             return ds.Tables["ChiTietHoaDon"];
         }
 
-        public void themChiTietHoaDon(string maHD, string maSP, int soLuong, decimal donGia)
+        public void addRow(DataRow r)
         {
-            conn.Open();
             try
             {
-                SqlCommand cmd = new SqlCommand(
-                    "INSERT INTO ChiTietHoaDon (MaHD, MaSP, SoLuong, DonGia, ThanhTien) " +
-                    "VALUES (@MaHD, @MaSP, @SoLuong, @DonGia, @ThanhTien)", conn);
-                cmd.Parameters.AddWithValue("@MaHD", maHD);
-                cmd.Parameters.AddWithValue("@MaSP", maSP);
-                cmd.Parameters.AddWithValue("@SoLuong", soLuong);
-                cmd.Parameters.AddWithValue("@DonGia", donGia);
-                cmd.Parameters.AddWithValue("@ThanhTien", soLuong * donGia);
-                cmd.ExecuteNonQuery();
+                ds.Tables["ChiTietHoaDon"].Rows.Add(r);
+                da.Update(ds, "ChiTietHoaDon");
+                ds.AcceptChanges();
             }
-            finally
-            {
-                conn.Close();
-            }
+            catch { }
         }
 
-        public void deleteChiTietByMaHD(string maHD)
+        public void update()
         {
-            DataRow[] rows = ds.Tables["ChiTietHoaDon"].Select("MaHD = '" + maHD.Replace("'", "''") + "'");
-            foreach (DataRow row in rows)
-            {
-                row.Delete();
-            }
             da.Update(ds, "ChiTietHoaDon");
             ds.AcceptChanges();
         }
 
-        public void suaChiTietHoaDon(string maHD, string maSP, int soLuongMoi, decimal donGiaMoi)
-        {
-            DataRow[] rows = ds.Tables["ChiTietHoaDon"].Select("MaHD = '" + maHD.Replace("'", "''") + "' AND MaSP = '" + maSP.Replace("'", "''") + "'");
-            if (rows.Length > 0)
-            {
-                rows[0]["SoLuong"] = soLuongMoi;
-                rows[0]["DonGia"] = donGiaMoi;
-                rows[0]["ThanhTien"] = soLuongMoi * donGiaMoi;
-                da.Update(ds, "ChiTietHoaDon");
-                ds.AcceptChanges();
-            }
-        }
-
-        public void xoaChiTietHoaDon(string maHD, string maSP)
+        public void delete(string maHD, string maSP)
         {
             DataRow[] rows = ds.Tables["ChiTietHoaDon"].Select("MaHD = '" + maHD.Replace("'", "''") + "' AND MaSP = '" + maSP.Replace("'", "''") + "'");
             if (rows.Length > 0)
@@ -84,17 +56,19 @@ namespace DAL
                 ds.AcceptChanges();
             }
         }
-
-        public void reload()
+        
+        public void deleteByMaHD(string maHD)
         {
-            ds.Tables["ChiTietHoaDon"].Clear();
-            da.Fill(ds, "ChiTietHoaDon");
-        }
-
-        public bool KiemTraSanPhamTonTai(string maSP)
-        {
-            DataRow[] rows = ds.Tables["ChiTietHoaDon"].Select("MaSP = '" + maSP.Replace("'", "''") + "'");
-            return rows.Length > 0;
+            DataRow[] rows = ds.Tables["ChiTietHoaDon"].Select("MaHD = '" + maHD.Replace("'", "''") + "'");
+            foreach(DataRow r in rows)
+            {
+                r.Delete();
+            }
+            if (rows.Length > 0)
+            {
+                da.Update(ds, "ChiTietHoaDon");
+                ds.AcceptChanges();
+            }
         }
     }
 }

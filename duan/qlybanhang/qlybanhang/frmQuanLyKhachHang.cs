@@ -60,28 +60,23 @@ namespace qlybanhang
         private void filter_dskh()
         {
             string keyword = txtTimKiem.Text.Replace("'", "''");
-            if (string.IsNullOrEmpty(keyword))
+            string strFilter = "";
+            
+            if (!string.IsNullOrEmpty(keyword))
             {
-                LoadData();
-                return;
+                strFilter = "(TenKH LIKE '%" + keyword + "%' OR SoDienThoai LIKE '%" + keyword + "%')";
             }
 
-            string strFilter = "(TenKH LIKE '%" + keyword + "%' OR SoDienThoai LIKE '%" + keyword + "%')";
             if (!chkHienThiDaXoa.Checked)
             {
-                strFilter += " AND (TrangThai = 1 OR TrangThai IS NULL)";
+                if (strFilter != "") strFilter += " AND ";
+                strFilter += "(TrangThai = 1 OR TrangThai IS NULL)";
             }
 
-            DataTable dt = bus.getTableKhachHang();
-            DataRow[] rows = bus.getFilter_KH(strFilter);
-            if (rows.Length > 0)
-            {
-                dgvKhachHang.DataSource = rows.CopyToDataTable();
-            }
-            else
-            {
-                dgvKhachHang.DataSource = dt.Clone();
-            }
+            DataViewManager dvm = bus.getDataset().DefaultViewManager;
+            dvm.DataViewSettings["KhachHang"].RowFilter = strFilter;
+            dgvKhachHang.DataSource = dvm;
+            dgvKhachHang.DataMember = "KhachHang";
         }
 
         private void txtTimKiem_TextChanged(object sender, EventArgs e)

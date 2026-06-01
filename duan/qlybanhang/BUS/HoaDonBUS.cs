@@ -25,13 +25,8 @@ namespace BUS
 
         public Boolean MaHD_not_Exist(string maHD)
         {
-            Boolean kq = true;
             DataRow[] rows = hdDal.getTable().Select("MaHD='" + maHD.Replace("'", "''") + "'");
-            if (rows.Length > 0)
-            {
-                kq = false;
-            }
-            return kq;
+            return rows.Length == 0;
         }
 
         public DataTable LayDanhSachHoaDonDayDu()
@@ -108,47 +103,58 @@ namespace BUS
             foreach (DataRow r in gioHang.Rows)
                 tongTien += Convert.ToDecimal(r["ThanhTien"]);
 
-            hdDal.taoHoaDon(maHD, maKH, maNV, tongTien);
+            DataRow newHD = hdDal.getTable().NewRow();
+            newHD["MaHD"] = maHD;
+            newHD["MaKH"] = maKH;
+            newHD["MaNV"] = maNV;
+            newHD["NgayLap"] = DateTime.Now;
+            newHD["TongTien"] = tongTien;
+            hdDal.addRow(newHD);
 
             foreach (DataRow r in gioHang.Rows)
             {
-                cthdDal.themChiTietHoaDon(maHD,
-                    r["MaSP"].ToString(),
-                    Convert.ToInt32(r["SoLuong"]),
-                    Convert.ToDecimal(r["DonGia"]));
-            }
+                DataRow newCT = cthdDal.getTable().NewRow();
+                newCT["MaHD"] = maHD;
+                string maSP = r["MaSP"].ToString();
+                newCT["MaSP"] = maSP;
+                int soLuong = Convert.ToInt32(r["SoLuong"]);
+                newCT["SoLuong"] = soLuong;
+                newCT["DonGia"] = Convert.ToDecimal(r["DonGia"]);
+                newCT["ThanhTien"] = Convert.ToDecimal(r["ThanhTien"]);
+                cthdDal.addRow(newCT);
 
-            foreach (DataRow r in gioHang.Rows)
-            {
-                spDal.capNhatTonKho(
-                    r["MaSP"].ToString(),
-                    Convert.ToInt32(r["SoLuong"]));
+                // Update stock
+                DataRow[] spRows = spDal.getTable().Select("MaSP = '" + maSP.Replace("'", "''") + "'");
+                if (spRows.Length > 0)
+                {
+                    spRows[0].BeginEdit();
+                    int currentStock = Convert.ToInt32(spRows[0]["SoLuongTon"]);
+                    spRows[0]["SoLuongTon"] = currentStock - soLuong;
+                    spRows[0].EndEdit();
+                }
             }
-
-            hdDal.reload();
-            cthdDal.reload();
-            spDal.reload();
+            spDal.update();
         }
 
         public void XoaHoaDon(string maHD)
         {
-            // When deleting a HoaDon, we need to delete its details and refund stock
-            // However, MyDatabase.deleteHoaDon did this: 
-            // - delete details from ChiTietHoaDon
-            // - update stock
-            // - delete HoaDon.
-            // Since we split the DALs, HoaDonBUS should handle this cross-DAL logic, or we rewrite it here.
-            
             DataRow[] cthdRows = cthdDal.getTable().Select("MaHD = '" + maHD.Replace("'", "''") + "'");
             foreach (DataRow r in cthdRows)
             {
                 string maSP = r["MaSP"].ToString();
                 int soLuong = Convert.ToInt32(r["SoLuong"]);
-                spDal.capNhatTonKho(maSP, -soLuong);
+                DataRow[] spRows = spDal.getTable().Select("MaSP = '" + maSP.Replace("'", "''") + "'");
+                if (spRows.Length > 0)
+                {
+                    spRows[0].BeginEdit();
+                    int currentStock = Convert.ToInt32(spRows[0]["SoLuongTon"]);
+                    spRows[0]["SoLuongTon"] = currentStock + soLuong; // Refund stock
+                    spRows[0].EndEdit();
+                }
             }
-            
-            cthdDal.deleteChiTietByMaHD(maHD);
-            hdDal.deleteHoaDon(maHD);
+            spDal.update();
+            cthdDal.deleteByMaHD(maHD);
+            hdDal.delete(maHD);
         }
     }
 }

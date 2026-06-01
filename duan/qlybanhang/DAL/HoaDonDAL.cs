@@ -29,28 +29,24 @@ namespace DAL
             return ds.Tables["HoaDon"];
         }
 
-        public int taoHoaDon(string maHD, string maKH, string maNV, decimal tongTien)
+        public void addRow(DataRow r)
         {
-            conn.Open();
             try
             {
-                SqlCommand cmd = new SqlCommand(
-                    "INSERT INTO HoaDon (MaHD, MaKH, MaNV, NgayLap, TongTien) " +
-                    "VALUES (@MaHD, @MaKH, @MaNV, GETDATE(), @TongTien)", conn);
-                cmd.Parameters.AddWithValue("@MaHD", maHD);
-                cmd.Parameters.AddWithValue("@MaKH", maKH);
-                cmd.Parameters.AddWithValue("@MaNV", maNV);
-                cmd.Parameters.AddWithValue("@TongTien", tongTien);
-                cmd.ExecuteNonQuery();
-                return 1;
+                ds.Tables["HoaDon"].Rows.Add(r);
+                da.Update(ds, "HoaDon");
+                ds.AcceptChanges();
             }
-            finally
-            {
-                conn.Close();
-            }
+            catch { }
         }
 
-        public void deleteHoaDon(string maHD)
+        public void update()
+        {
+            da.Update(ds, "HoaDon");
+            ds.AcceptChanges();
+        }
+
+        public void delete(string maHD)
         {
             DataRow[] rows = ds.Tables["HoaDon"].Select("MaHD = '" + maHD.Replace("'", "''") + "'");
             if (rows.Length > 0)
@@ -59,35 +55,6 @@ namespace DAL
                 da.Update(ds, "HoaDon");
                 ds.AcceptChanges();
             }
-        }
-
-        public void capNhatTongTien(string maHD, decimal tongTien)
-        {
-            DataRow[] rows = ds.Tables["HoaDon"].Select("MaHD = '" + maHD.Replace("'", "''") + "'");
-            if (rows.Length > 0)
-            {
-                rows[0]["TongTien"] = tongTien;
-                da.Update(ds, "HoaDon");
-                ds.AcceptChanges();
-            }
-        }
-
-        public void reload()
-        {
-            ds.Tables["HoaDon"].Clear();
-            da.Fill(ds, "HoaDon");
-        }
-
-        public bool KiemTraKhachHangTonTai(string maKH)
-        {
-            DataRow[] rows = ds.Tables["HoaDon"].Select("MaKH = '" + maKH.Replace("'", "''") + "'");
-            return rows.Length > 0;
-        }
-
-        public bool KiemTraNhanVienTonTai(string maNV)
-        {
-            DataRow[] rows = ds.Tables["HoaDon"].Select("MaNV = '" + maNV.Replace("'", "''") + "'");
-            return rows.Length > 0;
         }
     }
 }

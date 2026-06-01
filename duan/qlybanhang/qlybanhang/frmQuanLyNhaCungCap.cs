@@ -60,28 +60,23 @@ namespace qlybanhang
         private void filter_dsncc()
         {
             string keyword = txtTimKiem.Text.Replace("'", "''");
-            if (string.IsNullOrEmpty(keyword))
+            string strFilter = "";
+            
+            if (!string.IsNullOrEmpty(keyword))
             {
-                LoadData();
-                return;
+                strFilter = "(TenNCC LIKE '%" + keyword + "%' OR MaNCC LIKE '%" + keyword + "%')";
             }
 
-            string strFilter = "(TenNCC LIKE '%" + keyword + "%' OR MaNCC LIKE '%" + keyword + "%')";
             if (!chkHienThiDaXoa.Checked)
             {
-                strFilter += " AND (TrangThai = 1 OR TrangThai IS NULL)";
+                if (strFilter != "") strFilter += " AND ";
+                strFilter += "(TrangThai = 1 OR TrangThai IS NULL)";
             }
 
-            DataTable dt = bus.getTableNhaCungCap();
-            DataRow[] rows = bus.getFilter_NCC(strFilter);
-            if (rows.Length > 0)
-            {
-                dgvNhaCungCap.DataSource = rows.CopyToDataTable();
-            }
-            else
-            {
-                dgvNhaCungCap.DataSource = dt.Clone();
-            }
+            DataViewManager dvm = bus.getDataset().DefaultViewManager;
+            dvm.DataViewSettings["NhaCungCap"].RowFilter = strFilter;
+            dgvNhaCungCap.DataSource = dvm;
+            dgvNhaCungCap.DataMember = "NhaCungCap";
         }
 
         private void txtTimKiem_TextChanged(object sender, EventArgs e)

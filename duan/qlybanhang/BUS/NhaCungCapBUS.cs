@@ -16,71 +16,93 @@ namespace BUS
 
         public DataTable getTableNhaCungCap()
         {
-            DataTable dt = dal.getTable();
-            return dt;
+            return dal.getTable();
         }
 
-        public DataTable LayDanhSachNCCDangHoatDong()
+        public DataRow[] getFilter_NhaCungCap(string strFilter)
         {
-            return dal.LayDanhSachNCCDangHoatDong();
+            return dal.getTable().Select(strFilter);
         }
 
         public Boolean MaNCC_not_Exist(string maNCC)
         {
-            Boolean kq = true;
-            DataRow[] rows = dal.TimKiemTheoMa(maNCC);
-            if (rows.Length > 0)
-            {
-                kq = false;
-            }
-            return kq;
+            DataRow[] rows = dal.getTable().Select("MaNCC = '" + maNCC.Replace("'", "''") + "'");
+            return rows.Length == 0;
         }
 
         public Boolean add_New_NCC(NhaCungCapDTO ncc)
         {
-            Boolean kq = false;
-            if (MaNCC_not_Exist(ncc.MaNCC.ToString()))
+            if (MaNCC_not_Exist(ncc.MaNCC))
             {
-                ncc.TrangThai = 1;
-                dal.Add(ncc);
-                kq = true;
+                DataRow r = dal.getTable().NewRow();
+                r["MaNCC"] = ncc.MaNCC;
+                r["TenNCC"] = ncc.TenNCC;
+                r["SoDienThoai"] = ncc.SoDienThoai;
+                r["DiaChi"] = ncc.DiaChi;
+                r["TrangThai"] = 1;
+
+                dal.addRow(r);
+                return true;
             }
-            return kq;
+            return false;
         }
 
-        public DataRow[] getFilter_NCC(string strFilter)
+        public bool update_NCC(NhaCungCapDTO ncc)
         {
-            return dal.TimKiemTheoDieuKien(strFilter);
+            DataRow[] rows = dal.getTable().Select("MaNCC = '" + ncc.MaNCC.Replace("'", "''") + "'");
+            if (rows.Length == 0) return false;
+
+            DataRow r = rows[0];
+            r.BeginEdit();
+            r["TenNCC"] = ncc.TenNCC;
+            r["SoDienThoai"] = ncc.SoDienThoai;
+            r["DiaChi"] = ncc.DiaChi;
+            r.EndEdit();
+            
+            try 
+            {
+                dal.update();
+                return true;
+            }
+            catch (DBConcurrencyException) { return false; }
+            catch { return false; }
         }
 
-        public Boolean update_NCC(NhaCungCapDTO ncc)
+        public bool delete_NCC(string maNCC)
         {
-            if (MaNCC_not_Exist(ncc.MaNCC.ToString()))
-                return false;
+            // Xóa mềm
+            DataRow[] rows = dal.getTable().Select("MaNCC = '" + maNCC.Replace("'", "''") + "'");
+            if (rows.Length == 0) return false;
 
-            dal.Update(ncc);
-            return true;
-        }
+            DataRow r = rows[0];
+            r.BeginEdit();
+            r["TrangThai"] = 0;
+            r.EndEdit();
 
-        public Boolean delete_NCC(string maNCC)
-        {
-            if (MaNCC_not_Exist(maNCC)) 
-                return false;
-            dal.delete(maNCC);
-            return true;
+            try 
+            {
+                dal.update();
+                return true;
+            }
+            catch (DBConcurrencyException) { return false; }
+            catch { return false; }
         }
 
         public string XoaVinhVien(string maNCC)
         {
-            if (MaNCC_not_Exist(maNCC))
-                return "Nhà cung cấp không tồn tại!";
-
+            if (MaNCC_not_Exist(maNCC)) return "Nhà cung cấp không tồn tại!";
             SanPhamDAL spDal = new SanPhamDAL();
-            if (spDal.KiemTraNhaCungCapTonTai(maNCC))
-                return "Nhà cung cấp đã có Sản Phẩm, không thể xóa vĩnh viễn!";
+            DataRow[] spRows = spDal.getTable().Select("MaNCC = '" + maNCC.Replace("'", "''") + "'");
+            if (spRows.Length > 0) return "Nhà cung cấp đã có Sản Phẩm, không thể xóa vĩnh viễn!";
+            dal.delete(maNCC);
+            return "";
+        }
 
-            dal.hardDelete(maNCC);
-            return ""; 
+        public DataTable LayDanhSachNCCDangHoatDong()
+        {
+            DataRow[] rows = dal.getTable().Select("TrangThai = 1 OR TrangThai IS NULL");
+            if (rows.Length > 0) return rows.CopyToDataTable();
+            return dal.getTable().Clone();
         }
     }
 }

@@ -8,6 +8,7 @@ namespace BUS
     public class ChiTietHoaDonBUS
     {
         private ChiTietHoaDonDAL dal = new ChiTietHoaDonDAL();
+        private HoaDonDAL hdDal = new HoaDonDAL();
         private SanPhamDAL spDal = new SanPhamDAL();
 
         public DataSet getDataset()
@@ -17,8 +18,7 @@ namespace BUS
 
         public DataTable getTableChiTietHD()
         {
-            DataTable dt = dal.getTable();
-            return dt;
+            return dal.getTable();
         }
 
         public DataTable LayDanhSachChiTietHDDayDu(string maHD)
@@ -57,28 +57,45 @@ namespace BUS
 
         private void CapNhatTongTien(string maHD)
         {
-            HoaDonDAL hdDal = new HoaDonDAL();
-            DataTable dtChiTiet = dal.getTable();
-            DataRow[] rowsCT = dtChiTiet.Select("MaHD = '" + maHD.Replace("'", "''") + "'");
+            DataRow[] rowsCT = dal.getTable().Select("MaHD = '" + maHD.Replace("'", "''") + "'");
             decimal tongTien = 0;
             foreach (DataRow r in rowsCT)
             {
                 tongTien += Convert.ToInt32(r["SoLuong"]) * Convert.ToDecimal(r["DonGia"]);
             }
-            hdDal.capNhatTongTien(maHD, tongTien);
+            
+            DataRow[] hdRows = hdDal.getTable().Select("MaHD = '" + maHD.Replace("'", "''") + "'");
+            if (hdRows.Length > 0)
+            {
+                hdRows[0].BeginEdit();
+                hdRows[0]["TongTien"] = tongTien;
+                hdRows[0].EndEdit();
+                hdDal.update();
+            }
         }
 
         public bool ThemChiTiet(string maHD, string maSP, int soLuong, decimal donGia)
         {
-            // Check if product already in invoice
             DataRow[] exist = dal.getTable().Select("MaHD = '" + maHD.Replace("'", "''") + "' AND MaSP = '" + maSP.Replace("'", "''") + "'");
             if (exist.Length > 0) return false;
 
-            dal.themChiTietHoaDon(maHD, maSP, soLuong, donGia);
-            dal.reload();
+            DataRow r = dal.getTable().NewRow();
+            r["MaHD"] = maHD;
+            r["MaSP"] = maSP;
+            r["SoLuong"] = soLuong;
+            r["DonGia"] = donGia;
+            r["ThanhTien"] = soLuong * donGia;
+            dal.addRow(r);
 
-            spDal.capNhatTonKho(maSP, soLuong);
-            spDal.reload();
+            DataRow[] spRows = spDal.getTable().Select("MaSP = '" + maSP.Replace("'", "''") + "'");
+            if (spRows.Length > 0)
+            {
+                spRows[0].BeginEdit();
+                int currentStock = Convert.ToInt32(spRows[0]["SoLuongTon"]);
+                spRows[0]["SoLuongTon"] = currentStock - soLuong;
+                spRows[0].EndEdit();
+                spDal.update();
+            }
 
             CapNhatTongTien(maHD);
             return true;
@@ -92,9 +109,23 @@ namespace BUS
             int soLuongCu = Convert.ToInt32(exist[0]["SoLuong"]);
             int chechLech = soLuongMoi - soLuongCu;
 
-            dal.suaChiTietHoaDon(maHD, maSP, soLuongMoi, donGiaMoi);
+            DataRow r = exist[0];
+            r.BeginEdit();
+            r["SoLuong"] = soLuongMoi;
+            r["DonGia"] = donGiaMoi;
+            r["ThanhTien"] = soLuongMoi * donGiaMoi;
+            r.EndEdit();
+            dal.update();
             
-            spDal.capNhatTonKho(maSP, chechLech);
+            DataRow[] spRows = spDal.getTable().Select("MaSP = '" + maSP.Replace("'", "''") + "'");
+            if (spRows.Length > 0)
+            {
+                spRows[0].BeginEdit();
+                int currentStock = Convert.ToInt32(spRows[0]["SoLuongTon"]);
+                spRows[0]["SoLuongTon"] = currentStock - chechLech;
+                spRows[0].EndEdit();
+                spDal.update();
+            }
             
             CapNhatTongTien(maHD);
             return true;
@@ -107,10 +138,17 @@ namespace BUS
 
             int soLuongCu = Convert.ToInt32(exist[0]["SoLuong"]);
 
-            dal.xoaChiTietHoaDon(maHD, maSP);
+            dal.delete(maHD, maSP);
             
-            // Hoàn trả tồn kho
-            spDal.capNhatTonKho(maSP, -soLuongCu);
+            DataRow[] spRows = spDal.getTable().Select("MaSP = '" + maSP.Replace("'", "''") + "'");
+            if (spRows.Length > 0)
+            {
+                spRows[0].BeginEdit();
+                int currentStock = Convert.ToInt32(spRows[0]["SoLuongTon"]);
+                spRows[0]["SoLuongTon"] = currentStock + soLuongCu;
+                spRows[0].EndEdit();
+                spDal.update();
+            }
             
             CapNhatTongTien(maHD);
             return true;

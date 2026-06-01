@@ -66,28 +66,23 @@ namespace qlybanhang
         private void filter_dssp()
         {
             string keyword = txtTimKiem.Text.Replace("'", "''");
-            if (string.IsNullOrEmpty(keyword))
+            string strFilter = "";
+            
+            if (!string.IsNullOrEmpty(keyword))
             {
-                LoadData();
-                return;
+                strFilter = "(TenSP LIKE '%" + keyword + "%' OR MaSP LIKE '%" + keyword + "%')";
             }
 
-            string strFilter = "(TenSP LIKE '%" + keyword + "%' OR MaSP LIKE '%" + keyword + "%')";
             if (!chkHienThiDaXoa.Checked)
             {
-                strFilter += " AND (TrangThai = 1 OR TrangThai IS NULL)";
+                if (strFilter != "") strFilter += " AND ";
+                strFilter += "(TrangThai = 1 OR TrangThai IS NULL)";
             }
 
-            DataTable dt = bus.getTableSanPham();
-            DataRow[] rows = bus.getFilter_SP(strFilter);
-            if (rows.Length > 0)
-            {
-                dgvSanPham.DataSource = rows.CopyToDataTable();
-            }
-            else
-            {
-                dgvSanPham.DataSource = dt.Clone();
-            }
+            DataViewManager dvm = bus.getDataset().DefaultViewManager;
+            dvm.DataViewSettings["SanPham"].RowFilter = strFilter;
+            dgvSanPham.DataSource = dvm;
+            dgvSanPham.DataMember = "SanPham";
         }
 
         private void txtTimKiem_TextChanged(object sender, EventArgs e)

@@ -29,26 +29,10 @@ namespace DAL
             return ds.Tables["NhaCungCap"];
         }
 
-        public DataRow[] TimKiemTheoMa(string maNCC)
-        {
-            return ds.Tables["NhaCungCap"].Select("MaNCC = '" + maNCC.Replace("'", "''") + "'");
-        }
-
-        public DataRow[] TimKiemTheoDieuKien(string strFilter)
-        {
-            return ds.Tables["NhaCungCap"].Select(strFilter);
-        }
-
-        public void Add(DTO.NhaCungCapDTO ncc)
+        public void addRow(DataRow r)
         {
             try
             {
-                DataRow r = ds.Tables["NhaCungCap"].NewRow();
-                r["MaNCC"] = ncc.MaNCC;
-                r["TenNCC"] = ncc.TenNCC;
-                r["SoDienThoai"] = ncc.SoDienThoai;
-                r["DiaChi"] = ncc.DiaChi;
-                r["TrangThai"] = ncc.TrangThai; // Default from BUS
                 ds.Tables["NhaCungCap"].Rows.Add(r);
                 da.Update(ds, "NhaCungCap");
                 ds.AcceptChanges();
@@ -56,44 +40,15 @@ namespace DAL
             catch { }
         }
 
-        public void Update(DTO.NhaCungCapDTO ncc)
+        public void update()
         {
-            DataRow[] rows = TimKiemTheoMa(ncc.MaNCC.ToString());
-            if (rows.Length > 0)
-            {
-                DataRow r = rows[0];
-                r["TenNCC"] = ncc.TenNCC;
-                r["SoDienThoai"] = ncc.SoDienThoai;
-                r["DiaChi"] = ncc.DiaChi;
-                r["TrangThai"] = ncc.TrangThai;
-                da.Update(ds, "NhaCungCap");
-                ds.AcceptChanges();
-            }
+            da.Update(ds, "NhaCungCap");
+            ds.AcceptChanges();
         }
 
         public void delete(string maNCC)
         {
-            DataRow[] rows = TimKiemTheoMa(maNCC);
-            if (rows.Length > 0)
-            {
-                rows[0]["TrangThai"] = 0;
-                da.Update(ds, "NhaCungCap");
-                ds.AcceptChanges();
-            }
-        }
-
-        public DataTable LayDanhSachNCCDangHoatDong()
-        {
-            DataRow[] rows = ds.Tables["NhaCungCap"].Select("TrangThai = 1");
-            if (rows.Length > 0)
-                return rows.CopyToDataTable();
-            else
-                return ds.Tables["NhaCungCap"].Clone();
-        }
-
-        public void hardDelete(string maNCC)
-        {
-            DataRow[] rows = TimKiemTheoMa(maNCC);
+            DataRow[] rows = ds.Tables["NhaCungCap"].Select("MaNCC = '" + maNCC.Replace("'", "''") + "'");
             if (rows.Length > 0)
             {
                 rows[0].Delete();

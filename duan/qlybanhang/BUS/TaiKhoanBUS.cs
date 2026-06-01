@@ -16,14 +16,13 @@ namespace BUS
 
         public DataTable getTableTaiKhoan()
         {
-            DataTable dt = dal.getTable();
-            return dt;
+            return dal.getTable();
         }
 
         public DataRow DangNhap(string tenDangNhap, string matKhau)
         {
             string filter = "TenDangNhap = '" + tenDangNhap.Replace("'", "''") + "' AND MatKhau = '" + matKhau.Replace("'", "''") + "'";
-            DataRow[] rows = dal.TimKiemTheoDieuKien(filter);
+            DataRow[] rows = dal.getTable().Select(filter);
             return rows.Length > 0 ? rows[0] : null;
         }
 
@@ -64,44 +63,68 @@ namespace BUS
 
         public bool KiemTraNhanVienDaCoTaiKhoan(string maNV)
         {
-            DataRow[] rows = dal.TimKiemTheoDieuKien("MaNV = '" + maNV.Replace("'", "''") + "'");
+            DataRow[] rows = dal.getTable().Select("MaNV = '" + maNV.Replace("'", "''") + "'");
             return rows.Length > 0;
         }
 
         public Boolean TenDangNhap_not_Exist(string tenDN)
         {
-            DataRow[] rows = dal.TimKiemTheoTenDangNhap(tenDN);
+            DataRow[] rows = dal.getTable().Select("TenDangNhap = '" + tenDN.Replace("'", "''") + "'");
             return rows.Length == 0;
         }
 
         public Boolean add_New_TK(TaiKhoanDTO tk)
         {
-            if (!TenDangNhap_not_Exist(tk.TenDangNhap)) return false;
-
-            dal.Add(tk);
-            return true;
+            if (TenDangNhap_not_Exist(tk.TenDangNhap))
+            {
+                DataRow r = dal.getTable().NewRow();
+                r["TenDangNhap"] = tk.TenDangNhap;
+                r["MatKhau"] = tk.MatKhau;
+                r["Quyen"] = tk.Quyen;
+                if (!string.IsNullOrEmpty(tk.MaNV))
+                    r["MaNV"] = tk.MaNV;
+                else
+                    r["MaNV"] = DBNull.Value;
+                
+                dal.addRow(r);
+                return true;
+            }
+            return false;
         }
 
         public Boolean update_TK(TaiKhoanDTO tk)
         {
-            if (TenDangNhap_not_Exist(tk.TenDangNhap)) return false;
+            DataRow[] rows = dal.getTable().Select("TenDangNhap = '" + tk.TenDangNhap.Replace("'", "''") + "'");
+            if (rows.Length == 0) return false;
             
-            dal.Update(tk);
-            return true;
+            DataRow r = rows[0];
+            r.BeginEdit();
+            r["MatKhau"] = tk.MatKhau;
+            r["Quyen"] = tk.Quyen;
+            if (!string.IsNullOrEmpty(tk.MaNV))
+                r["MaNV"] = tk.MaNV;
+            else
+                r["MaNV"] = DBNull.Value;
+            r.EndEdit();
+
+            try
+            {
+                dal.update();
+                return true;
+            }
+            catch (DBConcurrencyException) { return false; }
+            catch { return false; }
         }
 
         public Boolean delete_TK(string tenDN)
         {
             if (TenDangNhap_not_Exist(tenDN)) return false;
-            dal.hardDelete(tenDN);
+            dal.delete(tenDN);
             return true;
         }
 
         public Boolean DangKy(TaiKhoanDTO tk)
         {
-            DataRow[] existing = dal.TimKiemTheoTenDangNhap(tk.TenDangNhap);
-            if (existing.Length > 0) return false;
-
             tk.Quyen = "Nhân viên"; // Default role
             return add_New_TK(tk);
         }

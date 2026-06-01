@@ -16,66 +16,91 @@ namespace BUS
 
         public DataTable getTableKhachHang()
         {
-            DataTable dt = dal.getTable();
-            return dt;
+            return dal.getTable();
+        }
+
+        public DataRow[] getFilter_KhachHang(string strFilter)
+        {
+            return dal.getTable().Select(strFilter);
         }
 
         public Boolean MaKH_not_Exist(string maKH)
         {
-            Boolean kq = true;
-            DataRow[] rows = dal.TimKiemTheoMa(maKH);
-            if (rows.Length > 0)
-            {
-                kq = false;
-            }
-            return kq;
+            DataRow[] rows = dal.getTable().Select("MaKH = '" + maKH.Replace("'", "''") + "'");
+            return rows.Length == 0;
         }
 
         public Boolean add_New_KH(KhachHangDTO kh)
         {
-            Boolean kq = false;
             if (MaKH_not_Exist(kh.MaKH))
             {
-                kh.TrangThai = 1;
-                dal.Add(kh);
-                kq = true;
+                DataRow r = dal.getTable().NewRow();
+                r["MaKH"] = kh.MaKH;
+                r["TenKH"] = kh.TenKH;
+                r["SoDienThoai"] = kh.SoDienThoai;
+                r["DiaChi"] = kh.DiaChi;
+                r["TrangThai"] = 1;
+
+                dal.addRow(r);
+                return true;
             }
-            return kq;
+            return false;
         }
 
-        public DataRow[] getFilter_KH(string strFilter)
+        public bool update_KH(KhachHangDTO kh)
         {
-            return dal.TimKiemTheoDieuKien(strFilter);
-        }
+            DataRow[] rows = dal.getTable().Select("MaKH = '" + kh.MaKH.Replace("'", "''") + "'");
+            if (rows.Length == 0) return false;
 
-        public Boolean update_KH(KhachHangDTO kh)
-        {
-            if (MaKH_not_Exist(kh.MaKH))
-                return false;
+            DataRow r = rows[0];
+            r.BeginEdit();
+            r["TenKH"] = kh.TenKH;
+            r["SoDienThoai"] = kh.SoDienThoai;
+            r["DiaChi"] = kh.DiaChi;
+            r.EndEdit();
             
-            dal.Update(kh);
-            return true;
+            try 
+            {
+                dal.update();
+                return true;
+            }
+            catch (DBConcurrencyException) { return false; }
+            catch { return false; }
         }
 
-        public Boolean delete_KH(string maKH)
+        public bool delete_KH(string maKH)
         {
-            if (MaKH_not_Exist(maKH)) 
-                return false;
-            dal.delete(maKH);
-            return true;
+            // Xóa mềm
+            DataRow[] rows = dal.getTable().Select("MaKH = '" + maKH.Replace("'", "''") + "'");
+            if (rows.Length == 0) return false;
+
+            DataRow r = rows[0];
+            r.BeginEdit();
+            r["TrangThai"] = 0;
+            r.EndEdit();
+
+            try 
+            {
+                dal.update();
+                return true;
+            }
+            catch (DBConcurrencyException) { return false; }
+            catch { return false; }
         }
 
         public string XoaVinhVien(string maKH)
         {
-            if (MaKH_not_Exist(maKH))
-                return "Khách hàng không tồn tại!";
-
+            if (MaKH_not_Exist(maKH)) return "Khách hàng không tồn tại!";
             HoaDonDAL hdDal = new HoaDonDAL();
-            if (hdDal.KiemTraKhachHangTonTai(maKH))
-                return "Khách hàng đã phát sinh Hóa Đơn, không thể xóa vĩnh viễn!";
-
-            dal.hardDelete(maKH);
-            return ""; 
+            DataRow[] hdRows = hdDal.getTable().Select("MaKH = '" + maKH.Replace("'", "''") + "'");
+            if (hdRows.Length > 0) return "Khách hàng đã phát sinh Hóa Đơn, không thể xóa vĩnh viễn!";
+            dal.delete(maKH);
+            return "";
+        }
+        
+        public DataRow[] getFilter_KH(string strFilter)
+        {
+            return getFilter_KhachHang(strFilter);
         }
     }
 }

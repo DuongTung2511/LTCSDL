@@ -16,66 +16,93 @@ namespace BUS
 
         public DataTable getTableSanPham()
         {
-            DataTable dt = dal.getTable();
-            return dt;
+            return dal.getTable();
+        }
+
+        public DataRow[] getFilter_SanPham(string strFilter)
+        {
+            return dal.getTable().Select(strFilter);
         }
 
         public Boolean MaSP_not_Exist(string maSP)
         {
-            Boolean kq = true;
-            DataRow[] rows = dal.TimKiemTheoMa(maSP);
-            if (rows.Length > 0)
-            {
-                kq = false;
-            }
-            return kq;
+            DataRow[] rows = dal.getTable().Select("MaSP = '" + maSP.Replace("'", "''") + "'");
+            return rows.Length == 0;
         }
 
         public Boolean add_New_SP(SanPhamDTO sp)
         {
-            Boolean kq = false;
-            if (MaSP_not_Exist(sp.MaSP.ToString()))
+            if (MaSP_not_Exist(sp.MaSP))
             {
-                sp.TrangThai = 1;
-                dal.Add(sp);
-                kq = true;
+                DataRow r = dal.getTable().NewRow();
+                r["MaSP"] = sp.MaSP;
+                r["TenSP"] = sp.TenSP;
+                r["MaNCC"] = sp.MaNCC;
+                r["GiaBan"] = sp.GiaBan;
+                r["SoLuongTon"] = sp.SoLuongTon;
+                r["TrangThai"] = 1;
+
+                dal.addRow(r);
+                return true;
             }
-            return kq;
+            return false;
         }
 
-        public DataRow[] getFilter_SP(string strFilter)
+        public bool update_SP(SanPhamDTO sp)
         {
-            return dal.TimKiemTheoDieuKien(strFilter);
+            DataRow[] rows = dal.getTable().Select("MaSP = '" + sp.MaSP.Replace("'", "''") + "'");
+            if (rows.Length == 0) return false;
+
+            DataRow r = rows[0];
+            r.BeginEdit();
+            r["TenSP"] = sp.TenSP;
+            r["MaNCC"] = sp.MaNCC;
+            r["GiaBan"] = sp.GiaBan;
+            r["SoLuongTon"] = sp.SoLuongTon;
+            r.EndEdit();
+            
+            try 
+            {
+                dal.update();
+                return true;
+            }
+            catch (DBConcurrencyException) { return false; }
+            catch { return false; }
         }
 
-        public Boolean update_SP(SanPhamDTO sp)
+        public bool delete_SP(string maSP)
         {
-            if (MaSP_not_Exist(sp.MaSP.ToString()))
-                return false;
+            // Xóa mềm
+            DataRow[] rows = dal.getTable().Select("MaSP = '" + maSP.Replace("'", "''") + "'");
+            if (rows.Length == 0) return false;
 
-            dal.Update(sp);
-            return true;
-        }
+            DataRow r = rows[0];
+            r.BeginEdit();
+            r["TrangThai"] = 0;
+            r.EndEdit();
 
-        public Boolean delete_SP(string maSP)
-        {
-            if (MaSP_not_Exist(maSP)) 
-                return false;
-            dal.delete(maSP);
-            return true;
+            try 
+            {
+                dal.update();
+                return true;
+            }
+            catch (DBConcurrencyException) { return false; }
+            catch { return false; }
         }
 
         public string XoaVinhVien(string maSP)
         {
-            if (MaSP_not_Exist(maSP))
-                return "Sản phẩm không tồn tại!";
+            if (MaSP_not_Exist(maSP)) return "Sản phẩm không tồn tại!";
+            ChiTietHoaDonDAL cthdDal = new ChiTietHoaDonDAL();
+            DataRow[] hdRows = cthdDal.getTable().Select("MaSP = '" + maSP.Replace("'", "''") + "'");
+            if (hdRows.Length > 0) return "Sản phẩm đã phát sinh Hóa Đơn, không thể xóa vĩnh viễn!";
+            dal.delete(maSP);
+            return "";
+        }
 
-            ChiTietHoaDonDAL ctDal = new ChiTietHoaDonDAL();
-            if (ctDal.KiemTraSanPhamTonTai(maSP))
-                return "Sản phẩm đã tồn tại trong Hóa Đơn, không thể xóa vĩnh viễn!";
-
-            dal.hardDelete(maSP);
-            return ""; 
+        public DataRow[] getFilter_SP(string strFilter)
+        {
+            return getFilter_SanPham(strFilter);
         }
     }
 }
