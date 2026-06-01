@@ -112,8 +112,8 @@ namespace BUS
                 dal.update();
                 return true;
             }
-            catch (DBConcurrencyException) { return false; }
-            catch { return false; }
+            catch (DBConcurrencyException ex) { Console.WriteLine("Lỗi đồng thời: " + ex.Message); return false; }
+            catch (Exception ex) { Console.WriteLine("Lỗi: " + ex.Message); return false; }
         }
 
         public Boolean delete_TK(string tenDN)

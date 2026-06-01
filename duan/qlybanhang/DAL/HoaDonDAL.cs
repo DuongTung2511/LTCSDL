@@ -37,7 +37,7 @@ namespace DAL
                 da.Update(ds, "HoaDon");
                 ds.AcceptChanges();
             }
-            catch { }
+            catch (Exception ex) { throw new Exception("Lỗi cập nhật CSDL: " + ex.Message); }
         }
 
         public void update()
