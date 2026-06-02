@@ -106,27 +106,30 @@ namespace DAL
 
         public void addRow(string tableName, DataRow r)
         {
-            try
-            {
                 ds.Tables[tableName].Rows.Add(r);
                 update(tableName);
-            }
-            catch { }
         }
 
         public void update(string tableName)
         {
-            switch (tableName)
+            try
             {
-                case "TaiKhoan": daTaiKhoan.Update(ds, "TaiKhoan"); break;
-                case "KhachHang": daKhachHang.Update(ds, "KhachHang"); break;
-                case "NhanVien": daNhanVien.Update(ds, "NhanVien"); break;
-                case "NhaCungCap": daNhaCungCap.Update(ds, "NhaCungCap"); break;
-                case "SanPham": daSanPham.Update(ds, "SanPham"); break;
-                case "HoaDon": daHoaDon.Update(ds, "HoaDon"); break;
-                case "ChiTietHoaDon": daChiTietHD.Update(ds, "ChiTietHoaDon"); break;
+                switch (tableName)
+                {
+                    case "TaiKhoan": daTaiKhoan.Update(ds, "TaiKhoan"); break;
+                    case "KhachHang": daKhachHang.Update(ds, "KhachHang"); break;
+                    case "NhanVien": daNhanVien.Update(ds, "NhanVien"); break;
+                    case "NhaCungCap": daNhaCungCap.Update(ds, "NhaCungCap"); break;
+                    case "SanPham": daSanPham.Update(ds, "SanPham"); break;
+                    case "HoaDon": daHoaDon.Update(ds, "HoaDon"); break;
+                    case "ChiTietHoaDon": daChiTietHD.Update(ds, "ChiTietHoaDon"); break;
+                }
+                ds.AcceptChanges();
             }
-            ds.AcceptChanges();
+            catch (Exception ex)
+            {
+                throw new Exception("L?i khi c?p nh?t SQL: " + ex.Message);
+            }
         }
 
         public void deleteRow(string tableName, string condition)

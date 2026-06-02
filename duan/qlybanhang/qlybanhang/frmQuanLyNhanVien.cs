@@ -17,11 +17,6 @@ namespace qlybanhang
 
         private void frmQuanLyNhanVien_Load(object sender, EventArgs e)
         {
-            // Ẩn TextBox và Label liên quan đến Tên Đăng Nhập vì không còn phụ thuộc
-            txtTenDangNhap.Visible = false;
-            // Label Tên Đăng Nhập thường nằm gần đó, nhưng ta không biết tên biến Label (có thể là label3, v.v.). Tạm thời chỉ ẩn txt.
-            // Sẽ dùng DataGridView_CellFormatting để hiển thị TrangThai.
-
             dgvNhanVien.CellFormatting += dgvNhanVien_CellFormatting;
 
             LoadData();
@@ -59,11 +54,7 @@ namespace qlybanhang
                 if(dgvNhanVien.Columns.Contains("NgaySinh")) dgvNhanVien.Columns["NgaySinh"].HeaderText = "Ngày sinh";
                 if(dgvNhanVien.Columns.Contains("SoDienThoai")) dgvNhanVien.Columns["SoDienThoai"].HeaderText = "Số điện thoại";
                 if(dgvNhanVien.Columns.Contains("DiaChi")) dgvNhanVien.Columns["DiaChi"].HeaderText = "Địa chỉ";
-                if(dgvNhanVien.Columns.Contains("TrangThai"))
-                {
-                    dgvNhanVien.Columns["TrangThai"].HeaderText = "Trạng thái";
-                    dgvNhanVien.Columns["TrangThai"].Visible = true;
-                }
+                if(dgvNhanVien.Columns.Contains("TrangThai")) dgvNhanVien.Columns["TrangThai"].HeaderText = "Trạng thái";
             }
             dgvNhanVien.ReadOnly = true;
             dtpNgaySinh.Value = DateTime.Now;

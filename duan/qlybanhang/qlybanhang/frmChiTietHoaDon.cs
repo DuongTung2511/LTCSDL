@@ -65,14 +65,20 @@ namespace qlybanhang
             }
         }
 
-        private void dgvChiTiet_SelectionChanged(object sender, EventArgs e)
+        private void dgvChiTiet_CellEnter(object sender, DataGridViewCellEventArgs e)
         {
-            if (dgvChiTiet.CurrentRow != null && dgvChiTiet.CurrentRow.Cells["MaSP"].Value != DBNull.Value)
-            {
-                cboSanPham.SelectedValue = dgvChiTiet.CurrentRow.Cells["MaSP"].Value.ToString();
-                nudSoLuong.Value = Convert.ToDecimal(dgvChiTiet.CurrentRow.Cells["SoLuong"].Value);
-                txtDonGia.Text = dgvChiTiet.CurrentRow.Cells["DonGia"].Value.ToString();
-            }
+            if (e.RowIndex < 0 || e.RowIndex >= dgvChiTiet.Rows.Count) return;
+            var dgvRow = dgvChiTiet.Rows[e.RowIndex];
+            if (dgvRow.IsNewRow) return;
+            // Kiểm tra e.RowIndex >= 0 để đảm bảo người dùng không click vào tiêu đề cột
+            //  // Lấy ra dòng hiện tại đang được click
+            DataGridViewRow row = dgvChiTiet.Rows[e.RowIndex];
+
+            // Đảm bảo dữ liệu không bị Null (tránh click vào dòng trống dưới cùng)
+            if (row == null) return;
+            cboSanPham.SelectedValue = row.Cells["MaSP"].Value.ToString();
+            nudSoLuong.Value = Convert.ToDecimal(row.Cells["SoLuong"].Value);
+            txtDonGia.Text = row.Cells["DonGia"].Value.ToString();
         }
 
         private void btnThem_Click(object sender, EventArgs e)

@@ -1,0 +1,130 @@
+Normal: TRƯỜNG ĐẠI HỌC HẠ LONG
+Normal: KHOA CÔNG NGHỆ THÔNG TIN
+Normal: 
+Normal: 
+Normal: 
+Normal: BÁO CÁO KẾT THÚC HỌC PHẦN
+Normal: MÔN: LẬP TRÌNH CƠ SỞ DỮ LIỆU
+Normal: Đề tài: Xây dựng phần mềm quản lý bán hàng
+Normal: Em xin chân thành cảm ơn!
+Normal: 
+Normal: 
+Normal: DANH MỤC CÁC KÝ HIỆU, THUẬT NGỮ, TỪ VIẾT TẮT
+table of figures: Hình 1.1: Sơ đồ thực thể liên kết.	13
+Normal: 
+Heading 2: 1.1 Giới Thiệu Bài Toán
+Heading 2: 1.2 Những chức năng phần mềm cần giải quyết
+Heading 3: 1.2.2 Quản lý khách hàng
+Heading 3: 1.2.3 Quản lý nhà cung cấp
+Heading 3: 1.2.4 Quản lý hóa đơn bán hàng
+Heading 3: 1.2.5 Thống kê và Báo cáo
+Heading 2: 1.3 Sơ đồ thực thể liên kết
+Heading 2: 1.4 Bảng mô tả chi tiết về các thực thể (Bảng CSDL)
+Heading 3: 1.4.1 Bảng Tài khoản:
+Heading 3: 1.4.2 Bảng Nhân viên:
+Heading 3: 1.4.3 Bảng Khách hàng
+Heading 3: 1.4.4 Bảng Nhà cung cấp
+Heading 3: 
+Heading 3: 1.4.5 Bảng Sản phẩm
+Heading 3: 1.4.6 Bảng Hóa đơn bán hàng
+Heading 3: 1.4.7 Bảng Chi tiết hóa đơn bán hàng
+Normal: 
+Heading 2: 2.2 Chức năng quản lý Tài khoản (frmDangNhap, frmDangKy, frmTaiKhoan)
+Heading 3: 2.2.1 Tạo ra class TaiKhoanDTO định nghĩa cho bảng TaiKhoan.
+Heading 3: 2.2.2 Khởi tạo SqlDataAdapter và Fill DataSet cho bảng TaiKhoan
+Heading 3: 2.2.3  Xây dựng Layer BUS
+Normal: 1. Khai báo các thư viện
+Normal: 2. Lớp TaiKhoanBUS với bảng TaiKhoan
+Heading 3: 2.2.4  Xây dựng Layer GUI
+Normal: 1. Khai báo các thư viện
+
+using System;
+Normal: - Code cho sự kiện Click của nút Đăng ký:
+Normal: - Code cho sự kiện Click của nút Hủy:
+Normal: - Code cho sự kiện frmQuanLyTaiKhoan_Load:
+Normal: - Code cho sự kiện Tìm kiếm:
+Normal: - Code kiểm tra dữ liệu nhập vào:
+Normal: - Code cho sự kiện Click của nút Thêm:
+Normal: - Code cho sự kiện Click của nút Sửa:
+Heading 2: 2.3 Chức năng quản lý Sản phẩm (frmQuanLySanPham)
+Heading 3: 2.3.1 Tạo ra class SanPhamDTO định nghĩa cho bảng SanPham.
+Heading 3: 2.3.2 Khởi tạo SqlDataAdapter và Fill DataSet cho bảng SanPham
+Heading 3: 2.3.3 Xây dựng layer SanPhamBUS với bảng SanPham
+Heading 3: 2.3.4 Xây dựng Layer GUI
+Normal: 1. Khai báo các thư viện
+Normal: - Code cho sự kiện Tìm kiếm:
+Normal: - Code kiểm tra dữ liệu nhập vào:
+List Paragraph: Hiển thị lại thông tin trên form
+Normal: - Code cho sự kiện Click của nút Thêm:
+Normal: - Code cho sự kiện Click của nút Sửa:
+Normal: - Code cho sự kiện Click của nút Xóa vĩnh viễn
+Normal: - Code cho sự kiện Click của nút Làm mới:
+Heading 3: 2.4 Chức năng quản lý Khách hàng (frmQuanLyKhachHang)
+Heading 3: 2.4.1 Tạo ra class KhachHangDTO định nghĩa cho bảng KhachHang
+Heading 3: 2.4.2 Khởi tạo SqlDataAdapter và Fill DataSet cho bảng KhachHang
+Heading 3: 2.4.3 Lớp KhachHangBUS với bảng KhachHang:
+Heading 3: 2.4.4 Xây dựng Layer GUI
+Normal: 1. Khai báo các thư viện
+Normal: - Code cho sự kiện frmQuanLyKhachHang_Load:
+Normal: - Code cho sự kiện Tìm kiếm:
+Normal: - Code cho sự kiện Click của nút Thêm:
+Normal: - Code cho sự kiện Click của nút Sửa:
+Normal: - Code cho sự kiện Click của nút Xóa:
+Normal: - Code cho sự kiện Click của nút Làm mới:
+Heading 2: 2.5  Chức năng quản lý Nhân viên (frmQuanLyNhanVien)
+Heading 3: 2.5.1 Tạo ra class NhanVienDTO định nghĩa cho bảng NhanVien.
+Heading 3: 2.5.2 Khởi tạo SqlDataAdapter và Fill DataSet cho bảng NhanVien
+Heading 3: 2.5.3 Xây dựng Layer BUS với bảng NhanVien
+Heading 3: 2.5.4 Xây dựng Layer GUI
+Normal: 1. Khai báo các thư viện
+Normal: - Code cho sự kiện frmQuanLyNhanVien_Load:
+Normal: - Code cho sự kiện Tìm kiếm:
+Normal: - Code cho sự kiện Click của nút Thêm:
+Normal: - Code cho sự kiện Click của nút Sửa:
+Normal: - Code cho sự kiện Click của nút Xóa:
+Normal: - Code cho sự kiện Click của nút Làm mới:
+Heading 2: 2.6  Chức năng quản lý Nhà cung cấp (frmNhaCungCap)
+Heading 3: 2.6.1 Tạo ra class NhaCungCapDTO định nghĩa cho bảng NhaCungCap.
+Heading 3: 2.6.2 Khởi tạo SqlDataAdapter và Fill DataSet cho bảng NhaCungCap
+Heading 3: 2.6.3 Xây dựng layer NhaCungCapBUS với bảng NhaCungCap
+Heading 3: 2.5.4 Xây dựng Layer GUI
+Normal: 1. Khai báo các thư viện
+Normal: - Code cho sự kiện frmQuanLyNhaCungCap_Load:
+Normal: - Code cho sự kiện tìm kiếm:
+Normal: - Code cho sự kiện của nút xóa vĩnh viễn:
+Normal: - Code cho sự kiện Click của nút Thêm:
+Normal: - Code cho sự kiện Click của nút Sửa:
+Normal: - Code cho sự kiện Click của nút Xóa:
+Normal: - Code cho sự kiện Click của nút Làm mới:
+Heading 2: 2.7  Chức năng quản lý Bán hàng (frmBanHang)
+Heading 3: 2.7.1 Tạo ra class HoaDonDTO định nghĩa cho bảng HoaDon.
+Heading 3: 2.7.2 Khởi tạo SqlDataAdapter và Fill DataSet cho bảng HoaDon:
+Heading 3: 2.7.3 Xây dựng layer HoaDonBUS cho bảng HoaDon
+Heading 3: 2.7.4 Xây dựng Layer GUI
+Normal: 1. Khai báo các thư viện
+Normal: 
+Normal: - Code cho sự kiện frmBanHang_Load:
+Normal: - Code cho sự kiện Tìm kiếm:
+Normal: - Code cho sự kiện Click của nút Thêm:
+Normal: - Code cho sự kiện Click của nút Xóa:
+Normal: - Code cho sự kiện Click của nút Thanh toán:
+Normal: - Code cho sự kiện Click của nút Tính tổng tiền:
+Heading 3: 2.8  Chức năng Quản lý lịch sử Hóa đơn (frmLichSuHoaDon)
+Heading 3: 2.8.1 Xây dựng Layer GUI
+Normal: 1. Khai báo các thư viện
+Normal: - Code cho sự kiện frmLichSuHoaDon_Load:
+Normal: - Code cho sự kiện Tìm kiếm:
+Normal: - Code cho sự kiện Click của nút Xóa:
+Heading 3: 2.9.1 Tạo ra class ChiTietHoaDonDTO định nghĩa cho bảng ChiTietHoaDon.
+Heading 3: 2.9.2 Khởi tạo SqlDataAdapter và Fill DataSet cho bảng ChiTietHoaDon
+Heading 3: 2.9.3 Xây dựng layer ChiTietHoaDonBUS cho bảng ChiTietHoaDon
+Heading 3: 2.9.4 Xây dựng Layer GUI
+Normal: 1. Khai báo các thư viện
+Normal: - Code cho sự kiện frmChiTietHoaDon_Load:
+Normal: - Code cho sự kiện Click của nút Thêm:
+Normal: - Code cho sự kiện Click nút Sửa:
+Normal: - Code cho sự kiện Click nút Xóa:
+Heading 2: 2.10  Đánh giá quá trình thực hiện
+Heading 3: 1. Tóm tắt kết quả đã thực hiện
+Heading 3: 2. Những vấn đề còn tồn tại và hạn chế
+Heading 3: 3. Hướng phát triển tiếp theo

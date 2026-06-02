@@ -40,9 +40,9 @@ namespace qlybanhang
             this.groupBox1.Controls.Add(this.dgvChiTiet);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(13, 160);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox1.Size = new System.Drawing.Size(1019, 395);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
@@ -56,14 +56,14 @@ namespace qlybanhang
             this.dgvChiTiet.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvChiTiet.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvChiTiet.Location = new System.Drawing.Point(4, 19);
-            this.dgvChiTiet.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dgvChiTiet.Margin = new System.Windows.Forms.Padding(4);
             this.dgvChiTiet.Name = "dgvChiTiet";
             this.dgvChiTiet.ReadOnly = true;
             this.dgvChiTiet.RowHeadersWidth = 51;
             this.dgvChiTiet.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvChiTiet.Size = new System.Drawing.Size(1011, 372);
             this.dgvChiTiet.TabIndex = 0;
-            this.dgvChiTiet.SelectionChanged += new System.EventHandler(this.dgvChiTiet_SelectionChanged);
+            this.dgvChiTiet.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvChiTiet_CellEnter);
             // 
             // groupBox2
             // 
@@ -80,9 +80,9 @@ namespace qlybanhang
             this.groupBox2.Controls.Add(this.btnXoa);
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox2.Location = new System.Drawing.Point(13, 12);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox2.Size = new System.Drawing.Size(1019, 148);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
@@ -101,7 +101,7 @@ namespace qlybanhang
             // txtMaHD
             // 
             this.txtMaHD.Location = new System.Drawing.Point(133, 33);
-            this.txtMaHD.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtMaHD.Margin = new System.Windows.Forms.Padding(4);
             this.txtMaHD.Name = "txtMaHD";
             this.txtMaHD.ReadOnly = true;
             this.txtMaHD.Size = new System.Drawing.Size(199, 22);
@@ -121,7 +121,7 @@ namespace qlybanhang
             // 
             this.cboSanPham.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboSanPham.Location = new System.Drawing.Point(133, 70);
-            this.cboSanPham.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cboSanPham.Margin = new System.Windows.Forms.Padding(4);
             this.cboSanPham.Name = "cboSanPham";
             this.cboSanPham.Size = new System.Drawing.Size(199, 24);
             this.cboSanPham.TabIndex = 3;
@@ -140,7 +140,7 @@ namespace qlybanhang
             // nudSoLuong
             // 
             this.nudSoLuong.Location = new System.Drawing.Point(453, 34);
-            this.nudSoLuong.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.nudSoLuong.Margin = new System.Windows.Forms.Padding(4);
             this.nudSoLuong.Minimum = new decimal(new int[] {
             1,
             0,
@@ -168,7 +168,7 @@ namespace qlybanhang
             // txtDonGia
             // 
             this.txtDonGia.Location = new System.Drawing.Point(453, 70);
-            this.txtDonGia.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtDonGia.Margin = new System.Windows.Forms.Padding(4);
             this.txtDonGia.Name = "txtDonGia";
             this.txtDonGia.ReadOnly = true;
             this.txtDonGia.Size = new System.Drawing.Size(159, 22);
@@ -177,7 +177,7 @@ namespace qlybanhang
             // btnThem
             // 
             this.btnThem.Location = new System.Drawing.Point(667, 33);
-            this.btnThem.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnThem.Margin = new System.Windows.Forms.Padding(4);
             this.btnThem.Name = "btnThem";
             this.btnThem.Size = new System.Drawing.Size(100, 62);
             this.btnThem.TabIndex = 8;
@@ -187,7 +187,7 @@ namespace qlybanhang
             // btnSua
             // 
             this.btnSua.Location = new System.Drawing.Point(780, 33);
-            this.btnSua.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnSua.Margin = new System.Windows.Forms.Padding(4);
             this.btnSua.Name = "btnSua";
             this.btnSua.Size = new System.Drawing.Size(100, 62);
             this.btnSua.TabIndex = 9;
@@ -197,7 +197,7 @@ namespace qlybanhang
             // btnXoa
             // 
             this.btnXoa.Location = new System.Drawing.Point(893, 33);
-            this.btnXoa.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnXoa.Margin = new System.Windows.Forms.Padding(4);
             this.btnXoa.Name = "btnXoa";
             this.btnXoa.Size = new System.Drawing.Size(100, 62);
             this.btnXoa.TabIndex = 10;
@@ -211,7 +211,7 @@ namespace qlybanhang
             this.ClientSize = new System.Drawing.Size(1045, 567);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox2);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "frmChiTietHoaDon";
             this.Padding = new System.Windows.Forms.Padding(13, 12, 13, 12);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
