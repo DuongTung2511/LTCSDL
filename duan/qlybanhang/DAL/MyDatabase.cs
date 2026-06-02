@@ -62,6 +62,36 @@ namespace DAL
             daChiTietHD = new SqlDataAdapter("SELECT * FROM ChiTietHoaDon", conn);
             new SqlCommandBuilder(daChiTietHD);
             daChiTietHD.Fill(ds, "ChiTietHoaDon");
+
+            DataRelation rel_NhanVien_TaiKhoan = new DataRelation("NhanVien_TaiKhoan",
+                ds.Tables["NhanVien"].Columns["MaNV"],
+                ds.Tables["TaiKhoan"].Columns["MaNV"]);
+            ds.Relations.Add(rel_NhanVien_TaiKhoan);
+
+            DataRelation rel_NhaCungCap_SanPham = new DataRelation("NhaCungCap_SanPham",
+                ds.Tables["NhaCungCap"].Columns["MaNCC"],
+                ds.Tables["SanPham"].Columns["MaNCC"]);
+            ds.Relations.Add(rel_NhaCungCap_SanPham);
+
+            DataRelation rel_KhachHang_HoaDon = new DataRelation("KhachHang_HoaDon",
+                ds.Tables["KhachHang"].Columns["MaKH"],
+                ds.Tables["HoaDon"].Columns["MaKH"]);
+            ds.Relations.Add(rel_KhachHang_HoaDon);
+
+            DataRelation rel_NhanVien_HoaDon = new DataRelation("NhanVien_HoaDon",
+                ds.Tables["NhanVien"].Columns["MaNV"],
+                ds.Tables["HoaDon"].Columns["MaNV"]);
+            ds.Relations.Add(rel_NhanVien_HoaDon);
+
+            DataRelation rel_HoaDon_ChiTietHoaDon = new DataRelation("HoaDon_ChiTietHoaDon",
+                ds.Tables["HoaDon"].Columns["MaHD"],
+                ds.Tables["ChiTietHoaDon"].Columns["MaHD"]);
+            ds.Relations.Add(rel_HoaDon_ChiTietHoaDon);
+
+            DataRelation rel_SanPham_ChiTietHoaDon = new DataRelation("SanPham_ChiTietHoaDon",
+                ds.Tables["SanPham"].Columns["MaSP"],
+                ds.Tables["ChiTietHoaDon"].Columns["MaSP"]);
+            ds.Relations.Add(rel_SanPham_ChiTietHoaDon);
         }
 
         public DataSet getDataSet()
