@@ -104,6 +104,10 @@ namespace BUS
             foreach (DataRow r in gioHang.Rows)
                 tongTien += Convert.ToDecimal(r["ThanhTien"]);
 
+            // Lưu các thay đổi số lượng tồn (do giao diện đã trừ) vào CSDL trước
+            // để tránh bị ds.AcceptChanges() xóa mất trạng thái Modified
+            db.update("SanPham");
+
             DataRow newHD = db.getTable("HoaDon").NewRow();
             newHD["MaHD"] = maHD;
             newHD["MaKH"] = maKH;
@@ -123,18 +127,7 @@ namespace BUS
                 newCT["DonGia"] = Convert.ToDecimal(r["DonGia"]);
                 newCT["ThanhTien"] = Convert.ToDecimal(r["ThanhTien"]);
                 db.addRow("ChiTietHoaDon", newCT);
-
-                // Update stock
-                DataRow[] spRows = db.getTable("SanPham").Select("MaSP = '" + maSP.Replace("'", "''") + "'");
-                if (spRows.Length > 0)
-                {
-                    spRows[0].BeginEdit();
-                    int currentStock = Convert.ToInt32(spRows[0]["SoLuongTon"]);
-                    spRows[0]["SoLuongTon"] = currentStock - soLuong;
-                    spRows[0].EndEdit();
-                }
             }
-            db.update("SanPham");
         }
 
         public void XoaHoaDon(string maHD)
