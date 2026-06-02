@@ -7,34 +7,40 @@ namespace BUS
 {
     public class SanPhamBUS
     {
-        private SanPhamDAL dal = new SanPhamDAL();
+        private MyDatabase db = MyDatabase.Instance;
 
         public DataSet getDataset()
         {
-            return dal.getDBtoDataset();
+            return db.getDataSet();
         }
 
         public DataTable getTableSanPham()
         {
-            return dal.getTable();
+            return db.getTable("SanPham");
         }
 
         public DataRow[] getFilter_SanPham(string strFilter)
         {
-            return dal.getTable().Select(strFilter);
+            return db.getTable("SanPham").Select(strFilter);
         }
 
         public Boolean MaSP_not_Exist(string maSP)
         {
-            DataRow[] rows = dal.getTable().Select("MaSP = '" + maSP.Replace("'", "''") + "'");
-            return rows.Length == 0;
+            Boolean kq = true;
+            DataRow[] rows = db.getTable("SanPham").Select("MaSP = '" + maSP.Replace("'", "''") + "'");
+            if (rows.Length > 0)
+            {
+                kq = false;
+            }
+            return kq;
         }
 
         public Boolean add_New_SP(SanPhamDTO sp)
         {
+            Boolean kq = false;
             if (MaSP_not_Exist(sp.MaSP))
             {
-                DataRow r = dal.getTable().NewRow();
+                DataRow r = db.getTable("SanPham").NewRow();
                 r["MaSP"] = sp.MaSP;
                 r["TenSP"] = sp.TenSP;
                 r["MaNCC"] = sp.MaNCC;
@@ -42,63 +48,78 @@ namespace BUS
                 r["SoLuongTon"] = sp.SoLuongTon;
                 r["TrangThai"] = 1;
 
-                dal.addRow(r);
-                return true;
+                db.addRow("SanPham", r);
+                kq = true;
             }
-            return false;
+            return kq;
         }
 
         public bool update_SP(SanPhamDTO sp)
         {
-            DataRow[] rows = dal.getTable().Select("MaSP = '" + sp.MaSP.Replace("'", "''") + "'");
-            if (rows.Length == 0) return false;
-
-            DataRow r = rows[0];
-            r.BeginEdit();
-            r["TenSP"] = sp.TenSP;
-            r["MaNCC"] = sp.MaNCC;
-            r["GiaBan"] = sp.GiaBan;
-            r["SoLuongTon"] = sp.SoLuongTon;
-            r["TrangThai"] = sp.TrangThai;
-            r.EndEdit();
-            
-            try 
+            bool kq = false;
+            DataRow[] rows = db.getTable("SanPham").Select("MaSP = '" + sp.MaSP.Replace("'", "''") + "'");
+            if (rows.Length > 0)
             {
-                dal.update();
-                return true;
+                DataRow r = rows[0];
+                r.BeginEdit();
+                r["TenSP"] = sp.TenSP;
+                r["MaNCC"] = sp.MaNCC;
+                r["GiaBan"] = sp.GiaBan;
+                r["SoLuongTon"] = sp.SoLuongTon;
+                r["TrangThai"] = sp.TrangThai;
+                r.EndEdit();
+                
+                try 
+                {
+                    db.update("SanPham");
+                    kq = true;
+                }
+                catch { }
             }
-            catch (DBConcurrencyException ex) { Console.WriteLine("Lỗi đồng thời: " + ex.Message); return false; }
-            catch (Exception ex) { Console.WriteLine("Lỗi: " + ex.Message); return false; }
+            return kq;
         }
 
         public bool delete_SP(string maSP)
         {
-            // Xóa mềm
-            DataRow[] rows = dal.getTable().Select("MaSP = '" + maSP.Replace("'", "''") + "'");
-            if (rows.Length == 0) return false;
-
-            DataRow r = rows[0];
-            r.BeginEdit();
-            r["TrangThai"] = 0;
-            r.EndEdit();
-
-            try 
+            bool kq = false;
+            DataRow[] rows = db.getTable("SanPham").Select("MaSP = '" + maSP.Replace("'", "''") + "'");
+            if (rows.Length > 0)
             {
-                dal.update();
-                return true;
+                DataRow r = rows[0];
+                r.BeginEdit();
+                r["TrangThai"] = 0;
+                r.EndEdit();
+
+                try 
+                {
+                    db.update("SanPham");
+                    kq = true;
+                }
+                catch { }
             }
-            catch (DBConcurrencyException ex) { Console.WriteLine("Lỗi đồng thời: " + ex.Message); return false; }
-            catch (Exception ex) { Console.WriteLine("Lỗi: " + ex.Message); return false; }
+            return kq;
         }
 
         public string XoaVinhVien(string maSP)
         {
-            if (MaSP_not_Exist(maSP)) return "Sản phẩm không tồn tại!";
-            ChiTietHoaDonDAL cthdDal = new ChiTietHoaDonDAL();
-            DataRow[] hdRows = cthdDal.getTable().Select("MaSP = '" + maSP.Replace("'", "''") + "'");
-            if (hdRows.Length > 0) return "Sản phẩm đã phát sinh Hóa Đơn, không thể xóa vĩnh viễn!";
-            dal.delete(maSP);
-            return "";
+            string kq = "";
+            if (MaSP_not_Exist(maSP))
+            {
+                kq = "Sản phẩm không tồn tại!";
+            }
+            else
+            {
+                DataRow[] hdRows = db.getTable("ChiTietHoaDon").Select("MaSP = '" + maSP.Replace("'", "''") + "'");
+                if (hdRows.Length > 0)
+                {
+                    kq = "Sản phẩm đã phát sinh Hóa Đơn, không thể xóa vĩnh viễn!";
+                }
+                else
+                {
+                    db.deleteRow("SanPham", "MaSP = '" + maSP.Replace("'", "''") + "'");
+                }
+            }
+            return kq;
         }
 
         public DataRow[] getFilter_SP(string strFilter)

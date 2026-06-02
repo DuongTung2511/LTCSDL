@@ -7,24 +7,22 @@ namespace BUS
 {
     public class ChiTietHoaDonBUS
     {
-        private ChiTietHoaDonDAL dal = new ChiTietHoaDonDAL();
-        private HoaDonDAL hdDal = new HoaDonDAL();
-        private SanPhamDAL spDal = new SanPhamDAL();
+        private MyDatabase db = MyDatabase.Instance;
 
         public DataSet getDataset()
         {
-            return dal.getDBtoDataset();
+            return db.getDataSet();
         }
 
         public DataTable getTableChiTietHD()
         {
-            return dal.getTable();
+            return db.getTable("ChiTietHoaDon");
         }
 
         public DataTable LayDanhSachChiTietHDDayDu(string maHD)
         {
-            DataTable dtChiTiet = dal.getTable();
-            DataTable dtSanPham = spDal.getTable();
+            DataTable dtChiTiet = db.getTable("ChiTietHoaDon");
+            DataTable dtSanPham = db.getTable("SanPham");
             
             DataTable result = new DataTable();
             result.Columns.Add("MaHD", typeof(string));
@@ -57,101 +55,110 @@ namespace BUS
 
         private void CapNhatTongTien(string maHD)
         {
-            DataRow[] rowsCT = dal.getTable().Select("MaHD = '" + maHD.Replace("'", "''") + "'");
+            DataRow[] rowsCT = db.getTable("ChiTietHoaDon").Select("MaHD = '" + maHD.Replace("'", "''") + "'");
             decimal tongTien = 0;
             foreach (DataRow r in rowsCT)
             {
                 tongTien += Convert.ToInt32(r["SoLuong"]) * Convert.ToDecimal(r["DonGia"]);
             }
             
-            DataRow[] hdRows = hdDal.getTable().Select("MaHD = '" + maHD.Replace("'", "''") + "'");
+            DataRow[] hdRows = db.getTable("HoaDon").Select("MaHD = '" + maHD.Replace("'", "''") + "'");
             if (hdRows.Length > 0)
             {
                 hdRows[0].BeginEdit();
                 hdRows[0]["TongTien"] = tongTien;
                 hdRows[0].EndEdit();
-                hdDal.update();
+                db.update("HoaDon");
             }
         }
 
         public bool ThemChiTiet(string maHD, string maSP, int soLuong, decimal donGia)
         {
-            DataRow[] exist = dal.getTable().Select("MaHD = '" + maHD.Replace("'", "''") + "' AND MaSP = '" + maSP.Replace("'", "''") + "'");
-            if (exist.Length > 0) return false;
-
-            DataRow r = dal.getTable().NewRow();
-            r["MaHD"] = maHD;
-            r["MaSP"] = maSP;
-            r["SoLuong"] = soLuong;
-            r["DonGia"] = donGia;
-            r["ThanhTien"] = soLuong * donGia;
-            dal.addRow(r);
-
-            DataRow[] spRows = spDal.getTable().Select("MaSP = '" + maSP.Replace("'", "''") + "'");
-            if (spRows.Length > 0)
+            bool kq = false;
+            DataRow[] exist = db.getTable("ChiTietHoaDon").Select("MaHD = '" + maHD.Replace("'", "''") + "' AND MaSP = '" + maSP.Replace("'", "''") + "'");
+            if (exist.Length == 0)
             {
-                spRows[0].BeginEdit();
-                int currentStock = Convert.ToInt32(spRows[0]["SoLuongTon"]);
-                spRows[0]["SoLuongTon"] = currentStock - soLuong;
-                spRows[0].EndEdit();
-                spDal.update();
-            }
+                DataRow r = db.getTable("ChiTietHoaDon").NewRow();
+                r["MaHD"] = maHD;
+                r["MaSP"] = maSP;
+                r["SoLuong"] = soLuong;
+                r["DonGia"] = donGia;
+                r["ThanhTien"] = soLuong * donGia;
+                db.addRow("ChiTietHoaDon", r);
 
-            CapNhatTongTien(maHD);
-            return true;
+                DataRow[] spRows = db.getTable("SanPham").Select("MaSP = '" + maSP.Replace("'", "''") + "'");
+                if (spRows.Length > 0)
+                {
+                    spRows[0].BeginEdit();
+                    int currentStock = Convert.ToInt32(spRows[0]["SoLuongTon"]);
+                    spRows[0]["SoLuongTon"] = currentStock - soLuong;
+                    spRows[0].EndEdit();
+                    db.update("SanPham");
+                }
+
+                CapNhatTongTien(maHD);
+                kq = true;
+            }
+            return kq;
         }
 
         public bool SuaChiTiet(string maHD, string maSP, int soLuongMoi, decimal donGiaMoi)
         {
-            DataRow[] exist = dal.getTable().Select("MaHD = '" + maHD.Replace("'", "''") + "' AND MaSP = '" + maSP.Replace("'", "''") + "'");
-            if (exist.Length == 0) return false;
-
-            int soLuongCu = Convert.ToInt32(exist[0]["SoLuong"]);
-            int chechLech = soLuongMoi - soLuongCu;
-
-            DataRow r = exist[0];
-            r.BeginEdit();
-            r["SoLuong"] = soLuongMoi;
-            r["DonGia"] = donGiaMoi;
-            r["ThanhTien"] = soLuongMoi * donGiaMoi;
-            r.EndEdit();
-            dal.update();
-            
-            DataRow[] spRows = spDal.getTable().Select("MaSP = '" + maSP.Replace("'", "''") + "'");
-            if (spRows.Length > 0)
+            bool kq = false;
+            DataRow[] exist = db.getTable("ChiTietHoaDon").Select("MaHD = '" + maHD.Replace("'", "''") + "' AND MaSP = '" + maSP.Replace("'", "''") + "'");
+            if (exist.Length > 0)
             {
-                spRows[0].BeginEdit();
-                int currentStock = Convert.ToInt32(spRows[0]["SoLuongTon"]);
-                spRows[0]["SoLuongTon"] = currentStock - chechLech;
-                spRows[0].EndEdit();
-                spDal.update();
+                int soLuongCu = Convert.ToInt32(exist[0]["SoLuong"]);
+                int chechLech = soLuongMoi - soLuongCu;
+
+                DataRow r = exist[0];
+                r.BeginEdit();
+                r["SoLuong"] = soLuongMoi;
+                r["DonGia"] = donGiaMoi;
+                r["ThanhTien"] = soLuongMoi * donGiaMoi;
+                r.EndEdit();
+                db.update("ChiTietHoaDon");
+                
+                DataRow[] spRows = db.getTable("SanPham").Select("MaSP = '" + maSP.Replace("'", "''") + "'");
+                if (spRows.Length > 0)
+                {
+                    spRows[0].BeginEdit();
+                    int currentStock = Convert.ToInt32(spRows[0]["SoLuongTon"]);
+                    spRows[0]["SoLuongTon"] = currentStock - chechLech;
+                    spRows[0].EndEdit();
+                    db.update("SanPham");
+                }
+                
+                CapNhatTongTien(maHD);
+                kq = true;
             }
-            
-            CapNhatTongTien(maHD);
-            return true;
+            return kq;
         }
 
         public bool XoaChiTiet(string maHD, string maSP)
         {
-            DataRow[] exist = dal.getTable().Select("MaHD = '" + maHD.Replace("'", "''") + "' AND MaSP = '" + maSP.Replace("'", "''") + "'");
-            if (exist.Length == 0) return false;
-
-            int soLuongCu = Convert.ToInt32(exist[0]["SoLuong"]);
-
-            dal.delete(maHD, maSP);
-            
-            DataRow[] spRows = spDal.getTable().Select("MaSP = '" + maSP.Replace("'", "''") + "'");
-            if (spRows.Length > 0)
+            bool kq = false;
+            DataRow[] exist = db.getTable("ChiTietHoaDon").Select("MaHD = '" + maHD.Replace("'", "''") + "' AND MaSP = '" + maSP.Replace("'", "''") + "'");
+            if (exist.Length > 0)
             {
-                spRows[0].BeginEdit();
-                int currentStock = Convert.ToInt32(spRows[0]["SoLuongTon"]);
-                spRows[0]["SoLuongTon"] = currentStock + soLuongCu;
-                spRows[0].EndEdit();
-                spDal.update();
+                int soLuongCu = Convert.ToInt32(exist[0]["SoLuong"]);
+
+                db.deleteRow("ChiTietHoaDon", "MaHD = '" + maHD.Replace("'", "''") + "' AND MaSP = '" + maSP.Replace("'", "''") + "'");
+                
+                DataRow[] spRows = db.getTable("SanPham").Select("MaSP = '" + maSP.Replace("'", "''") + "'");
+                if (spRows.Length > 0)
+                {
+                    spRows[0].BeginEdit();
+                    int currentStock = Convert.ToInt32(spRows[0]["SoLuongTon"]);
+                    spRows[0]["SoLuongTon"] = currentStock + soLuongCu;
+                    spRows[0].EndEdit();
+                    db.update("SanPham");
+                }
+                
+                CapNhatTongTien(maHD);
+                kq = true;
             }
-            
-            CapNhatTongTien(maHD);
-            return true;
+            return kq;
         }
     }
 }

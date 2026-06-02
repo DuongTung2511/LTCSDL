@@ -7,30 +7,34 @@ namespace BUS
 {
     public class TaiKhoanBUS
     {
-        private TaiKhoanDAL dal = new TaiKhoanDAL();
+        private MyDatabase db = MyDatabase.Instance;
 
         public DataSet getDataset()
         {
-            return dal.getDBtoDataset();
+            return db.getDataSet();
         }
 
         public DataTable getTableTaiKhoan()
         {
-            return dal.getTable();
+            return db.getTable("TaiKhoan");
         }
 
         public DataRow DangNhap(string tenDangNhap, string matKhau)
         {
+            DataRow kq = null;
             string filter = "TenDangNhap = '" + tenDangNhap.Replace("'", "''") + "' AND MatKhau = '" + matKhau.Replace("'", "''") + "'";
-            DataRow[] rows = dal.getTable().Select(filter);
-            return rows.Length > 0 ? rows[0] : null;
+            DataRow[] rows = db.getTable("TaiKhoan").Select(filter);
+            if (rows.Length > 0)
+            {
+                kq = rows[0];
+            }
+            return kq;
         }
 
         public DataTable LayDanhSachTaiKhoanDayDu()
         {
-            DataTable dtTK = dal.getTable();
-            NhanVienDAL nvDal = new NhanVienDAL();
-            DataTable dtNV = nvDal.getTable();
+            DataTable dtTK = db.getTable("TaiKhoan");
+            DataTable dtNV = db.getTable("NhanVien");
 
             DataTable result = new DataTable();
             result.Columns.Add("TenDangNhap", typeof(string));
@@ -63,21 +67,32 @@ namespace BUS
 
         public bool KiemTraNhanVienDaCoTaiKhoan(string maNV)
         {
-            DataRow[] rows = dal.getTable().Select("MaNV = '" + maNV.Replace("'", "''") + "'");
-            return rows.Length > 0;
+            bool kq = false;
+            DataRow[] rows = db.getTable("TaiKhoan").Select("MaNV = '" + maNV.Replace("'", "''") + "'");
+            if (rows.Length > 0)
+            {
+                kq = true;
+            }
+            return kq;
         }
 
         public Boolean TenDangNhap_not_Exist(string tenDN)
         {
-            DataRow[] rows = dal.getTable().Select("TenDangNhap = '" + tenDN.Replace("'", "''") + "'");
-            return rows.Length == 0;
+            Boolean kq = true;
+            DataRow[] rows = db.getTable("TaiKhoan").Select("TenDangNhap = '" + tenDN.Replace("'", "''") + "'");
+            if (rows.Length > 0)
+            {
+                kq = false;
+            }
+            return kq;
         }
 
         public Boolean add_New_TK(TaiKhoanDTO tk)
         {
+            Boolean kq = false;
             if (TenDangNhap_not_Exist(tk.TenDangNhap))
             {
-                DataRow r = dal.getTable().NewRow();
+                DataRow r = db.getTable("TaiKhoan").NewRow();
                 r["TenDangNhap"] = tk.TenDangNhap;
                 r["MatKhau"] = tk.MatKhau;
                 r["Quyen"] = tk.Quyen;
@@ -86,47 +101,58 @@ namespace BUS
                 else
                     r["MaNV"] = DBNull.Value;
                 
-                dal.addRow(r);
-                return true;
+                db.addRow("TaiKhoan", r);
+                kq = true;
             }
-            return false;
+            return kq;
         }
 
         public Boolean update_TK(TaiKhoanDTO tk)
         {
-            DataRow[] rows = dal.getTable().Select("TenDangNhap = '" + tk.TenDangNhap.Replace("'", "''") + "'");
-            if (rows.Length == 0) return false;
-            
-            DataRow r = rows[0];
-            r.BeginEdit();
-            r["MatKhau"] = tk.MatKhau;
-            r["Quyen"] = tk.Quyen;
-            if (!string.IsNullOrEmpty(tk.MaNV))
-                r["MaNV"] = tk.MaNV;
-            else
-                r["MaNV"] = DBNull.Value;
-            r.EndEdit();
-
-            try
+            Boolean kq = false;
+            DataRow[] rows = db.getTable("TaiKhoan").Select("TenDangNhap = '" + tk.TenDangNhap.Replace("'", "''") + "'");
+            if (rows.Length > 0)
             {
-                dal.update();
-                return true;
+                DataRow r = rows[0];
+                r.BeginEdit();
+                r["MatKhau"] = tk.MatKhau;
+                r["Quyen"] = tk.Quyen;
+                if (!string.IsNullOrEmpty(tk.MaNV))
+                    r["MaNV"] = tk.MaNV;
+                else
+                    r["MaNV"] = DBNull.Value;
+                r.EndEdit();
+
+                try
+                {
+                    db.update("TaiKhoan");
+                    kq = true;
+                }
+                catch { }
             }
-            catch (DBConcurrencyException ex) { Console.WriteLine("Lỗi đồng thời: " + ex.Message); return false; }
-            catch (Exception ex) { Console.WriteLine("Lỗi: " + ex.Message); return false; }
+            return kq;
         }
 
         public Boolean delete_TK(string tenDN)
         {
-            if (TenDangNhap_not_Exist(tenDN)) return false;
-            dal.delete(tenDN);
-            return true;
+            Boolean kq = false;
+            if (!TenDangNhap_not_Exist(tenDN))
+            {
+                db.deleteRow("TaiKhoan", "TenDangNhap = '" + tenDN.Replace("'", "''") + "'");
+                kq = true;
+            }
+            return kq;
         }
 
         public Boolean DangKy(TaiKhoanDTO tk)
         {
+            Boolean kq = false;
             tk.Quyen = "Nhân viên"; // Default role
-            return add_New_TK(tk);
+            if (add_New_TK(tk))
+            {
+                kq = true;
+            }
+            return kq;
         }
     }
 }

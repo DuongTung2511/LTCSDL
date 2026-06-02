@@ -69,19 +69,20 @@ namespace qlybanhang
             filter_dstk();
         }
 
-        private bool checkInput()
+        private Boolean checkInput()
         {
+            Boolean kq = true;
             if (string.IsNullOrWhiteSpace(txtTenDangNhap.Text))
             {
+                kq = false;
                 txtTenDangNhap.Focus();
-                return false;
             }
-            if (string.IsNullOrWhiteSpace(txtMatKhau.Text))
+            else if (string.IsNullOrWhiteSpace(txtMatKhau.Text))
             {
+                kq = false;
                 txtMatKhau.Focus();
-                return false;
             }
-            return true;
+            return kq;
         }
 
         private void dgvTaiKhoan_CellEnter(object sender, DataGridViewCellEventArgs e)

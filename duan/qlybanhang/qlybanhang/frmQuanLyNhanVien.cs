@@ -95,34 +95,35 @@ namespace qlybanhang
             filter_dsnv();
         }
 
-        private bool checkInput()
+        private Boolean checkInput()
         {
+            Boolean kq = true;
             if (string.IsNullOrWhiteSpace(txtMaNV.Text))
             {
+                kq = false;
                 txtMaNV.Focus();
-                return false;
             }
-            if (string.IsNullOrWhiteSpace(txtTenNV.Text))
+            else if (string.IsNullOrWhiteSpace(txtTenNV.Text))
             {
+                kq = false;
                 txtTenNV.Focus();
-                return false;
             }
-            if (cboGioiTinh.SelectedIndex < 0)
+            else if (cboGioiTinh.SelectedIndex < 0)
             {
+                kq = false;
                 cboGioiTinh.Focus();
-                return false;
             }
-            if (string.IsNullOrWhiteSpace(txtSoDienThoai.Text))
+            else if (string.IsNullOrWhiteSpace(txtSoDienThoai.Text))
             {
+                kq = false;
                 txtSoDienThoai.Focus();
-                return false;
             }
-            if (string.IsNullOrWhiteSpace(txtDiaChi.Text))
+            else if (string.IsNullOrWhiteSpace(txtDiaChi.Text))
             {
+                kq = false;
                 txtDiaChi.Focus();
-                return false;
             }
-            return true;
+            return kq;
         }
 
         private void dgvNhanVien_CellEnter(object sender, DataGridViewCellEventArgs e)

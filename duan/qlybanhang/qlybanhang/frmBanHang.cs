@@ -84,15 +84,9 @@ namespace qlybanhang
             string keyword = txtTimKiemSanPham.Text.Replace("'", "''");
             string strFilter = $"(TenSP LIKE '%{keyword}%') AND (TrangThai = 1 OR TrangThai IS NULL)";
 
-            DataRow[] rows = spBus.getFilter_SP(strFilter);
-            if (rows.Length > 0)
-            {
-                dgvSanPham.DataSource = rows.CopyToDataTable();
-            }
-            else
-            {
-                dgvSanPham.DataSource = spBus.getTableSanPham().Clone();
-            }
+            DataView dv = spBus.getTableSanPham().DefaultView;
+            dv.RowFilter = strFilter;
+            dgvSanPham.DataSource = dv;
         }
 
         private void txtTimKiemSanPham_TextChanged(object sender, EventArgs e)
@@ -171,26 +165,27 @@ namespace qlybanhang
             }
         }
 
-        private bool checkInputThanhToan()
+        private Boolean checkInputThanhToan()
         {
+            Boolean kq = true;
             if (gioHang.Rows.Count == 0)
             {
+                kq = false;
                 MessageBox.Show("Giỏ hàng trống!");
-                return false;
             }
-            if (cboKhachHang.SelectedIndex < 0)
+            else if (cboKhachHang.SelectedIndex < 0)
             {
+                kq = false;
                 cboKhachHang.Focus();
                 MessageBox.Show("Vui lòng chọn khách hàng!");
-                return false;
             }
-            if (string.IsNullOrWhiteSpace(txtMaHD.Text))
+            else if (string.IsNullOrWhiteSpace(txtMaHD.Text))
             {
+                kq = false;
                 txtMaHD.Focus();
                 MessageBox.Show("Vui lòng nhập mã hóa đơn!");
-                return false;
             }
-            return true;
+            return kq;
         }
 
         private void btnThanhToan_Click(object sender, EventArgs e)

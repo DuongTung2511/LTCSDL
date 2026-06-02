@@ -82,29 +82,30 @@ namespace qlybanhang
             filter_dsncc();
         }
 
-        private bool checkInput()
+        private Boolean checkInput()
         {
+            Boolean kq = true;
             if (string.IsNullOrWhiteSpace(txtMaNCC.Text))
             {
+                kq = false;
                 txtMaNCC.Focus();
-                return false;
             }
-            if (string.IsNullOrWhiteSpace(txtTenNCC.Text))
+            else if (string.IsNullOrWhiteSpace(txtTenNCC.Text))
             {
+                kq = false;
                 txtTenNCC.Focus();
-                return false;
             }
-            if (string.IsNullOrWhiteSpace(txtSoDienThoai.Text))
+            else if (string.IsNullOrWhiteSpace(txtSoDienThoai.Text))
             {
+                kq = false;
                 txtSoDienThoai.Focus();
-                return false;
             }
-            if (string.IsNullOrWhiteSpace(txtDiaChi.Text))
+            else if (string.IsNullOrWhiteSpace(txtDiaChi.Text))
             {
+                kq = false;
                 txtDiaChi.Focus();
-                return false;
             }
-            return true;
+            return kq;
         }
 
         private void dgvNhaCungCap_CellEnter(object sender, DataGridViewCellEventArgs e)

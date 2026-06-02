@@ -7,33 +7,34 @@ namespace BUS
 {
     public class HoaDonBUS
     {
-        private HoaDonDAL hdDal = new HoaDonDAL();
-        private KhachHangDAL khDal = new KhachHangDAL();
-        private NhanVienDAL nvDal = new NhanVienDAL();
-        private ChiTietHoaDonDAL cthdDal = new ChiTietHoaDonDAL();
-        private SanPhamDAL spDal = new SanPhamDAL();
+        private MyDatabase db = MyDatabase.Instance;
 
         public DataSet getDataset()
         {
-            return hdDal.getDBtoDataset();
+            return db.getDataSet();
         }
 
         public DataTable getTableHoaDon()
         {
-            return hdDal.getTable();
+            return db.getTable("HoaDon");
         }
 
         public Boolean MaHD_not_Exist(string maHD)
         {
-            DataRow[] rows = hdDal.getTable().Select("MaHD='" + maHD.Replace("'", "''") + "'");
-            return rows.Length == 0;
+            Boolean kq = true;
+            DataRow[] rows = db.getTable("HoaDon").Select("MaHD='" + maHD.Replace("'", "''") + "'");
+            if (rows.Length > 0)
+            {
+                kq = false;
+            }
+            return kq;
         }
 
         public DataTable LayDanhSachHoaDonDayDu()
         {
-            DataTable dtHoaDon = hdDal.getTable();
-            DataTable dtKhachHang = khDal.getTable();
-            DataTable dtNhanVien = nvDal.getTable();
+            DataTable dtHoaDon = db.getTable("HoaDon");
+            DataTable dtKhachHang = db.getTable("KhachHang");
+            DataTable dtNhanVien = db.getTable("NhanVien");
             
             DataTable result = new DataTable();
             result.Columns.Add("MaHD", typeof(string));
@@ -74,7 +75,7 @@ namespace BUS
 
         public string LayNextMaHD()
         {
-            DataTable dt = hdDal.getTable();
+            DataTable dt = db.getTable("HoaDon");
             int max = 0;
             foreach (DataRow r in dt.Rows)
             {
@@ -103,17 +104,17 @@ namespace BUS
             foreach (DataRow r in gioHang.Rows)
                 tongTien += Convert.ToDecimal(r["ThanhTien"]);
 
-            DataRow newHD = hdDal.getTable().NewRow();
+            DataRow newHD = db.getTable("HoaDon").NewRow();
             newHD["MaHD"] = maHD;
             newHD["MaKH"] = maKH;
             newHD["MaNV"] = maNV;
             newHD["NgayLap"] = DateTime.Now;
             newHD["TongTien"] = tongTien;
-            hdDal.addRow(newHD);
+            db.addRow("HoaDon", newHD);
 
             foreach (DataRow r in gioHang.Rows)
             {
-                DataRow newCT = cthdDal.getTable().NewRow();
+                DataRow newCT = db.getTable("ChiTietHoaDon").NewRow();
                 newCT["MaHD"] = maHD;
                 string maSP = r["MaSP"].ToString();
                 newCT["MaSP"] = maSP;
@@ -121,10 +122,10 @@ namespace BUS
                 newCT["SoLuong"] = soLuong;
                 newCT["DonGia"] = Convert.ToDecimal(r["DonGia"]);
                 newCT["ThanhTien"] = Convert.ToDecimal(r["ThanhTien"]);
-                cthdDal.addRow(newCT);
+                db.addRow("ChiTietHoaDon", newCT);
 
                 // Update stock
-                DataRow[] spRows = spDal.getTable().Select("MaSP = '" + maSP.Replace("'", "''") + "'");
+                DataRow[] spRows = db.getTable("SanPham").Select("MaSP = '" + maSP.Replace("'", "''") + "'");
                 if (spRows.Length > 0)
                 {
                     spRows[0].BeginEdit();
@@ -133,17 +134,17 @@ namespace BUS
                     spRows[0].EndEdit();
                 }
             }
-            spDal.update();
+            db.update("SanPham");
         }
 
         public void XoaHoaDon(string maHD)
         {
-            DataRow[] cthdRows = cthdDal.getTable().Select("MaHD = '" + maHD.Replace("'", "''") + "'");
+            DataRow[] cthdRows = db.getTable("ChiTietHoaDon").Select("MaHD = '" + maHD.Replace("'", "''") + "'");
             foreach (DataRow r in cthdRows)
             {
                 string maSP = r["MaSP"].ToString();
                 int soLuong = Convert.ToInt32(r["SoLuong"]);
-                DataRow[] spRows = spDal.getTable().Select("MaSP = '" + maSP.Replace("'", "''") + "'");
+                DataRow[] spRows = db.getTable("SanPham").Select("MaSP = '" + maSP.Replace("'", "''") + "'");
                 if (spRows.Length > 0)
                 {
                     spRows[0].BeginEdit();
@@ -152,9 +153,9 @@ namespace BUS
                     spRows[0].EndEdit();
                 }
             }
-            spDal.update();
-            cthdDal.deleteByMaHD(maHD);
-            hdDal.delete(maHD);
+            db.update("SanPham");
+            db.deleteRow("ChiTietHoaDon", "MaHD = '" + maHD.Replace("'", "''") + "'");
+            db.deleteRow("HoaDon", "MaHD = '" + maHD.Replace("'", "''") + "'");
         }
     }
 }

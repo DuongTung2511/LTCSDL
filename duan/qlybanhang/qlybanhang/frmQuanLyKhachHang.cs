@@ -82,29 +82,30 @@ namespace qlybanhang
             filter_dskh();
         }
 
-        private bool checkInput()
+        private Boolean checkInput()
         {
+            Boolean kq = true;
             if (string.IsNullOrWhiteSpace(txtMaKH.Text))
             {
+                kq = false;
                 txtMaKH.Focus();
-                return false;
             }
-            if (string.IsNullOrWhiteSpace(txtTenKH.Text))
+            else if (string.IsNullOrWhiteSpace(txtTenKH.Text))
             {
+                kq = false;
                 txtTenKH.Focus();
-                return false;
             }
-            if (string.IsNullOrWhiteSpace(txtSoDienThoai.Text))
+            else if (string.IsNullOrWhiteSpace(txtSoDienThoai.Text))
             {
+                kq = false;
                 txtSoDienThoai.Focus();
-                return false;
             }
-            if (string.IsNullOrWhiteSpace(txtDiaChi.Text))
+            else if (string.IsNullOrWhiteSpace(txtDiaChi.Text))
             {
+                kq = false;
                 txtDiaChi.Focus();
-                return false;
             }
-            return true;
+            return kq;
         }
 
         private void dgvKhachHang_CellEnter(object sender, DataGridViewCellEventArgs e)

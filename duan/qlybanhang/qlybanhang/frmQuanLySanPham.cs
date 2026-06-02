@@ -88,24 +88,25 @@ namespace qlybanhang
             filter_dssp();
         }
 
-        private bool checkInput()
+        private Boolean checkInput()
         {
+            Boolean kq = true;
             if (string.IsNullOrWhiteSpace(txtMaSP.Text))
             {
+                kq = false;
                 txtMaSP.Focus();
-                return false;
             }
-            if (string.IsNullOrWhiteSpace(txtTenSP.Text))
+            else if (string.IsNullOrWhiteSpace(txtTenSP.Text))
             {
+                kq = false;
                 txtTenSP.Focus();
-                return false;
             }
-            if (cboNhaCungCap.SelectedIndex < 0)
+            else if (cboNhaCungCap.SelectedIndex < 0)
             {
+                kq = false;
                 cboNhaCungCap.Focus();
-                return false;
             }
-            return true;
+            return kq;
         }
 
         private void dgvSanPham_CellEnter(object sender, DataGridViewCellEventArgs e)
