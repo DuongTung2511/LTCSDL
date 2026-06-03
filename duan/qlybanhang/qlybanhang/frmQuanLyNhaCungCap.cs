@@ -85,22 +85,22 @@ namespace qlybanhang
         private Boolean checkInput()
         {
             Boolean kq = true;
-            if (string.IsNullOrWhiteSpace(txtMaNCC.Text))
+            if (string.IsNullOrEmpty(txtMaNCC.Text))
             {
                 kq = false;
                 txtMaNCC.Focus();
             }
-            else if (string.IsNullOrWhiteSpace(txtTenNCC.Text))
+            else if (string.IsNullOrEmpty(txtTenNCC.Text))
             {
                 kq = false;
                 txtTenNCC.Focus();
             }
-            else if (string.IsNullOrWhiteSpace(txtSoDienThoai.Text))
+            else if (string.IsNullOrEmpty(txtSoDienThoai.Text))
             {
                 kq = false;
                 txtSoDienThoai.Focus();
             }
-            else if (string.IsNullOrWhiteSpace(txtDiaChi.Text))
+            else if (string.IsNullOrEmpty(txtDiaChi.Text))
             {
                 kq = false;
                 txtDiaChi.Focus();
@@ -113,30 +113,15 @@ namespace qlybanhang
             if (e.RowIndex < 0 || e.RowIndex >= dgvNhaCungCap.Rows.Count) return;
             var dgvRow = dgvNhaCungCap.Rows[e.RowIndex];
             if (dgvRow.IsNewRow) return;
-
             DataRowView row = dgvRow.DataBoundItem as DataRowView;
-            if (row != null)
-            {
-                txtMaNCC.Text = row["MaNCC"].ToString();
-                txtTenNCC.Text = row["TenNCC"].ToString();
-                txtSoDienThoai.Text = row["SoDienThoai"].ToString();
-                txtDiaChi.Text = row["DiaChi"].ToString();
-                if(row["TrangThai"] != DBNull.Value)
-                    cboTrangThai.SelectedIndex = Convert.ToInt32(row["TrangThai"]) == 1 ? 1 : 0;
-            }
-            else
-            {
-                DataRow dataRow = (dgvRow.DataBoundItem as DataRowView)?.Row;
-                if(dataRow != null)
-                {
-                    txtMaNCC.Text = dataRow["MaNCC"].ToString();
-                    txtTenNCC.Text = dataRow["TenNCC"].ToString();
-                    txtSoDienThoai.Text = dataRow["SoDienThoai"].ToString();
-                    txtDiaChi.Text = dataRow["DiaChi"].ToString();
-                    if(dataRow["TrangThai"] != DBNull.Value)
-                        cboTrangThai.SelectedIndex = Convert.ToInt32(dataRow["TrangThai"]) == 1 ? 1 : 0;
-                }
-            }
+            if (row == null) return;
+            txtMaNCC.Text = row["MaNCC"].ToString();
+            txtTenNCC.Text = row["TenNCC"].ToString();
+            txtSoDienThoai.Text = row["SoDienThoai"].ToString();
+            txtDiaChi.Text = row["DiaChi"].ToString();
+            
+            if (row["TrangThai"] != DBNull.Value)
+                cboTrangThai.SelectedIndex = (row["TrangThai"].ToString() == "1") ? 1 : 0;
         }
 
         private void btnThem_Click(object sender, EventArgs e)

@@ -85,22 +85,22 @@ namespace qlybanhang
         private Boolean checkInput()
         {
             Boolean kq = true;
-            if (string.IsNullOrWhiteSpace(txtMaKH.Text))
+            if (string.IsNullOrEmpty(txtMaKH.Text))
             {
                 kq = false;
                 txtMaKH.Focus();
             }
-            else if (string.IsNullOrWhiteSpace(txtTenKH.Text))
+            else if (string.IsNullOrEmpty(txtTenKH.Text))
             {
                 kq = false;
                 txtTenKH.Focus();
             }
-            else if (string.IsNullOrWhiteSpace(txtSoDienThoai.Text))
+            else if (string.IsNullOrEmpty(txtSoDienThoai.Text))
             {
                 kq = false;
                 txtSoDienThoai.Focus();
             }
-            else if (string.IsNullOrWhiteSpace(txtDiaChi.Text))
+            else if (string.IsNullOrEmpty(txtDiaChi.Text))
             {
                 kq = false;
                 txtDiaChi.Focus();
@@ -123,7 +123,7 @@ namespace qlybanhang
             txtDiaChi.Text = row["DiaChi"].ToString();
 
             if (row["TrangThai"] != DBNull.Value)
-                cboTrangThai.SelectedIndex = (row["TrangThai"].ToString() == "1" || row["TrangThai"].ToString() == "True") ? 1 : 0;
+                cboTrangThai.SelectedIndex = (row["TrangThai"].ToString() == "1") ? 1 : 0;
         }
 
         private void btnThem_Click(object sender, EventArgs e)

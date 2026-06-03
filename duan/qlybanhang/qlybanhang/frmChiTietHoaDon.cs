@@ -55,7 +55,7 @@ namespace qlybanhang
             }
             else if (cboSanPham.SelectedValue != null)
             {
-                // In case ValueMember returns directly the object
+                
                 string maSP = cboSanPham.SelectedValue.ToString();
                 DataRow[] rows = spBus.getTableSanPham().Select("MaSP = '" + maSP.Replace("'", "''") + "'");
                 if (rows.Length > 0)
@@ -70,11 +70,9 @@ namespace qlybanhang
             if (e.RowIndex < 0 || e.RowIndex >= dgvChiTiet.Rows.Count) return;
             var dgvRow = dgvChiTiet.Rows[e.RowIndex];
             if (dgvRow.IsNewRow) return;
-            // Kiểm tra e.RowIndex >= 0 để đảm bảo người dùng không click vào tiêu đề cột
-            //  // Lấy ra dòng hiện tại đang được click
-            DataGridViewRow row = dgvChiTiet.Rows[e.RowIndex];
 
-            // Đảm bảo dữ liệu không bị Null (tránh click vào dòng trống dưới cùng)
+            DataGridViewRow row = dgvChiTiet.Rows[e.RowIndex];
+           
             if (row == null) return;
             cboSanPham.SelectedValue = row.Cells["MaSP"].Value.ToString();
             nudSoLuong.Value = Convert.ToDecimal(row.Cells["SoLuong"].Value);
@@ -118,12 +116,7 @@ namespace qlybanhang
             string maSP = cboSanPham.SelectedValue.ToString();
             int soLuongMoi = (int)nudSoLuong.Value;
             decimal donGiaMoi = Convert.ToDecimal(txtDonGia.Text);
-
-            // Cần tính tồn kho có đủ không
-            // Tồn kho thực tế = tồn kho hiện tại + số lượng cũ
-            // Nhưng để nhanh, ta có thể cho qua nếu âm thì báo lỗi ở DB, 
-            // hoặc kiểm tra kỹ hơn
-            
+         
             bool result = cthdBus.SuaChiTiet(maHD, maSP, soLuongMoi, donGiaMoi);
             if (result)
             {

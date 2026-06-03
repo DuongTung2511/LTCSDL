@@ -21,7 +21,7 @@ namespace qlybanhang
 
         private void frmBanHang_Load(object sender, EventArgs e)
         {
-            // Load Khách Hàng (chỉ hiển thị khách hàng có trạng thái = 1)
+            
             DataRow[] activeKHs = khBus.getFilter_KH("TrangThai = 1 OR TrangThai IS NULL");
             DataTable dtKH = khBus.getTableKhachHang().Clone();
             if (activeKHs.Length > 0) dtKH = activeKHs.CopyToDataTable();
@@ -30,7 +30,7 @@ namespace qlybanhang
             cboKhachHang.DisplayMember = "TenKH";
             cboKhachHang.ValueMember = "MaKH";
 
-            // Load Sản Phẩm
+
             LoadDataSanPham();
 
             KhoiTaoGioHang();
@@ -111,8 +111,7 @@ namespace qlybanhang
                 MessageBox.Show("Số lượng tồn không đủ!");
                 return;
             }
-
-            // Check if exist
+            
             DataRow[] existing = gioHang.Select("MaSP = '" + maSPStr.Replace("'", "''") + "'");
             if (existing.Length > 0)
             {
@@ -209,7 +208,7 @@ namespace qlybanhang
                 gioHang.Rows.Clear();
                 txtMaHD.Clear();
                 CapNhatTongTien();
-                spBus = new SanPhamBUS(); // Tải lại dữ liệu mới nhất từ CSDL
+                spBus = new SanPhamBUS(); 
                 LoadDataSanPham();
                 LoadmaHD();
             }

@@ -91,12 +91,12 @@ namespace qlybanhang
         private Boolean checkInput()
         {
             Boolean kq = true;
-            if (string.IsNullOrWhiteSpace(txtMaSP.Text))
+            if (string.IsNullOrEmpty(txtMaSP.Text))
             {
                 kq = false;
                 txtMaSP.Focus();
             }
-            else if (string.IsNullOrWhiteSpace(txtTenSP.Text))
+            else if (string.IsNullOrEmpty(txtTenSP.Text))
             {
                 kq = false;
                 txtTenSP.Focus();
@@ -125,7 +125,7 @@ namespace qlybanhang
             nudSoLuongTon.Value = Convert.ToDecimal(row["SoLuongTon"]);
 
             if (row["TrangThai"] != DBNull.Value)
-                cboTrangThai.SelectedIndex = (row["TrangThai"].ToString() == "1" || row["TrangThai"].ToString() == "True") ? 1 : 0;
+                cboTrangThai.SelectedIndex = (row["TrangThai"].ToString() == "1" ) ? 1 : 0;
         }
 
         private void btnThem_Click(object sender, EventArgs e)

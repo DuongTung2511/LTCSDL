@@ -128,7 +128,7 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                throw new Exception("L?i khi c?p nh?t SQL: " + ex.Message);
+                throw new Exception("Loi khi cap nhat SQL: " + ex.Message);
             }
         }
 

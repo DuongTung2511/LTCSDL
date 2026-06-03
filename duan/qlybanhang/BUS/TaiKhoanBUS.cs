@@ -147,7 +147,7 @@ namespace BUS
         public Boolean DangKy(TaiKhoanDTO tk)
         {
             Boolean kq = false;
-            tk.Quyen = "Nhân viên"; // Default role
+            tk.Quyen = "Nhân viên"; 
             if (add_New_TK(tk))
             {
                 kq = true;

@@ -37,7 +37,7 @@ namespace qlybanhang
         private void txtTimKiemKH_TextChanged(object sender, EventArgs e)
         {
             string keyword = txtTimKiemKH.Text.Trim().Replace("'", "''");
-            DataRow[] rows = hdBus.getFilter_HDDayDu(string.Format("TenKH LIKE '%{0}%'", keyword));
+            DataRow[] rows = hdBus.getFilter_HDDayDu(string.Format("TenKH LIKE '%{0}%' OR MaHD LIKE '%{0}%'", keyword));
             if (rows.Length > 0)
             {
                 dgvHoaDon.DataSource = rows.CopyToDataTable();

@@ -21,14 +21,14 @@ namespace qlybanhang
             string quyenHienThi = Quyen == "quanly" ? "Quản lý" : "Nhân viên";
             lblUserInfo.Text = "Người dùng: " + TenDangNhap + " | Quyền: " + quyenHienThi;
 
-            // Phân quyền: Nhân viên không được vào menu Quản lý
+            // nhân viên không được vào menu Quản lý
             if (Quyen == "nhanvien" || Quyen == "Nhân viên")
             {
                 mnuQuanLy.Visible = false;
             }
         }
 
-        // --- Menu Quản lý ---
+        //  Menu Quản lý 
         private void mnuSanPham_Click(object sender, EventArgs e)
         {
             frmQuanLySanPham frm = new frmQuanLySanPham();
@@ -59,7 +59,7 @@ namespace qlybanhang
             frm.ShowDialog();
         }
 
-        // --- Menu Bán hàng ---
+        // menu Bán hàng 
         private void mnuTaoHoaDon_Click(object sender, EventArgs e)
         {
             frmBanHang frm = new frmBanHang();
@@ -67,14 +67,14 @@ namespace qlybanhang
             frm.ShowDialog();
         }
 
-        // --- Menu Lịch sử ---
+        // menu Lịch sử 
         private void mnuXemHoaDon_Click(object sender, EventArgs e)
         {
             frmLichSuHoaDon frm = new frmLichSuHoaDon();
             frm.ShowDialog();
         }
 
-        // --- Menu Hệ thống ---
+        // menu Hệ thống
         private void mnuDangXuat_Click(object sender, EventArgs e)
         {
             DialogResult dr = MessageBox.Show("Bạn có muốn đăng xuất?", "Xác nhận",

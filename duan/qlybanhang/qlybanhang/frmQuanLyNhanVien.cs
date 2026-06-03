@@ -89,12 +89,12 @@ namespace qlybanhang
         private Boolean checkInput()
         {
             Boolean kq = true;
-            if (string.IsNullOrWhiteSpace(txtMaNV.Text))
+            if (string.IsNullOrEmpty(txtMaNV.Text))
             {
                 kq = false;
                 txtMaNV.Focus();
             }
-            else if (string.IsNullOrWhiteSpace(txtTenNV.Text))
+            else if (string.IsNullOrEmpty(txtTenNV.Text))
             {
                 kq = false;
                 txtTenNV.Focus();
@@ -104,12 +104,12 @@ namespace qlybanhang
                 kq = false;
                 cboGioiTinh.Focus();
             }
-            else if (string.IsNullOrWhiteSpace(txtSoDienThoai.Text))
+            else if (string.IsNullOrEmpty(txtSoDienThoai.Text))
             {
                 kq = false;
                 txtSoDienThoai.Focus();
             }
-            else if (string.IsNullOrWhiteSpace(txtDiaChi.Text))
+            else if (string.IsNullOrEmpty(txtDiaChi.Text))
             {
                 kq = false;
                 txtDiaChi.Focus();
@@ -124,54 +124,18 @@ namespace qlybanhang
             if (dgvRow.IsNewRow) return;
 
             DataRowView row = dgvRow.DataBoundItem as DataRowView;
-            if (row != null)
-            {
-                txtMaNV.Text = row["MaNV"].ToString();
-                txtTenNV.Text = row["TenNV"].ToString();
-                
-                string gioiTinh = row["GioiTinh"].ToString();
-                if (gioiTinh != "")
-                    cboGioiTinh.SelectedItem = gioiTinh;
-                else
-                    cboGioiTinh.SelectedIndex = -1;
+            
+            if (row == null) return;
 
-                if (row["NgaySinh"] != DBNull.Value)
-                    dtpNgaySinh.Value = Convert.ToDateTime(row["NgaySinh"]);
-                else
-                    dtpNgaySinh.Value = DateTime.Now;
-
-                txtSoDienThoai.Text = row["SoDienThoai"].ToString();
-                txtDiaChi.Text = row["DiaChi"].ToString();
-
-                if(row["TrangThai"] != DBNull.Value)
-                    cboTrangThai.SelectedIndex = (row["TrangThai"].ToString() == "1" || row["TrangThai"].ToString() == "True") ? 1 : 0;
-            }
-            else
-            {
-                DataRow dataRow = (dgvRow.DataBoundItem as DataRowView)?.Row;
-                if(dataRow != null)
-                {
-                    txtMaNV.Text = dataRow["MaNV"].ToString();
-                    txtTenNV.Text = dataRow["TenNV"].ToString();
-                    
-                    string gioiTinh = dataRow["GioiTinh"].ToString();
-                    if (gioiTinh != "")
-                        cboGioiTinh.SelectedItem = gioiTinh;
-                    else
-                        cboGioiTinh.SelectedIndex = -1;
-
-                    if (dataRow["NgaySinh"] != DBNull.Value)
-                        dtpNgaySinh.Value = Convert.ToDateTime(dataRow["NgaySinh"]);
-                    else
-                        dtpNgaySinh.Value = DateTime.Now;
-
-                    txtSoDienThoai.Text = dataRow["SoDienThoai"].ToString();
-                    txtDiaChi.Text = dataRow["DiaChi"].ToString();
-
-                    if(dataRow["TrangThai"] != DBNull.Value)
-                        cboTrangThai.SelectedIndex = (dataRow["TrangThai"].ToString() == "1" || dataRow["TrangThai"].ToString() == "True") ? 1 : 0;
-                }
-            }
+            txtMaNV.Text = row["MaNV"].ToString();
+            txtTenNV.Text = row["TenNV"].ToString();
+            cboGioiTinh.Text = row["GioiTinh"].ToString();
+            if (row["NgaySinh"] != DBNull.Value) dtpNgaySinh.Value = Convert.ToDateTime(row["NgaySinh"]);
+            txtSoDienThoai.Text = row["SoDienThoai"].ToString();
+            txtDiaChi.Text = row["DiaChi"].ToString();
+           
+            if (row["TrangThai"] != DBNull.Value)
+                cboTrangThai.SelectedIndex = (row["TrangThai"].ToString() == "1") ? 1 : 0;
         }
 
         private void btnThem_Click(object sender, EventArgs e)
@@ -196,7 +160,7 @@ namespace qlybanhang
             nv.NgaySinh = dtpNgaySinh.Value.Date;
             nv.SoDienThoai = txtSoDienThoai.Text;
             nv.DiaChi = txtDiaChi.Text;
-            // Không gán TrangThai vì BUS đã gán mặc định = 1
+            // TrangThai  BUS đã gán mặc định = 1
 
             bool kq = bus.add_New_NV(nv);
             if (!kq)

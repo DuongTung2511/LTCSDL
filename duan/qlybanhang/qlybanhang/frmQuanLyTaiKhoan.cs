@@ -72,12 +72,12 @@ namespace qlybanhang
         private Boolean checkInput()
         {
             Boolean kq = true;
-            if (string.IsNullOrWhiteSpace(txtTenDangNhap.Text))
+            if (string.IsNullOrEmpty(txtTenDangNhap.Text))
             {
                 kq = false;
                 txtTenDangNhap.Focus();
             }
-            else if (string.IsNullOrWhiteSpace(txtMatKhau.Text))
+            else if (string.IsNullOrEmpty(txtMatKhau.Text))
             {
                 kq = false;
                 txtMatKhau.Focus();
@@ -90,34 +90,18 @@ namespace qlybanhang
             if (e.RowIndex < 0 || e.RowIndex >= dgvTaiKhoan.Rows.Count) return;
             var dgvRow = dgvTaiKhoan.Rows[e.RowIndex];
             if (dgvRow.IsNewRow) return;
-
+            
             DataRowView row = dgvRow.DataBoundItem as DataRowView;
-            if (row != null)
-            {
-                txtTenDangNhap.Text = row["TenDangNhap"].ToString();
-                txtMatKhau.Text = row["MatKhau"].ToString();
-                string roleDB = row["Quyen"].ToString();
-                cboQuyen.Text = roleDB == "quanly" ? "Quản lý" : "Nhân viên";
-                if(row["MaNV"] != DBNull.Value)
-                    txtMaNV.Text = row["MaNV"].ToString();
-                else
-                    txtMaNV.Clear();
-            }
+
+            if (row == null) return;
+            txtTenDangNhap.Text = row["TenDangNhap"].ToString();
+            txtMatKhau.Text = row["MatKhau"].ToString();
+            cboQuyen.SelectedIndex = row["Quyen"].ToString() == "quanly" ? 0 : 1;
+
+            if (row["MaNV"] != DBNull.Value)
+                txtMaNV.Text = row["MaNV"].ToString();
             else
-            {
-                DataRow dataRow = (dgvRow.DataBoundItem as DataRowView)?.Row;
-                if(dataRow != null)
-                {
-                    txtTenDangNhap.Text = dataRow["TenDangNhap"].ToString();
-                    txtMatKhau.Text = dataRow["MatKhau"].ToString();
-                    string roleDB = dataRow["Quyen"].ToString();
-                    cboQuyen.Text = roleDB == "quanly" ? "Quản lý" : "Nhân viên";
-                    if(dataRow["MaNV"] != DBNull.Value)
-                        txtMaNV.Text = dataRow["MaNV"].ToString();
-                    else
-                        txtMaNV.Clear();
-                }
-            }
+                txtMaNV.Clear(); 
         }
 
         private void btnThem_Click(object sender, EventArgs e)
