@@ -84,9 +84,11 @@ namespace qlybanhang
             string keyword = txtTimKiemSanPham.Text.Replace("'", "''");
             string strFilter = $"(TenSP LIKE '%{keyword}%') AND (TrangThai = 1 OR TrangThai IS NULL)";
 
-            DataView dv = spBus.getTableSanPham().DefaultView;
-            dv.RowFilter = strFilter;
-            dgvSanPham.DataSource = dv;
+            DataRow[] rows = spBus.getFilter_SP(strFilter);
+            if (rows.Length > 0)
+            {
+                dgvSanPham.DataSource = rows.CopyToDataTable();
+            }
         }
 
         private void txtTimKiemSanPham_TextChanged(object sender, EventArgs e)
@@ -112,6 +114,7 @@ namespace qlybanhang
                 return;
             }
             
+            // Check if exist
             DataRow[] existing = gioHang.Select("MaSP = '" + maSPStr.Replace("'", "''") + "'");
             if (existing.Length > 0)
             {
@@ -130,10 +133,15 @@ namespace qlybanhang
                 gioHang.Rows.Add(r);
             }
 
-            // Trừ số lượng tồn ngay trên UI
-            drvSP.Row.BeginEdit();
-            drvSP["SoLuongTon"] = soLuongTon - soLuongThem;
-            drvSP.Row.EndEdit();
+            // Trừ số lượng tồn ngay trên UI (cập nhật vào Dataset global)
+            DataRow[] globalRows = spBus.getTableSanPham().Select("MaSP = '" + maSPStr.Replace("'", "''") + "'");
+            if (globalRows.Length > 0)
+            {
+                globalRows[0].BeginEdit();
+                globalRows[0]["SoLuongTon"] = soLuongTon - soLuongThem;
+                globalRows[0].EndEdit();
+            }
+            filter_dssp();
 
             CapNhatTongTien();
         }
@@ -160,6 +168,7 @@ namespace qlybanhang
 
                 drvGH.Row.Delete();
                 gioHang.AcceptChanges();
+                filter_dssp();
                 CapNhatTongTien();
             }
         }

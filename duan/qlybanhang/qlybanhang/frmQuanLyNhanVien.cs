@@ -76,9 +76,11 @@ namespace qlybanhang
                 strFilter += "(TrangThai = 1 OR TrangThai IS NULL)";
             }
 
-            DataView dv = bus.getTableNhanVien().DefaultView;
-            dv.RowFilter = strFilter;
-            dgvNhanVien.DataSource = dv;
+            DataRow[] rows = bus.getFilter_NhanVien(strFilter);
+            if (rows.Length > 0)
+            {
+                dgvNhanVien.DataSource = rows.CopyToDataTable();
+            }
         }
 
         private void txtTimKiem_TextChanged(object sender, EventArgs e)

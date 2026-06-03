@@ -72,9 +72,11 @@ namespace qlybanhang
                 strFilter += "(TrangThai = 1 OR TrangThai IS NULL)";
             }
 
-            DataView dv = bus.getTableNhaCungCap().DefaultView;
-            dv.RowFilter = strFilter;
-            dgvNhaCungCap.DataSource = dv;
+            DataRow[] rows = bus.getFilter_NhaCungCap(strFilter);
+            if (rows.Length > 0)
+            {
+                dgvNhaCungCap.DataSource = rows.CopyToDataTable();
+            }
         }
 
         private void txtTimKiem_TextChanged(object sender, EventArgs e)

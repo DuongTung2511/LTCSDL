@@ -55,13 +55,17 @@ namespace qlybanhang
         private void filter_dstk()
         {
             string keyword = txtTimKiem.Text.Replace("'", "''");
-            DataTable dtDayDu = bus.LayDanhSachTaiKhoanDayDu();
-            DataView dv = dtDayDu.DefaultView;
+            string strFilter = "";
             if (!string.IsNullOrEmpty(keyword))
             {
-                dv.RowFilter = "TenDangNhap LIKE '%" + keyword + "%' OR TenNV LIKE '%" + keyword + "%'";
+                strFilter = "TenDangNhap LIKE '%" + keyword + "%' OR TenNV LIKE '%" + keyword + "%'";
             }
-            dgvTaiKhoan.DataSource = dv;
+            
+            DataRow[] rows = bus.getFilter_TKDayDu(strFilter);
+            if (rows.Length > 0)
+            {
+                dgvTaiKhoan.DataSource = rows.CopyToDataTable();
+            }
         }
 
         private void txtTimKiem_TextChanged(object sender, EventArgs e)

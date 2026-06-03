@@ -65,6 +65,12 @@ namespace BUS
             return result;
         }
 
+        public DataRow[] getFilter_TKDayDu(string strFilter)
+        {
+            DataTable dt = LayDanhSachTaiKhoanDayDu();
+            return dt.Select(strFilter);
+        }
+
         public bool KiemTraNhanVienDaCoTaiKhoan(string maNV)
         {
             bool kq = false;
