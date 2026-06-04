@@ -69,6 +69,7 @@ namespace qlybanhang
                 if (dgvSanPham.Columns.Contains("MaNCC")) dgvSanPham.Columns["MaNCC"].HeaderText = "Mã NCC";
                 if (dgvSanPham.Columns.Contains("GiaBan")) dgvSanPham.Columns["GiaBan"].HeaderText = "Giá bán";
                 if (dgvSanPham.Columns.Contains("SoLuongTon")) dgvSanPham.Columns["SoLuongTon"].HeaderText = "Số lượng tồn";
+                if(dgvSanPham.Columns.Contains("TrangThai")) dgvSanPham.Columns["TrangThai"].Visible =false;
             }
             dgvSanPham.ReadOnly = true;
         }

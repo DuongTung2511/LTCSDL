@@ -25,7 +25,7 @@ namespace qlybanhang
         {
             if (dgvNhaCungCap.Columns[e.ColumnIndex].Name == "TrangThai" && e.Value != null)
             {
-                if (e.Value.ToString() == "1" || e.Value.ToString() == "True")
+                if (e.Value.ToString() == "1" )
                     e.Value = "Đang giao dịch";
                 else
                     e.Value = "Ngừng giao dịch";

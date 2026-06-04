@@ -30,7 +30,7 @@ namespace qlybanhang
         {
             if (dgvSanPham.Columns[e.ColumnIndex].Name == "TrangThai" && e.Value != null)
             {
-                if (e.Value.ToString() == "1" || e.Value.ToString() == "True")
+                if (e.Value.ToString() == "1" )
                     e.Value = "Đang bán";
                 else
                     e.Value = "Ngừng kinh doanh";
